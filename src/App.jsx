@@ -8,6 +8,7 @@ import {
 } from "@clerk/clerk-react";
 import ItemList from "./components/ItemList";
 import NewItemForm from "./components/NewItemForm";
+import ShoppingList from "./components/ShoppingList";
 
 function App() {
   const { user } = useUser();
@@ -25,6 +26,7 @@ function App() {
               <h3>Hi {user.firstName || user.username || "User"}</h3>
               <UserButton />
             </header>
+            <ShoppingList />
             <ItemList />
             <NewItemForm userId={user.id} user_name={user.firstName} />
           </>
