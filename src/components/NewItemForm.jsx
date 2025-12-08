@@ -42,7 +42,7 @@ const NewItemForm = ({ userId, user_name }) => {
 
   return (
     <div>
-      <h2>ItemList</h2>
+      <h2>Produkt hinzufügen</h2>
       <form onSubmit={handleAddItem}>
         <input
           type="text"

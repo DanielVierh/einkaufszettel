@@ -30,11 +30,14 @@ const ItemList = () => {
   }, []);
 
   return (
-    <ul>
-      {items.map((item) => (
-        <li key={item.id ?? item.item_name}>{item.item_name}</li>
-      ))}
-    </ul>
+    <>
+      <h2>Alle Produkte</h2>
+      <ul>
+        {items.map((item) => (
+          <li key={item.id ?? item.item_name}>{item.item_name}</li>
+        ))}
+      </ul>
+    </>
   );
 };
 
