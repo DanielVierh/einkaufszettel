@@ -25,8 +25,8 @@ function App() {
               <h3>Hi {user.firstName || user.username || "User"}</h3>
               <UserButton />
             </header>
-            <ItemList userId={user.id} user_name={user.firstName} />
-            <NewItemForm />
+            <ItemList />
+            <NewItemForm userId={user.id} user_name={user.firstName} />
           </>
         ) : (
           <p>Loading User...</p>
