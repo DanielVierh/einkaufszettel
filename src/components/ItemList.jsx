@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import supabase from "../lib/supabaseClient";
+import NewItemForm from "./NewItemForm";
 
-const ItemList = () => {
+const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
   const [items, setItems] = useState([]);
 
   async function updateItem(id, changes) {
@@ -62,15 +63,14 @@ const ItemList = () => {
   }, []);
 
   return (
-    <>
+    <section className={`product-list ${visible ? "active" : ""}`}>
       <h2>Alle Produkte</h2>
+      <NewItemForm userId={userId} user_name={user_name} />
       <ul className="list-wrapper">
         {items.map((item) => (
           <li
             key={item.id ?? item.item_name}
-            className={`product ${item.item_on_list ? "on-list" : ""} ${
-              item.item_is_open ? "item-open" : ""
-            }`}
+            className={`product ${item.item_on_list ? "on-list" : ""}`}
           >
             <div className="product-name-div">{item.item_name}</div>
             <div
@@ -103,7 +103,15 @@ const ItemList = () => {
           </li>
         ))}
       </ul>
-    </>
+      <button
+        className="btn product-list--button-ready"
+        onClick={() => {
+          if (typeof onClose === "function") onClose();
+        }}
+      >
+        Fertig
+      </button>
+    </section>
   );
 };
 

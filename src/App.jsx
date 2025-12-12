@@ -9,9 +9,15 @@ import {
 import ItemList from "./components/ItemList";
 import NewItemForm from "./components/NewItemForm";
 import ShoppingList from "./components/ShoppingList";
+import { useState } from "react";
 
 function App() {
   const { user } = useUser();
+  const [showItemList, setShowItemList] = useState(false);
+
+  function toggleItemList() {
+    setShowItemList((s) => !s);
+  }
   console.log(user);
 
   return (
@@ -26,8 +32,13 @@ function App() {
               <h3>Hi {user.firstName || user.username || "User"}</h3>
               <UserButton />
             </header>
-            <ShoppingList />
-            <ItemList />
+            <ShoppingList onToggleItemList={toggleItemList} />
+            <ItemList
+              visible={showItemList}
+              onClose={toggleItemList}
+              userId={user.id}
+              user_name={user.firstName}
+            />
             <NewItemForm userId={user.id} user_name={user.firstName} />
           </>
         ) : (

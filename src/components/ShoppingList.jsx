@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import supabase from "../lib/supabaseClient";
 
-const ShoppingList = () => {
+const ShoppingList = ({ onToggleItemList } = {}) => {
   const [items, setItems] = useState([]);
 
   async function handleGetList() {
@@ -57,7 +57,7 @@ const ShoppingList = () => {
   }, []);
 
   return (
-    <>
+    <section className="shopping-list">
       <h2>Einkaufszettel</h2>
       <ul className="list-wrapper">
         {items.map((item) => (
@@ -98,6 +98,7 @@ const ShoppingList = () => {
       </ul>
       <div style={{ marginTop: 12 }}>
         <button
+          className="btn shopping-list--refresh-btn"
           onClick={async () => {
             const data = await handleGetList();
             setItems(data);
@@ -105,8 +106,17 @@ const ShoppingList = () => {
         >
           Aktualisieren
         </button>
+        <br />
+        <button
+          className="btn shopping-list--add-btn"
+          onClick={() => {
+            if (typeof onToggleItemList === "function") onToggleItemList();
+          }}
+        >
+          Hinzufügen
+        </button>
       </div>
-    </>
+    </section>
   );
 };
 
