@@ -1,13 +1,10 @@
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import supabase from "../lib/supabaseClient";
 
 const NewItemForm = ({ userId, user_name }) => {
   const [itemname, setItemname] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const supabase_URL = import.meta.env.VITE_SUPABASE_URL;
-  const supabase_API_KEY = import.meta.env.VITE_SUPABASE_API_KEY;
-  const supabase = createClient(supabase_URL, supabase_API_KEY);
 
   async function handleAddItem(e) {
     e.preventDefault();
@@ -33,9 +30,17 @@ const NewItemForm = ({ userId, user_name }) => {
       });
       setSuccess("Neues Item gespeichert");
       setItemname("");
+      // notify other components that items changed
+      try {
+        window.dispatchEvent(new CustomEvent("items:changed"));
+      } catch (e) {
+        console.log(e);
+
+        // ignore if dispatch not supported
+      }
     } catch (err) {
-      setError(err);
-      console.log(error);
+      setError(String(err));
+      console.error(err);
       return null;
     }
   }

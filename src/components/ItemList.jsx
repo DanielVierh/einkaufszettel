@@ -1,17 +1,41 @@
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_API_KEY
-);
+import supabase from "../lib/supabaseClient";
 
 const ItemList = () => {
   const [items, setItems] = useState([]);
 
+  async function updateItem(id, changes) {
+    try {
+      const { error } = await supabase
+        .from("shopping_items")
+        .update(changes)
+        .eq("id", id);
+      if (error) throw error;
+      window.dispatchEvent(new CustomEvent("items:changed"));
+    } catch (err) {
+      console.error("Update error", err);
+      alert("Fehler beim Aktualisieren: " + String(err));
+    }
+  }
+
+  async function deleteItem(id) {
+    try {
+      const { error } = await supabase
+        .from("shopping_items")
+        .delete()
+        .eq("id", id);
+      if (error) throw error;
+      window.dispatchEvent(new CustomEvent("items:changed"));
+    } catch (err) {
+      console.error("Delete error", err);
+      alert("Fehler beim Löschen: " + String(err));
+    }
+  }
+
   useEffect(() => {
     let mounted = true;
 
-    (async () => {
+    async function load() {
       try {
         const { data, error } = await supabase.from("shopping_items").select();
         if (error) {
@@ -22,19 +46,61 @@ const ItemList = () => {
       } catch (err) {
         console.error(err);
       }
-    })();
+    }
+
+    load();
+
+    const onItemsChanged = () => {
+      load();
+    };
+    window.addEventListener("items:changed", onItemsChanged);
 
     return () => {
       mounted = false;
+      window.removeEventListener("items:changed", onItemsChanged);
     };
   }, []);
 
   return (
     <>
       <h2>Alle Produkte</h2>
-      <ul>
+      <ul className="list-wrapper">
         {items.map((item) => (
-          <li key={item.id ?? item.item_name}>{item.item_name}</li>
+          <li
+            key={item.id ?? item.item_name}
+            className={`product ${item.item_on_list ? "on-list" : ""} ${
+              item.item_is_open ? "item-open" : ""
+            }`}
+          >
+            <div className="product-name-div">{item.item_name}</div>
+            <div
+              style={{
+                position: "absolute",
+                top: 6,
+                right: 6,
+                display: "flex",
+                gap: 6,
+              }}
+            >
+              <button
+                onClick={() =>
+                  updateItem(item.id, { item_on_list: !item.item_on_list })
+                }
+                title="An/Aus auf Einkaufsliste"
+              >
+                {item.item_on_list ? "- List" : "+ List"}
+              </button>
+              <button
+                onClick={() => {
+                  if (confirm(`Produkt "${item.item_name}" wirklich löschen?`))
+                    deleteItem(item.id);
+                }}
+                title="Löschen"
+              >
+                🗑️
+              </button>
+            </div>
+          </li>
         ))}
       </ul>
     </>

@@ -40,3 +40,75 @@
 .read-the-docs {
   color: #888;
 }
+
+/* --- Styles imported from shopping-list (simplified) --- */
+:root {
+  --style-open1: tomato;
+  --style-open2: #137b86;
+  --style-open3: rgb(155, 39, 4);
+  --MainTheme: var(--style-open3);
+}
+
+.list-wrapper {
+  margin: 20px auto 10px auto;
+  border: 1px solid white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  max-height: 60vh;
+  padding: 10px;
+  z-index: 1;
+}
+
+.list-wrapper .product {
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  background-color: gray;
+  margin: 6px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  text-align: center;
+  border-radius: 8px;
+  padding: 3px 3px 10px 3px;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.list-wrapper .product.on-list,
+.list-wrapper .product.item-open {
+  background: var(--MainTheme);
+}
+
+.list-button {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+  color: white;
+  padding: 8px;
+  background-color: rgb(33, 31, 31);
+  box-shadow: 0 0 8px white, inset 0 0 3px white;
+  border-radius: 15px;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.shopping-sum {
+  color: red;
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+/* small utilities used by components */
+h2 {
+  margin-top: 1rem;
+}

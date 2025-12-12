@@ -1,50 +1,111 @@
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_API_KEY
-);
+import supabase from "../lib/supabaseClient";
 
 const ShoppingList = () => {
   const [items, setItems] = useState([]);
 
+  async function handleGetList() {
+    try {
+      const { data, error } = await supabase
+        .from("shopping_items")
+        .select("*")
+        .eq("item_on_list", true);
+
+      if (error) {
+        console.error("Supabase error:", error);
+        return [];
+      }
+      return data ?? [];
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  }
+
+  async function updateItem(id, changes) {
+    try {
+      const { error } = await supabase
+        .from("shopping_items")
+        .update(changes)
+        .eq("id", id);
+      if (error) throw error;
+      window.dispatchEvent(new CustomEvent("items:changed"));
+    } catch (err) {
+      console.error("Update error", err);
+      alert("Fehler beim Aktualisieren: " + String(err));
+    }
+  }
+
   useEffect(() => {
     let mounted = true;
+    async function load() {
+      const data = await handleGetList();
+      if (mounted) setItems(data);
+    }
 
-    (async () => {
-      try {
-        const { data, error } = await supabase
-          .from("shopping_items")
-          .select("*")
-          .eq("item_on_list", true);
-        if (error) {
-          console.error("Supabase error:", error);
-          return;
-        }
-        if (mounted) {
-          setItems(data);
-          console.log("Data", data);
-        } else {
-          setItems([]);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    })();
+    load();
+
+    const onItemsChanged = () => {
+      load();
+    };
+    window.addEventListener("items:changed", onItemsChanged);
 
     return () => {
       mounted = false;
+      window.removeEventListener("items:changed", onItemsChanged);
     };
   }, []);
 
   return (
     <>
       <h2>Einkaufszettel</h2>
-      <ul>
+      <ul className="list-wrapper">
         {items.map((item) => (
-          <li key={item.id ?? item.item_name}>{item.item_name}</li>
+          <li
+            key={item.id ?? item.item_name}
+            className={`product ${item.item_on_list ? "on-list" : ""} ${
+              item.item_is_open ? "item-open" : ""
+            }`}
+          >
+            <div className="product-name-div">{item.item_name}</div>
+            <div
+              style={{
+                position: "absolute",
+                top: 6,
+                right: 6,
+                display: "flex",
+                gap: 6,
+              }}
+            >
+              <button
+                onClick={() =>
+                  updateItem(item.id, { item_is_open: !item.item_is_open })
+                }
+                title="Erledigt/Unerledigt"
+              >
+                {item.item_is_open ? "✓" : "○"}
+              </button>
+
+              <button
+                onClick={() => updateItem(item.id, { item_on_list: false })}
+                title="Von Liste entfernen"
+              >
+                Entfernen
+              </button>
+            </div>
+          </li>
         ))}
       </ul>
+      <div style={{ marginTop: 12 }}>
+        <button
+          onClick={async () => {
+            const data = await handleGetList();
+            setItems(data);
+          }}
+        >
+          Aktualisieren
+        </button>
+      </div>
     </>
   );
 };
