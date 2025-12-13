@@ -30,6 +30,7 @@ function App() {
           <>
             <header>
               <h3>Hi {user.firstName || user.username || "User"}</h3>
+              <h2>Einkaufszettel</h2>
               <UserButton />
             </header>
             <ShoppingList onToggleItemList={toggleItemList} />

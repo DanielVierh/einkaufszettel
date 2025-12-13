@@ -108,6 +108,18 @@
   margin: 0;
 }
 
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99;
+  background-color: #0e354c;
+  height: 60px;
+  display: flex;
+  justify-content: space-around;
+}
+
 /* small utilities used by components */
 h2 {
   margin-top: 1rem;
