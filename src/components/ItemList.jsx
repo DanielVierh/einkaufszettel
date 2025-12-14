@@ -137,6 +137,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
           </li>
         ))}
       </ul>
+      {/* <button className="btn">Wocheneinkaufsliste</button> */}
       <button
         className="btn product-list--button-ready"
         onClick={() => {
