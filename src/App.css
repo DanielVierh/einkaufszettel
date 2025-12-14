@@ -57,7 +57,7 @@
   justify-content: center;
   align-items: center;
   overflow-y: auto;
-  max-height: 60vh;
+  max-height: 50vh;
   padding: 10px;
   z-index: 1;
 }
@@ -70,8 +70,9 @@
   margin: 6px;
   color: white;
   display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
   text-align: center;
   border-radius: 8px;
   padding: 3px 3px 10px 3px;
@@ -130,6 +131,10 @@ h2 {
   padding: 10px 15px;
 }
 
+.search-add-btn {
+  padding: 10px 15px;
+}
+
 .shopping-list {
   position: fixed;
   top: 0;
@@ -178,4 +183,12 @@ h2 {
 
 .product-list--delete-btn {
   background-color: black;
+}
+
+.searchbar {
+  width: 70%;
+  margin: 0 auto;
+  height: 40px;
+  border-radius: 15px;
+  padding: 10px 15px;
 }

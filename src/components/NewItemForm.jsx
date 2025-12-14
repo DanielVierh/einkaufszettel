@@ -101,13 +101,14 @@ const NewItemForm = ({
 
   return (
     <div style={{ position: "relative", marginBottom: 12 }}>
-      <h2>Produkt hinzufügen</h2>
+      <h2>Produkt Suchen/Hinzufügen</h2>
       <form onSubmit={handleAddItem}>
         <input
           type="text"
           value={itemname}
           onChange={handleInputChange}
           placeholder="Item Bezeichnung"
+          className="searchbar"
         />
 
         <div style={{ marginTop: 8, marginBottom: 8 }}>
@@ -130,6 +131,7 @@ const NewItemForm = ({
                       type="button"
                       onClick={() => addExistingItem(m.id)}
                       title={`Zur Einkaufsliste hinzufügen: ${m.item_name}`}
+                      className="btn"
                     >
                       Hinzufügen
                     </button>
@@ -140,7 +142,7 @@ const NewItemForm = ({
           )}
         </div>
 
-        <button>Hinzufügen</button>
+        <button className="btn">Hinzufügen</button>
 
         {error ? (
           <p style={{ color: "red" }}>
@@ -210,9 +212,12 @@ const NewItemForm = ({
             </div>
 
             <div style={{ display: "flex", gap: 8 }}>
-              <button type="submit">Erstellen</button>
+              <button type="submit" className="btn">
+                Erstellen
+              </button>
               <button
                 type="button"
+                className="btn"
                 onClick={() => {
                   setShowModal(false);
                 }}

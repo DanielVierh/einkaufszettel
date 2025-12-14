@@ -67,6 +67,7 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
               item.item_is_open ? "item-open" : ""
             }`}
           >
+            <div>{item.item_comment ? "ℹ️" : ""}</div>
             <div className="product-name-div">{item.item_name}</div>
             <div
               style={{
@@ -77,14 +78,14 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
                 gap: 6,
               }}
             >
-              <button
+              {/* <button
                 onClick={() =>
                   updateItem(item.id, { item_is_open: !item.item_is_open })
                 }
                 title="Erledigt/Unerledigt"
               >
                 {item.item_is_open ? "✓" : "○"}
-              </button>
+              </button> */}
 
               <button
                 onClick={() => updateItem(item.id, { item_on_list: false })}
