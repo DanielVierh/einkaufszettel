@@ -83,8 +83,8 @@ const NewItemForm = ({
       setItemname("");
       setSearchTerm("");
       setShowModal(false);
-      setItem_amount(0);
-      setItem_price(1);
+      setItem_amount(1);
+      setItem_price(0);
       setItem_on_weekly_list(false);
       setItem_comment("");
 
@@ -181,6 +181,7 @@ const NewItemForm = ({
                 step="0.01"
                 value={item_price}
                 onChange={(e) => setItem_price(e.target.value)}
+                className="input-fields"
               />
             </div>
             <div style={{ marginBottom: 8 }}>
@@ -190,6 +191,7 @@ const NewItemForm = ({
                 min="1"
                 value={item_amount}
                 onChange={(e) => setItem_amount(e.target.value)}
+                className="input-fields"
               />
             </div>
             <div style={{ marginBottom: 8 }}>
@@ -198,6 +200,7 @@ const NewItemForm = ({
                 type="text"
                 value={item_comment}
                 onChange={(e) => setItem_comment(e.target.value)}
+                className="input-fields"
               />
             </div>
             <div style={{ marginBottom: 8 }}>
