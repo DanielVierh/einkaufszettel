@@ -83,6 +83,10 @@ const NewItemForm = ({
       setItemname("");
       setSearchTerm("");
       setShowModal(false);
+      setItem_amount(0);
+      setItem_price(1);
+      setItem_on_weekly_list(false);
+      setItem_comment("");
 
       try {
         window.dispatchEvent(new CustomEvent("items:changed"));
@@ -155,7 +159,7 @@ const NewItemForm = ({
             left: 0,
             right: 0,
             top: "100%",
-            background: "#fff",
+            background: "#1b2336ff",
             border: "1px solid #ccc",
             padding: 12,
             zIndex: 50,
