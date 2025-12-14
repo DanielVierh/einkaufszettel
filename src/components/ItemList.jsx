@@ -4,6 +4,7 @@ import NewItemForm from "./NewItemForm";
 
 const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
   const [items, setItems] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   async function updateItem(id, changes) {
     try {
@@ -62,12 +63,44 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
     };
   }, []);
 
+  const filteredItems =
+    searchTerm && searchTerm.trim() !== ""
+      ? items.filter((it) =>
+          it.item_name
+            .toString()
+            .toLowerCase()
+            .includes(searchTerm.toString().toLowerCase())
+        )
+      : items;
+
+  async function addExistingItem(id) {
+    try {
+      const { error } = await supabase
+        .from("shopping_items")
+        .update({ item_on_list: true })
+        .eq("id", id);
+      if (error) throw error;
+      window.dispatchEvent(new CustomEvent("items:changed"));
+      setSearchTerm("");
+    } catch (err) {
+      console.error("Add existing error", err);
+      alert("Fehler beim Hinzufügen: " + String(err));
+    }
+  }
+
   return (
     <section className={`product-list ${visible ? "active" : ""}`}>
       <h2>Alle Produkte</h2>
-      <NewItemForm userId={userId} user_name={user_name} />
+      <NewItemForm
+        userId={userId}
+        user_name={user_name}
+        items={items}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        addExistingItem={addExistingItem}
+      />
       <ul className="list-wrapper">
-        {items.map((item) => (
+        {filteredItems.map((item) => (
           <li
             key={item.id ?? item.item_name}
             className={`product ${item.item_on_list ? "on-list" : ""}`}

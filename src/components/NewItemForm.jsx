@@ -1,17 +1,67 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import supabase from "../lib/supabaseClient";
 
-const NewItemForm = ({ userId, user_name }) => {
-  const [itemname, setItemname] = useState("");
+const NewItemForm = ({
+  userId,
+  user_name,
+  items = [],
+  searchTerm = "",
+  setSearchTerm = () => {},
+  addExistingItem = () => {},
+}) => {
+  const [itemname, setItemname] = useState(searchTerm ?? "");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const [item_price, setItem_price] = useState(0);
+  const [item_amount, setItem_amount] = useState(1);
+  const [item_comment, setItem_comment] = useState("");
+  const [item_on_weekly_list, setItem_on_weekly_list] = useState(false);
+
+  // compute matches from provided items
+  const matches = useMemo(() => {
+    const q = (itemname || "").toString().toLowerCase();
+    if (!q) return [];
+    return items.filter((it) =>
+      it.item_name.toString().toLowerCase().includes(q)
+    );
+  }, [items, itemname]);
+
+  function handleInputChange(e) {
+    const v = e.target.value;
+    setItemname(v);
+    setSearchTerm(v);
+    setError("");
+    setSuccess("");
+  }
 
   async function handleAddItem(e) {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    if (itemname === "") {
+    if (!itemname || itemname.trim() === "") {
+      setError("Ein Name muss eingetragen werden");
+      return;
+    }
+
+    if ((matches || []).length === 0) {
+      // open modal to collect more data for new product
+      setShowModal(true);
+      return;
+    }
+
+    // if there are matches, instruct user to click one of them
+    setSuccess("Produkt gefunden — bitte aus der Liste auswählen");
+  }
+
+  async function createNewProduct(e) {
+    e?.preventDefault?.();
+    setError("");
+    setSuccess("");
+
+    if (!itemname || itemname.trim() === "") {
       setError("Ein Name muss eingetragen werden");
       return;
     }
@@ -20,41 +70,72 @@ const NewItemForm = ({ userId, user_name }) => {
       await supabase.from("shopping_items").insert({
         user_id: userId,
         item_name: itemname,
-        item_price: "0.0",
+        item_price: Number(item_price) || 0.0,
         item_on_list: true,
         item_is_open: true,
-        item_amount: 1,
-        item_on_weekly_list: false,
-        item_comment: "",
+        item_amount: Number(item_amount) || 1,
+        item_on_weekly_list: Boolean(item_on_weekly_list),
+        item_comment: item_comment || "",
         item_creator: user_name,
       });
-      setSuccess("Neues Item gespeichert");
+
+      setSuccess("Neues Produkt erstellt und zur Liste hinzugefügt");
       setItemname("");
-      // notify other components that items changed
+      setSearchTerm("");
+      setShowModal(false);
+
       try {
         window.dispatchEvent(new CustomEvent("items:changed"));
       } catch (e) {
         console.log(e);
-
-        // ignore if dispatch not supported
       }
     } catch (err) {
       setError(String(err));
       console.error(err);
-      return null;
     }
   }
 
   return (
-    <div>
+    <div style={{ position: "relative", marginBottom: 12 }}>
       <h2>Produkt hinzufügen</h2>
       <form onSubmit={handleAddItem}>
         <input
           type="text"
           value={itemname}
-          onChange={(e) => setItemname(e.target.value)}
+          onChange={handleInputChange}
           placeholder="Item Bezeichnung"
         />
+
+        <div style={{ marginTop: 8, marginBottom: 8 }}>
+          {matches.length > 0 && (
+            <div style={{ border: "1px solid #ddd", padding: 8 }}>
+              <div style={{ fontSize: 12, marginBottom: 6 }}>Treffer:</div>
+              <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
+                {matches.map((m) => (
+                  <li
+                    key={m.id}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: 8,
+                      padding: 6,
+                    }}
+                  >
+                    <span>{m.item_name}</span>
+                    <button
+                      type="button"
+                      onClick={() => addExistingItem(m.id)}
+                      title={`Zur Einkaufsliste hinzufügen: ${m.item_name}`}
+                    >
+                      Hinzufügen
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
         <button>Hinzufügen</button>
 
         {error ? (
@@ -65,7 +146,81 @@ const NewItemForm = ({ userId, user_name }) => {
           <p style={{ color: "green" }}>{success}</p>
         )}
       </form>
+
+      {/* Modal */}
+      {showModal && (
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: "100%",
+            background: "#fff",
+            border: "1px solid #ccc",
+            padding: 12,
+            zIndex: 50,
+            boxShadow: "0 6px 18px rgba(0,0,0,0.1)",
+          }}
+        >
+          <h3>Neues Produkt anlegen</h3>
+          <form onSubmit={createNewProduct}>
+            <div style={{ marginBottom: 8 }}>
+              <label>Bezeichnung:</label>
+              <div>{itemname}</div>
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <label>Preis:</label>
+              <input
+                type="number"
+                step="0.01"
+                value={item_price}
+                onChange={(e) => setItem_price(e.target.value)}
+              />
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <label>Menge:</label>
+              <input
+                type="number"
+                min="1"
+                value={item_amount}
+                onChange={(e) => setItem_amount(e.target.value)}
+              />
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <label>Kommentar:</label>
+              <input
+                type="text"
+                value={item_comment}
+                onChange={(e) => setItem_comment(e.target.value)}
+              />
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={item_on_weekly_list}
+                  onChange={(e) => setItem_on_weekly_list(e.target.checked)}
+                />
+                Auf Wochenliste
+              </label>
+            </div>
+
+            <div style={{ display: "flex", gap: 8 }}>
+              <button type="submit">Erstellen</button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowModal(false);
+                }}
+              >
+                Abbrechen
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
+
 export default NewItemForm;
