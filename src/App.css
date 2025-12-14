@@ -43,9 +43,9 @@
 
 /* --- Styles imported from shopping-list (simplified) --- */
 :root {
-  --style-open1: tomato;
+  --style-open1: rgb(71, 160, 255);
   --style-open2: #137b86;
-  --style-open3: rgb(155, 39, 4);
+  --style-open3: rgb(4, 105, 155);
   --MainTheme: var(--style-open3);
 }
 
@@ -127,6 +127,7 @@ h2 {
 
 .btn {
   margin: 10px;
+  padding: 10px 15px;
 }
 
 .shopping-list {
@@ -161,6 +162,7 @@ h2 {
   left: 0;
   width: 100%;
   height: 100%;
+  padding-top: 60px !important;
   background-color: rgb(17, 17, 27);
   z-index: 11;
   display: block;

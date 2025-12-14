@@ -23,6 +23,7 @@ function App() {
   return (
     <>
       <SignedOut>
+        <h1>Einkaufszettel</h1>
         <SignInButton />
       </SignedOut>
       <SignedIn>
