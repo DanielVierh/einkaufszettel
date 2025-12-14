@@ -175,3 +175,7 @@ h2 {
   background-color: #0e354c;
   padding: 8px 12px;
 }
+
+.product-list--delete-btn {
+  background-color: black;
+}

@@ -91,6 +91,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
                 {item.item_on_list ? "- List" : "+ List"}
               </button>
               <button
+                className="product-list--delete-btn"
                 onClick={() => {
                   if (confirm(`Produkt "${item.item_name}" wirklich löschen?`))
                     deleteItem(item.id);
