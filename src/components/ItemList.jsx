@@ -16,6 +16,9 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
         .eq("id", id);
       if (error) throw error;
       window.dispatchEvent(new CustomEvent("items:changed"));
+      if (selectedItem && selectedItem.id === id) {
+        setSelectedItem((prev) => ({ ...(prev ?? {}), ...changes }));
+      }
     } catch (err) {
       console.error("Update error", err);
       alert("Fehler beim Aktualisieren: " + String(err));

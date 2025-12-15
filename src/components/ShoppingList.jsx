@@ -32,6 +32,10 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
         .eq("id", id);
       if (error) throw error;
       window.dispatchEvent(new CustomEvent("items:changed"));
+      // If the updated item is currently selected in the modal, update it locally so the modal shows new values immediately
+      if (selectedItem && selectedItem.id === id) {
+        setSelectedItem((prev) => ({ ...(prev ?? {}), ...changes }));
+      }
     } catch (err) {
       console.error("Update error", err);
       alert("Fehler beim Aktualisieren: " + String(err));
