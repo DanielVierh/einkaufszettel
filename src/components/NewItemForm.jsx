@@ -46,14 +46,20 @@ const NewItemForm = ({
       return;
     }
 
-    if ((matches || []).length === 0) {
+    // Only block creation if there is an exact (case-insensitive) name match.
+    const q = (itemname || "").toString().trim().toLowerCase();
+    const hasExact = (matches || []).some(
+      (it) => it.item_name.toString().trim().toLowerCase() === q
+    );
+
+    if (!hasExact) {
       // open modal to collect more data for new product
       setShowModal(true);
       return;
     }
 
-    // if there are matches, instruct user to click one of them
-    setSuccess("Produkt gefunden — bitte aus der Liste auswählen");
+    // if exact match exists, instruct user to click the found item
+    setSuccess("Produkt bereits vorhanden — bitte aus der Liste auswählen");
   }
 
   async function createNewProduct(e) {
