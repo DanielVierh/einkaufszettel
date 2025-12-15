@@ -62,9 +62,25 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
     };
   }, []);
 
+  const parsePrice = (val) => {
+    const n = parseFloat(val);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const totalSum = items.reduce((acc, it) => {
+    const price = parsePrice(it.item_price);
+    const amount = Number.isFinite(Number(it.item_amount))
+      ? Number(it.item_amount)
+      : 0;
+    return acc + price * amount;
+  }, 0);
+
   return (
     <section className="shopping-list">
       <h2>Einkaufszettel</h2>
+      <div>
+        <span className="shopping-sum">Gesamt: {totalSum.toFixed(2)} €</span>
+      </div>
       <ul className="list-wrapper">
         {items.map((item) => (
           <li
