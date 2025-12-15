@@ -139,8 +139,7 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
         <button
           className="btn shopping-list--refresh-btn"
           onClick={async () => {
-            const data = await handleGetList();
-            setItems(data);
+            window.location.reload();
           }}
         >
           Aktualisieren
