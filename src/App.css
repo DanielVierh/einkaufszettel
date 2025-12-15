@@ -72,7 +72,7 @@
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-around;
   align-items: center;
   text-align: center;
   border-radius: 8px;
@@ -309,4 +309,9 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: #0b1520;
   color: #fff;
+}
+
+.btn-remove-from-list {
+  font-size: 12px;
+  background-color: green;
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ItemModal = ({ item, onClose, onUpdate } = {}) => {
+const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
   const [amount, setAmount] = useState(() => item?.item_amount ?? 1);
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(() => ({
@@ -9,9 +9,6 @@ const ItemModal = ({ item, onClose, onUpdate } = {}) => {
     item_price: item?.item_price ?? "",
     item_comment: item?.item_comment ?? "",
   }));
-
-  // When the modal is mounted per-item (we rely on parent key), initial state is set.
-  // If you want to refresh while open, we would need effect-based syncing.
 
   if (!item) return null;
 
@@ -68,11 +65,39 @@ const ItemModal = ({ item, onClose, onUpdate } = {}) => {
     setIsEditing(false);
   };
 
+  const handleRemoveFromList = async () => {
+    try {
+      if (typeof onUpdate === "function")
+        await onUpdate(item.id, { item_on_list: false });
+      if (typeof onClose === "function") onClose();
+    } catch (err) {
+      console.error("Fehler beim Entfernen von Liste:", err);
+      alert("Fehler beim Entfernen: " + String(err));
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm(`Produkt "${item.item_name}" wirklich löschen?`)) return;
+    try {
+      if (typeof onDelete === "function") await onDelete(item.id);
+      if (typeof onClose === "function") onClose();
+    } catch (err) {
+      console.error("Fehler beim Löschen:", err);
+      alert("Fehler beim Löschen: " + String(err));
+    }
+  };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>{item.item_name}</h3>
+          <button
+            className="btn btn-remove-from-list"
+            onClick={handleRemoveFromList}
+          >
+            Von Liste entfernen ☑️
+          </button>
           <button
             className="modal-close"
             onClick={onClose}
@@ -181,6 +206,13 @@ const ItemModal = ({ item, onClose, onUpdate } = {}) => {
             <>
               <button className="btn" onClick={handleEditClick}>
                 Edit
+              </button>
+              <button
+                className="btn product-list--delete-btn"
+                onClick={handleDelete}
+                style={{ color: "red" }}
+              >
+                Löschen
               </button>
               <button className="btn cancel-btn" onClick={onClose}>
                 Schließen

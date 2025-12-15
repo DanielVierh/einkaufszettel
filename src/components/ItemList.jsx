@@ -151,6 +151,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
           onUpdate={updateItem}
+          onDelete={deleteItem}
         />
       ) : null}
       {/* <button className="btn">Wocheneinkaufsliste</button> */}

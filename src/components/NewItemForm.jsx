@@ -107,7 +107,7 @@ const NewItemForm = ({
 
   return (
     <div style={{ position: "relative", marginBottom: 12 }}>
-      <h2>Produkt Suchen/Hinzufügen</h2>
+      <h4 style={{ margin: "0" }}>Produkt Suchen/Hinzufügen</h4>
       <form onSubmit={handleAddItem}>
         <input
           type="text"

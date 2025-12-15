@@ -42,6 +42,21 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
     }
   }
 
+  async function deleteItem(id) {
+    try {
+      const { error } = await supabase
+        .from("shopping_items")
+        .delete()
+        .eq("id", id);
+      if (error) throw error;
+      window.dispatchEvent(new CustomEvent("items:changed"));
+      if (selectedItem && selectedItem.id === id) setSelectedItem(null);
+    } catch (err) {
+      console.error("Delete error", err);
+      alert("Fehler beim Löschen: " + String(err));
+    }
+  }
+
   useEffect(() => {
     let mounted = true;
     async function load() {
@@ -107,17 +122,7 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
                 display: "flex",
                 gap: 6,
               }}
-            >
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  updateItem(item.id, { item_on_list: false });
-                }}
-                title="Von Liste entfernen"
-              >
-                Entfernen
-              </button>
-            </div>
+            ></div>
           </li>
         ))}
       </ul>
@@ -127,6 +132,7 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
           onUpdate={updateItem}
+          onDelete={deleteItem}
         />
       ) : null}
       <div style={{ marginTop: 12 }}>
