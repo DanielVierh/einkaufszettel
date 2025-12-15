@@ -26,6 +26,14 @@ const ItemModal = ({ item, onClose, onUpdate } = {}) => {
     }
   };
 
+  const parsePrice = (val) => {
+    const n = parseFloat(val);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const unitPrice = parsePrice(isEditing ? form.item_price : item.item_price);
+  const totalPrice = (unitPrice * (amount ?? 0)).toFixed(2);
+
   const handleEditClick = () => {
     setForm({
       item_name: item?.item_name ?? "",
@@ -91,12 +99,13 @@ const ItemModal = ({ item, onClose, onUpdate } = {}) => {
           <div className="modal-row">
             <strong>Preis pro Einheit:</strong>
             <span className="modal-comment">
-              {item.item_price
-                ? `${item.item_price} € x ${amount} = ${
-                    amount * parseFloat(item.item_price)
-                  } €`
-                : "0 €"}
+              {unitPrice > 0 ? `${unitPrice.toFixed(2)} €` : "—"}
             </span>
+          </div>
+
+          <div className="modal-row">
+            <strong>Gesamtpreis:</strong>
+            <span className="modal-comment">{`${totalPrice} €`}</span>
           </div>
 
           {!isEditing ? (
