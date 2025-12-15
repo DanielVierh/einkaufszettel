@@ -105,14 +105,14 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
             }`}
             onClick={() => setSelectedItem(item)}
           >
-            <div>{item.item_comment ? "ℹ️" : ""}</div>
-            <div>
-              {item.item_amount > 1 ? (
-                <span className="amount-label">{item.item_amount} x</span>
-              ) : (
-                ""
-              )}
+            <div
+              className={`item-price ${
+                item.item_amount > 1 && "multiple-amount"
+              }`}
+            >
+              {item.item_price && `${item.item_amount} x ${item.item_price} €`}
             </div>
+            <div>{item.item_comment ? "ℹ️" : ""}</div>
             <div className="product-name-div">{item.item_name}</div>
             <div
               style={{

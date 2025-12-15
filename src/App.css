@@ -209,15 +209,6 @@ h2 {
   font-size: 1rem;
 }
 
-.amount-label {
-  background-color: aqua;
-  color: black;
-  font-weight: bold;
-  padding: 2px 10px;
-  border-radius: 7px;
-  font-size: 14px;
-}
-
 /* Simple modal styles */
 .modal-overlay {
   position: fixed;
@@ -315,4 +306,22 @@ h2 {
 .btn-remove-from-list {
   font-size: 12px;
   background-color: green;
+}
+
+.item-price {
+  background-color: rgb(51, 59, 61);
+  color: white;
+  font-weight: bold;
+  padding: 3px 6px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+.multiple-amount {
+  background-color: rgb(49, 211, 217);
+  color: black;
+  font-weight: bold;
+  padding: 2px 10px;
+  border-radius: 7px;
+  font-size: 14px;
 }

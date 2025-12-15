@@ -111,6 +111,14 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
             className={`product ${item.item_on_list ? "on-list" : ""}`}
             onClick={() => setSelectedItem(item)}
           >
+            <div
+              className={`item-price ${
+                item.item_amount > 1 && "multiple-amount"
+              }`}
+            >
+              {item.item_price && `${item.item_amount} x ${item.item_price} €`}
+            </div>
+            <div>{item.item_comment ? "ℹ️" : ""}</div>
             <div className="product-name-div">{item.item_name}</div>
             <div
               style={{
@@ -120,28 +128,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
                 display: "flex",
                 gap: 6,
               }}
-            >
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  updateItem(item.id, { item_on_list: !item.item_on_list });
-                }}
-                title="An/Aus auf Einkaufsliste"
-              >
-                {item.item_on_list ? "- List" : "+ List"}
-              </button>
-              <button
-                className="product-list--delete-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (confirm(`Produkt "${item.item_name}" wirklich löschen?`))
-                    deleteItem(item.id);
-                }}
-                title="Löschen"
-              >
-                🗑️
-              </button>
-            </div>
+            ></div>
           </li>
         ))}
       </ul>
