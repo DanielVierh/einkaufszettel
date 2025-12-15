@@ -45,6 +45,17 @@ const ItemModal = ({ item, onClose, onUpdate } = {}) => {
           </div>
 
           <div className="modal-row">
+            <strong>Preis pro Einheit:</strong>
+            <span className="modal-comment">
+              {item.item_price
+                ? `${item.item_price} € x ${amount} = ${
+                    amount * parseFloat(item.item_price)
+                  } €`
+                : "0 €"}
+            </span>
+          </div>
+
+          <div className="modal-row">
             <strong>Kommentar:</strong>
             <span className="modal-comment">
               {item.item_comment ? item.item_comment : "—"}
