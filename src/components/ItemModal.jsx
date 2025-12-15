@@ -165,7 +165,7 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
               <label className="modal-label">
                 Name
                 <input
-                  className="modal-input"
+                  className="input-fields"
                   value={form.item_name}
                   onChange={(e) => handleChange("item_name", e.target.value)}
                 />
