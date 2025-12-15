@@ -68,6 +68,13 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
             }`}
           >
             <div>{item.item_comment ? "ℹ️" : ""}</div>
+            <div>
+              {item.item_amount > 1 ? (
+                <span className="amount-label">{item.item_amount} x</span>
+              ) : (
+                ""
+              )}
+            </div>
             <div className="product-name-div">{item.item_name}</div>
             <div
               style={{
