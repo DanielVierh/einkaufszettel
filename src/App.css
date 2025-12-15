@@ -136,6 +136,16 @@ h2 {
   padding: 10px 15px;
 }
 
+.submit-btn {
+  color: white;
+  font-weight: bold;
+}
+
+.cancel-btn {
+  background-color: black;
+  color: lightgray;
+}
+
 .shopping-list {
   position: fixed;
   top: 0;

@@ -175,7 +175,7 @@ const NewItemForm = ({
               <div>{itemname}</div>
             </div>
             <div style={{ marginBottom: 8 }}>
-              <label>Preis:</label>
+              <label style={{ marginRight: 12 }}>Preis:</label>
               <input
                 type="number"
                 step="0.01"
@@ -185,7 +185,7 @@ const NewItemForm = ({
               />
             </div>
             <div style={{ marginBottom: 8 }}>
-              <label>Menge:</label>
+              <label style={{ marginRight: 12 }}>Menge:</label>
               <input
                 type="number"
                 min="1"
@@ -195,7 +195,7 @@ const NewItemForm = ({
               />
             </div>
             <div style={{ marginBottom: 8 }}>
-              <label>Kommentar:</label>
+              <label style={{ marginRight: 12 }}>Kommentar:</label>
               <input
                 type="text"
                 value={item_comment}
@@ -209,23 +209,24 @@ const NewItemForm = ({
                   type="checkbox"
                   checked={item_on_weekly_list}
                   onChange={(e) => setItem_on_weekly_list(e.target.checked)}
+                  style={{ marginRight: 8 }}
                 />
                 Auf Wochenliste
               </label>
             </div>
 
-            <div style={{ display: "flex", gap: 8 }}>
-              <button type="submit" className="btn">
-                Erstellen
-              </button>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
               <button
                 type="button"
-                className="btn"
+                className="btn cancel-btn"
                 onClick={() => {
                   setShowModal(false);
                 }}
               >
                 Abbrechen
+              </button>
+              <button type="submit" className="btn submit-btn">
+                Erstellen
               </button>
             </div>
           </form>
