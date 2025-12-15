@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import supabase from "../lib/supabaseClient";
 import NewItemForm from "./NewItemForm";
+import ItemModal from "./ItemModal";
 
 const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
   const [items, setItems] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   async function updateItem(id, changes) {
@@ -104,6 +106,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
           <li
             key={item.id ?? item.item_name}
             className={`product ${item.item_on_list ? "on-list" : ""}`}
+            onClick={() => setSelectedItem(item)}
           >
             <div className="product-name-div">{item.item_name}</div>
             <div
@@ -116,16 +119,18 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
               }}
             >
               <button
-                onClick={() =>
-                  updateItem(item.id, { item_on_list: !item.item_on_list })
-                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  updateItem(item.id, { item_on_list: !item.item_on_list });
+                }}
                 title="An/Aus auf Einkaufsliste"
               >
                 {item.item_on_list ? "- List" : "+ List"}
               </button>
               <button
                 className="product-list--delete-btn"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   if (confirm(`Produkt "${item.item_name}" wirklich löschen?`))
                     deleteItem(item.id);
                 }}
@@ -137,6 +142,14 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
           </li>
         ))}
       </ul>
+      {selectedItem ? (
+        <ItemModal
+          key={selectedItem.id ?? "item-modal"}
+          item={selectedItem}
+          onClose={() => setSelectedItem(null)}
+          onUpdate={updateItem}
+        />
+      ) : null}
       {/* <button className="btn">Wocheneinkaufsliste</button> */}
       <button
         className="btn product-list--button-ready"
