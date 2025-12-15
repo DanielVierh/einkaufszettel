@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import supabase from "../lib/supabaseClient";
+import ItemModal from "./ItemModal";
 
 const ShoppingList = ({ onToggleItemList } = {}) => {
   const [items, setItems] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   async function handleGetList() {
     try {
@@ -66,6 +68,7 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
             className={`product ${item.item_on_list ? "on-list" : ""} ${
               item.item_is_open ? "item-open" : ""
             }`}
+            onClick={() => setSelectedItem(item)}
           >
             <div>{item.item_comment ? "ℹ️" : ""}</div>
             <div>
@@ -85,17 +88,11 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
                 gap: 6,
               }}
             >
-              {/* <button
-                onClick={() =>
-                  updateItem(item.id, { item_is_open: !item.item_is_open })
-                }
-                title="Erledigt/Unerledigt"
-              >
-                {item.item_is_open ? "✓" : "○"}
-              </button> */}
-
               <button
-                onClick={() => updateItem(item.id, { item_on_list: false })}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  updateItem(item.id, { item_on_list: false });
+                }}
                 title="Von Liste entfernen"
               >
                 Entfernen
@@ -104,6 +101,14 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
           </li>
         ))}
       </ul>
+      {selectedItem ? (
+        <ItemModal
+          key={selectedItem.id ?? "item-modal"}
+          item={selectedItem}
+          onClose={() => setSelectedItem(null)}
+          onUpdate={updateItem}
+        />
+      ) : null}
       <div style={{ marginTop: 12 }}>
         <button
           className="btn shopping-list--refresh-btn"
