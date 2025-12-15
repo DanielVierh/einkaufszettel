@@ -92,12 +92,16 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>{item.item_name}</h3>
-          <button
-            className="btn btn-remove-from-list"
-            onClick={handleRemoveFromList}
-          >
-            Von Liste entfernen ☑️
-          </button>
+          {item.item_on_list ? (
+            <button
+              className="btn btn-remove-from-list"
+              onClick={handleRemoveFromList}
+            >
+              Von Liste entfernen ☑️
+            </button>
+          ) : (
+            ""
+          )}
           <button
             className="modal-close"
             onClick={onClose}
@@ -181,7 +185,7 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
               <label className="modal-label">
                 Preis
                 <input
-                  className="modal-input"
+                  className="input-fields"
                   type="number"
                   step="0.01"
                   value={form.item_price ?? ""}
@@ -192,7 +196,7 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
               <label className="modal-label">
                 Kommentar
                 <textarea
-                  className="modal-input"
+                  className="input-fields"
                   value={form.item_comment ?? ""}
                   onChange={(e) => handleChange("item_comment", e.target.value)}
                 />

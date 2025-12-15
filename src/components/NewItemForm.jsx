@@ -116,7 +116,7 @@ const NewItemForm = ({
           placeholder="Item Bezeichnung"
           className="searchbar"
         />
-
+        <button className="btn">Neu Hinzufügen</button>
         <div style={{ marginTop: 8, marginBottom: 8 }}>
           {matches.length > 0 && (
             <div style={{ border: "1px solid #ddd", padding: 8 }}>
@@ -139,7 +139,7 @@ const NewItemForm = ({
                       title={`Zur Einkaufsliste hinzufügen: ${m.item_name}`}
                       className="btn"
                     >
-                      Hinzufügen
+                      Auf die Liste
                     </button>
                   </li>
                 ))}
@@ -147,8 +147,6 @@ const NewItemForm = ({
             </div>
           )}
         </div>
-
-        <button className="btn">Hinzufügen</button>
 
         {error ? (
           <p style={{ color: "red" }}>
