@@ -163,9 +163,10 @@ h2 {
 }
 
 .shopping-list--add-btn {
-  color: black;
+  color: white;
   background-color: green;
-  padding: 8px 12px;
+  padding: 14px 17px;
+  margin-top: 40px;
 }
 
 .product-list {
