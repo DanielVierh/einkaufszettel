@@ -118,7 +118,9 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
             >
               {item.item_price && `${item.item_amount} x ${item.item_price} €`}
             </div>
-            <div>{item.item_comment ? "ℹ️" : ""}</div>
+            <div style={{ fontSize: "1rem" }}>
+              {item.item_comment && "ℹ"} {item.item_on_weekly_list && "∞"}
+            </div>
             <div className="product-name-div">{item.item_name}</div>
             <div
               style={{
