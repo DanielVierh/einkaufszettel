@@ -5,6 +5,7 @@ import ItemModal from "./ItemModal";
 const ShoppingList = ({ onToggleItemList } = {}) => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [itemAmount, setItemAmount] = useState(0);
 
   async function handleGetList() {
     try {
@@ -61,7 +62,11 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
     let mounted = true;
     async function load() {
       const data = await handleGetList();
-      if (mounted) setItems(data);
+      if (mounted) {
+        setItems(data);
+        // set count directly from freshly fetched data (avoid using stale `items` or timeouts)
+        setItemAmount((data && data.length) || 0);
+      }
     }
 
     load();
@@ -96,6 +101,7 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
       <div>
         <span className="shopping-sum">Gesamt: {totalSum.toFixed(2)} €</span>
       </div>
+      <div>Anzahl {itemAmount}</div>
       {items.length > 0 ? (
         <ul className="list-wrapper">
           {items.map((item) => (

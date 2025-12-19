@@ -135,11 +135,16 @@ const NewItemForm = ({
                     <span>{m.item_name}</span>
                     <button
                       type="button"
-                      onClick={() => addExistingItem(m.id)}
+                      onClick={() => {
+                        addExistingItem(m.id);
+                        // clear local and parent search state immediately
+                        setItemname("");
+                        setSearchTerm("");
+                      }}
                       title={`Zur Einkaufsliste hinzufügen: ${m.item_name}`}
                       className="btn"
                     >
-                      Auf die Liste
+                      Hinzufügen
                     </button>
                   </li>
                 ))}
@@ -147,7 +152,6 @@ const NewItemForm = ({
             </div>
           )}
         </div>
-
         {error ? (
           <p style={{ color: "red" }}>
             Da ist etwas schief gelaufen <br></br> {error}
