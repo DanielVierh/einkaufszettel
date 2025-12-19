@@ -188,6 +188,9 @@ h2 {
 }
 
 .product-list--button-ready {
+  position: fixed;
+  top: 60px;
+  right: 10px;
   color: lightgreen;
   background-color: #0e354c;
   padding: 8px 12px;

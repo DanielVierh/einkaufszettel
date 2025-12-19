@@ -68,6 +68,14 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
     };
   }, []);
 
+  async function handle_create_weeklyList() {
+    items.map((item) => {
+      if (item.item_on_weekly_list) {
+        addExistingItem(item.id);
+      }
+    });
+  }
+
   const filteredItems =
     searchTerm && searchTerm.trim() !== ""
       ? items.filter((it) =>
@@ -143,7 +151,9 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
           onDelete={deleteItem}
         />
       ) : null}
-      {/* <button className="btn">Wocheneinkaufsliste</button> */}
+      <button className="btn" onClick={handle_create_weeklyList}>
+        Wocheneinkaufsliste
+      </button>
       <button
         className="btn product-list--button-ready"
         onClick={() => {
