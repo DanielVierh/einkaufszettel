@@ -96,38 +96,45 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
       <div>
         <span className="shopping-sum">Gesamt: {totalSum.toFixed(2)} €</span>
       </div>
-      <ul className="list-wrapper">
-        {items.map((item) => (
-          <li
-            key={item.id ?? item.item_name}
-            className={`product ${item.item_on_list ? "on-list" : ""} ${
-              item.item_is_open ? "item-open" : ""
-            }`}
-            onClick={() => setSelectedItem(item)}
-          >
-            <div
-              className={`item-price ${
-                item.item_amount > 1 && "multiple-amount"
+      {items.length > 0 ? (
+        <ul className="list-wrapper">
+          {items.map((item) => (
+            <li
+              key={item.id ?? item.item_name}
+              className={`product ${item.item_on_list ? "on-list" : ""} ${
+                item.item_is_open ? "item-open" : ""
               }`}
+              onClick={() => setSelectedItem(item)}
             >
-              {item.item_price && `${item.item_amount} x ${item.item_price} €`}
-            </div>
-            <div style={{ fontSize: "1rem" }}>
-              {item.item_comment && "ℹ"} {item.item_on_weekly_list && "∞"}
-            </div>
-            <div className="product-name-div">{item.item_name}</div>
-            <div
-              style={{
-                position: "absolute",
-                top: 6,
-                right: 6,
-                display: "flex",
-                gap: 6,
-              }}
-            ></div>
-          </li>
-        ))}
-      </ul>
+              <div
+                className={`item-price ${
+                  item.item_amount > 1 && "multiple-amount"
+                }`}
+              >
+                {item.item_price &&
+                  `${item.item_amount} x ${item.item_price} €`}
+              </div>
+              <div style={{ fontSize: "1rem" }}>
+                {item.item_comment && "ℹ"} {item.item_on_weekly_list && "∞"}
+              </div>
+              <div className="product-name-div">{item.item_name}</div>
+              <div
+                style={{
+                  position: "absolute",
+                  top: 6,
+                  right: 6,
+                  display: "flex",
+                  gap: 6,
+                }}
+              ></div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div>
+          Einkaufsliste ist leer 🛒 <br></br> "Habt ihr an Kaffee gedacht?"" 🐑
+        </div>
+      )}
       {selectedItem ? (
         <ItemModal
           key={selectedItem.id ?? "item-modal"}
