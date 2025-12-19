@@ -132,7 +132,8 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
         </ul>
       ) : (
         <div>
-          Einkaufsliste ist leer 🛒 <br></br> "Habt ihr an Kaffee gedacht?"" 🐑
+          <h2> Einkaufsliste ist leer 🛒</h2>
+          <p style={{ color: "gray" }}>"Habt ihr an Kaffee gedacht?" 🐑</p>
         </div>
       )}
       {selectedItem ? (
