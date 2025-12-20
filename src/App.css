@@ -47,6 +47,10 @@
   --style-open2: #137b86;
   --style-open3: rgb(4, 105, 155);
   --MainTheme: var(--style-open3);
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+  --glass-accent: rgba(255, 255, 255, 0.08);
 }
 
 .list-wrapper {
@@ -65,29 +69,56 @@
 
 .list-wrapper .product {
   box-sizing: border-box;
-  width: 120px;
-  height: 120px;
-  background-color: gray;
-  margin: 3px;
+  width: 140px;
+  height: 140px;
+  margin: 8px;
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   text-align: center;
-  border-radius: 8px;
-  padding: 3px 3px 10px 3px;
+  border-radius: 14px;
+  padding: 10px 12px;
   overflow: hidden;
   position: relative;
-  transition: all 0.25s ease;
+  transition: transform 320ms cubic-bezier(0.2, 0.9, 0.2, 1), box-shadow 320ms,
+    border-color 320ms;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
   hyphens: auto;
 }
 
 .list-wrapper .product.on-list,
 .list-wrapper .product.item-open {
-  background: var(--MainTheme);
+  background: linear-gradient(
+    135deg,
+    rgba(6, 57, 104, 0.9),
+    rgba(17, 94, 150, 0.9)
+  );
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 30px rgba(4, 30, 60, 0.6);
+  /* ensure rounded corners and clipping remain for on-list state */
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.list-wrapper .product:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 18px 40px rgba(4, 30, 60, 0.65);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.list-wrapper .product:active {
+  transform: translateY(-2px) scale(1.01);
 }
 
 .list-button {
@@ -164,10 +195,11 @@ h2 {
 }
 
 .shopping-list--add-btn {
-  color: white;
+  color: lightgreen !important;
   background-color: green;
-  padding: 14px 17px;
+  padding: 14px 17px !important;
   margin-top: 40px;
+  box-shadow: 0 0 25px green !important;
 }
 
 .product-list {
@@ -224,14 +256,16 @@ h2 {
   z-index: 9999;
 }
 .modal {
-  background: #0f1720;
+  background: rgba(255, 255, 255, 0.04);
   color: #fff;
-  padding: 16px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 520px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-  border: 1px solid white;
+  padding: 18px;
+  border-radius: 12px;
+  width: 92%;
+  max-width: 640px;
+  box-shadow: 0 18px 50px rgba(2, 6, 23, 0.65);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
 }
 .modal-header {
   display: flex;
@@ -278,12 +312,17 @@ h2 {
 .modal-comment {
   font-size: 14px;
   text-align: left;
-  background-color: rgb(151, 196, 210);
-  color: black;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.02)
+  );
+  color: #e6f0f8;
   margin-left: 5px;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 10px;
+  border-radius: 10px;
   width: 60%;
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .modal-form {
@@ -313,7 +352,7 @@ h2 {
 }
 
 .item-price {
-  background-color: rgb(51, 59, 61);
+  background-color: rgba(21, 24, 25, 0.563) !important;
   color: white;
   font-weight: bold;
   padding: 3px 6px;
@@ -323,9 +362,235 @@ h2 {
 
 .multiple-amount {
   background-color: rgb(49, 211, 217);
-  color: black;
+  color: orange;
   font-weight: bold;
   padding: 2px 10px;
   border-radius: 7px;
   font-size: 14px;
 }
+
+/* --- Extra UI enhancements: animated gradients, sheen, buttons, modal pop --- */
+
+:root {
+  --accent-1: #7b61ff;
+  --accent-2: #61d4ff;
+  --accent-3: #6ef8b0;
+  --glass-strong: rgba(255, 255, 255, 0.08);
+  --glass-soft: rgba(255, 255, 255, 0.03);
+}
+
+/* floaty animation removed per user preference */
+
+@keyframes sheen-slide {
+  0% {
+    transform: translateX(-130%) skewX(-10deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(130%) skewX(-10deg);
+    opacity: 0;
+  }
+}
+
+/* gentle animated gradient for page root background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    120deg,
+    rgba(98, 72, 255, 0.08),
+    rgba(97, 212, 255, 0.04) 40%,
+    rgba(110, 248, 176, 0.03)
+  );
+  pointer-events: none;
+  filter: blur(40px);
+  transform: translateZ(0);
+}
+
+/* product card sheen + floating micro-motion */
+.list-wrapper .product {
+  overflow: hidden;
+}
+.list-wrapper .product::after {
+  content: "";
+  position: absolute;
+  left: -40%;
+  top: -60%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0) 25%
+  );
+  transform: rotate(-12deg);
+  transition: opacity 320ms;
+  opacity: 0.4;
+  pointer-events: none;
+}
+.list-wrapper .product:hover::after {
+  opacity: 0.6;
+}
+
+/* float animation intentionally removed; keep hover/glow only */
+
+/* Make corners consistently rounded across main UI elements */
+.list-wrapper .product,
+.btn,
+.searchbar,
+.modal,
+.modal-input,
+.modal-comment,
+.amount-btn,
+.item-price,
+.list-button {
+  border-radius: 14px;
+}
+
+/* Add soft base glow and stronger hover glow for product cards */
+.list-wrapper .product {
+  box-shadow: 0 10px 30px rgba(99, 79, 255, 0.06),
+    0 6px 18px rgba(2, 6, 23, 0.35);
+  transition: transform 320ms cubic-bezier(0.2, 0.9, 0.2, 1), box-shadow 320ms,
+    border-color 320ms;
+}
+.list-wrapper .product:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 26px 70px rgba(99, 79, 255, 0.18),
+    0 14px 40px rgba(6, 57, 104, 0.35);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* accent border glow for featured/on-list */
+.list-wrapper .product.on-list {
+  box-shadow: 0 22px 50px rgba(99, 79, 255, 0.14),
+    0 8px 18px rgba(6, 57, 104, 0.45);
+}
+
+/* Buttons: modern glass buttons with hover highlight */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  color: #fff;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 220ms ease;
+  box-shadow: 0 6px 16px rgba(2, 6, 23, 0.45);
+}
+.btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(4, 30, 60, 0.6);
+}
+.btn:active {
+  transform: translateY(-1px) scale(0.995);
+}
+.btn:focus {
+  outline: 2px solid rgba(123, 97, 255, 0.18);
+  outline-offset: 3px;
+}
+
+.submit-btn {
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  color: white;
+  border: none;
+  box-shadow: 0 10px 30px rgba(98, 72, 255, 0.14),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.cancel-btn {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.5),
+    rgba(255, 255, 255, 0.02)
+  );
+  color: #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* modal pop-in and inner shimmer */
+.modal {
+  transform: translateY(18px) scale(0.995);
+  opacity: 0;
+  transition: transform 260ms cubic-bezier(0.15, 0.9, 0.36, 1),
+    opacity 260ms ease;
+}
+.modal-open .modal {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+.modal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0)
+  );
+  border-radius: 12px;
+}
+
+/* small animated sheen for actions */
+.amount-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.amount-btn::after {
+  content: "";
+  position: absolute;
+  left: -120%;
+  top: -10%;
+  width: 40%;
+  height: 120%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.02)
+  );
+  transform: skewX(-10deg);
+}
+.amount-btn:active::after {
+  animation: sheen-slide 520ms ease forwards;
+}
+
+/* subtle badge on price */
+.item-price {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.35),
+    rgba(255, 255, 255, 0.02)
+  );
+  box-shadow: 0 6px 14px rgba(2, 6, 23, 0.45);
+  transition: transform 200ms ease;
+}
+.list-wrapper .product:hover .item-price {
+  transform: translateY(-6px);
+}
+
+/* small responsive tweak */
+@media (max-width: 640px) {
+  .list-wrapper .product {
+    width: 120px;
+    height: 120px;
+  }
+  .modal {
+    width: 96%;
+  }
+}
+
+/* utility: apply .modal-open on body when modal visible from JS */
