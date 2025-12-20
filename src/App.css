@@ -71,7 +71,7 @@
   box-sizing: border-box;
   width: 140px;
   height: 140px;
-  margin: 8px;
+  margin: 3px;
   color: white;
   display: flex;
   flex-direction: column;
@@ -350,7 +350,11 @@ h2 {
 
 .btn-remove-from-list {
   font-size: 12px;
-  background-color: green;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.616),
+    rgba(139, 0, 0, 0.461)
+  ) !important;
 }
 
 .item-price {
@@ -374,8 +378,8 @@ h2 {
 /* --- Extra UI enhancements: animated gradients, sheen, buttons, modal pop --- */
 
 :root {
-  --accent-1: #7b61ff;
-  --accent-2: #61d4ff;
+  --accent-1: #0a7113;
+  --accent-2: #0ca862;
   --accent-3: #6ef8b0;
   --glass-strong: rgba(255, 255, 255, 0.08);
   --glass-soft: rgba(255, 255, 255, 0.03);
