@@ -112,13 +112,15 @@
 }
 
 .list-wrapper .product:hover {
-  transform: translateY(-8px) scale(1.03);
+  /* remove upward shift on hover — keep glow and subtle scale */
+  transform: scale(1.02);
   box-shadow: 0 18px 40px rgba(4, 30, 60, 0.65);
   border-color: rgba(255, 255, 255, 0.22);
 }
 
 .list-wrapper .product:active {
-  transform: translateY(-2px) scale(1.01);
+  /* avoid persistent offset on click */
+  transform: scale(0.998);
 }
 
 .list-button {
@@ -437,8 +439,6 @@ body::before {
   opacity: 0.6;
 }
 
-/* float animation intentionally removed; keep hover/glow only */
-
 /* Make corners consistently rounded across main UI elements */
 .list-wrapper .product,
 .btn,
@@ -460,7 +460,8 @@ body::before {
     border-color 320ms;
 }
 .list-wrapper .product:hover {
-  transform: translateY(-8px) scale(1.03);
+  /* remove upward shift on hover — keep subtle scale and glow only */
+  transform: scale(1.02);
   box-shadow: 0 26px 70px rgba(99, 79, 255, 0.18),
     0 14px 40px rgba(6, 57, 104, 0.35);
   border-color: rgba(255, 255, 255, 0.22);
@@ -491,11 +492,11 @@ body::before {
   box-shadow: 0 6px 16px rgba(2, 6, 23, 0.45);
 }
 .btn:hover {
-  transform: translateY(-4px);
+  transform: translateY(0) scale(1.02);
   box-shadow: 0 18px 40px rgba(4, 30, 60, 0.6);
 }
 .btn:active {
-  transform: translateY(-1px) scale(0.995);
+  transform: scale(0.995);
 }
 .btn:focus {
   outline: 2px solid rgba(123, 97, 255, 0.18);
