@@ -493,7 +493,7 @@ body::before {
   color: #fff;
   cursor: pointer;
   transition: transform 180ms ease, box-shadow 180ms ease, background 220ms ease;
-  box-shadow: 0 6px 16px rgba(2, 6, 23, 0.45);
+  box-shadow: 0 6px 16px rgba(53, 81, 208, 0.45);
 }
 .btn:hover {
   transform: translateY(0) scale(1.02);
