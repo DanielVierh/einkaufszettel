@@ -76,6 +76,16 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
     }
   };
 
+  const handleAddToList = async () => {
+    try {
+      if (typeof onUpdate === "function")
+        await onUpdate(item.id, { item_on_list: true });
+    } catch (err) {
+      console.error("Fehler beim Hinzufügen zur Liste:", err);
+      alert("Fehler beim Hinzufügen: " + String(err));
+    }
+  };
+
   const handleDelete = async () => {
     if (!confirm(`Produkt "${item.item_name}" wirklich löschen?`)) return;
     try {
@@ -100,15 +110,10 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
               Von Liste entfernen ☑️
             </button>
           ) : (
-            ""
+            <button className="btn submit-btn" onClick={handleAddToList}>
+              Zur Liste hinzufügen ➕
+            </button>
           )}
-          <button
-            className="modal-close"
-            onClick={onClose}
-            aria-label="Schließen"
-          >
-            ×
-          </button>
         </div>
 
         <div className="modal-body">
