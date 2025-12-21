@@ -193,8 +193,8 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
                 <input
                   className="input-fields"
                   value={form.item_name}
-                    onChange={(e) => handleChange("item_name", e.target.value)}
-                    onFocus={(e) => e.target.select()}
+                  onChange={(e) => handleChange("item_name", e.target.value)}
+                  onFocus={(e) => e.target.select()}
                 />
               </label>
 
@@ -217,8 +217,8 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
                   type="number"
                   step="0.01"
                   value={form.item_price ?? ""}
-                    onChange={(e) => handleChange("item_price", e.target.value)}
-                    onFocus={(e) => e.target.select()}
+                  onChange={(e) => handleChange("item_price", e.target.value)}
+                  onFocus={(e) => e.target.select()}
                 />
               </label>
 
