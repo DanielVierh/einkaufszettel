@@ -191,7 +191,8 @@ const NewItemForm = ({
                   type="number"
                   step="0.01"
                   value={item_price}
-                  onChange={(e) => setItem_price(e.target.value)}
+                    onChange={(e) => setItem_price(e.target.value)}
+                    onFocus={(e) => e.target.select()}
                   className="input-fields"
                 />
               </label>
@@ -202,7 +203,8 @@ const NewItemForm = ({
                   type="number"
                   min="1"
                   value={item_amount}
-                  onChange={(e) => setItem_amount(e.target.value)}
+                    onChange={(e) => setItem_amount(e.target.value)}
+                    onFocus={(e) => e.target.select()}
                   className="input-fields"
                 />
               </label>
@@ -212,7 +214,8 @@ const NewItemForm = ({
                 <input
                   type="text"
                   value={item_comment}
-                  onChange={(e) => setItem_comment(e.target.value)}
+                    onChange={(e) => setItem_comment(e.target.value)}
+                    onFocus={(e) => e.target.select()}
                   className="input-fields"
                 />
               </label>
