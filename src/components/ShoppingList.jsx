@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import supabase from "../lib/supabaseClient";
 import ItemModal from "./ItemModal";
 
-const ShoppingList = ({ onToggleItemList } = {}) => {
+const ShoppingList = ({ onToggleItemList, userId, user_name } = {}) => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [itemAmount, setItemAmount] = useState(0);
@@ -146,6 +146,7 @@ const ShoppingList = ({ onToggleItemList } = {}) => {
         <ItemModal
           key={selectedItem.id ?? "item-modal"}
           item={selectedItem}
+          user_name={user_name}
           onClose={() => setSelectedItem(null)}
           onUpdate={updateItem}
           onDelete={deleteItem}

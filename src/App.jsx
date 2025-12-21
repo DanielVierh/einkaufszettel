@@ -34,7 +34,11 @@ function App() {
               <h2>Einkaufszettel</h2>
               <UserButton />
             </header>
-            <ShoppingList onToggleItemList={toggleItemList} />
+            <ShoppingList
+              onToggleItemList={toggleItemList}
+              userId={user.id}
+              user_name={user.firstName}
+            />
             <ItemList
               visible={showItemList}
               onClose={toggleItemList}

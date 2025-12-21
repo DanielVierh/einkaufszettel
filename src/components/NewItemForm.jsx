@@ -83,6 +83,7 @@ const NewItemForm = ({
         item_on_weekly_list: Boolean(item_on_weekly_list),
         item_comment: item_comment || "",
         item_creator: user_name,
+        added_at: new Date().toISOString(),
       });
 
       setSuccess("Neues Produkt erstellt und zur Liste hinzugefügt");

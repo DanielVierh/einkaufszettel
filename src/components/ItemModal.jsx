@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
+const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
   const [amount, setAmount] = useState(() => item?.item_amount ?? 1);
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(() => ({
@@ -68,7 +68,11 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
   const handleRemoveFromList = async () => {
     try {
       if (typeof onUpdate === "function")
-        await onUpdate(item.id, { item_on_list: false });
+        await onUpdate(item.id, {
+          item_on_list: false,
+          added_at: null,
+          item_creator: null,
+        });
       if (typeof onClose === "function") onClose();
     } catch (err) {
       console.error("Fehler beim Entfernen von Liste:", err);
@@ -78,8 +82,13 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
 
   const handleAddToList = async () => {
     try {
+      const creator = user_name ?? null;
       if (typeof onUpdate === "function")
-        await onUpdate(item.id, { item_on_list: true });
+        await onUpdate(item.id, {
+          item_on_list: true,
+          added_at: new Date().toISOString(),
+          item_creator: creator,
+        });
     } catch (err) {
       console.error("Fehler beim Hinzufügen zur Liste:", err);
       alert("Fehler beim Hinzufügen: " + String(err));
@@ -158,12 +167,23 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete } = {}) => {
                 </span>
               </div>
 
-              <div className="modal-row">
-                <strong>Erstellt von:</strong>
-                <span className="modal-comment">
-                  {item.item_creator ?? "—"}
-                </span>
-              </div>
+              {item.item_on_list && item.added_at ? (
+                <div className="modal-row">
+                  <strong>Hinzugefügt am:</strong>
+                  <span className="modal-comment">
+                    {new Date(item.added_at).toLocaleString("de-DE")}
+                  </span>
+                </div>
+              ) : null}
+
+              {item.item_on_list ? (
+                <div className="modal-row">
+                  <strong>Hinzugefügt von:</strong>
+                  <span className="modal-comment">
+                    {item.item_creator ?? "—"}
+                  </span>
+                </div>
+              ) : null}
             </>
           ) : (
             <div className="modal-form">

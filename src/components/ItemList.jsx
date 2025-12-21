@@ -90,7 +90,11 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
     try {
       const { error } = await supabase
         .from("shopping_items")
-        .update({ item_on_list: true })
+        .update({
+          item_on_list: true,
+          added_at: new Date().toISOString(),
+          item_creator: user_name ?? null,
+        })
         .eq("id", id);
       if (error) throw error;
       window.dispatchEvent(new CustomEvent("items:changed"));
@@ -146,6 +150,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
         <ItemModal
           key={selectedItem.id ?? "item-modal"}
           item={selectedItem}
+          user_name={user_name}
           onClose={() => setSelectedItem(null)}
           onUpdate={updateItem}
           onDelete={deleteItem}
