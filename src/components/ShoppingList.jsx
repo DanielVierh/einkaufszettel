@@ -4,6 +4,7 @@ import ItemModal from "./ItemModal";
 
 const ShoppingList = ({ onToggleItemList, userId, user_name } = {}) => {
   const [items, setItems] = useState([]);
+  const [sortBy, setSortBy] = useState("added_at");
   const [selectedItem, setSelectedItem] = useState(null);
   const [itemAmount, setItemAmount] = useState(0);
 
@@ -95,16 +96,52 @@ const ShoppingList = ({ onToggleItemList, userId, user_name } = {}) => {
     return acc + price * amount;
   }, 0);
 
+  const sortedItems = [...items].sort((a, b) => {
+    if (sortBy === "name") {
+      const an = (a.item_name || "").toString();
+      const bn = (b.item_name || "").toString();
+      return an.localeCompare(bn, undefined, { sensitivity: "base" });
+    }
+    if (sortBy === "added_at") {
+      const ta = a.added_at ? new Date(a.added_at).getTime() : 0;
+      const tb = b.added_at ? new Date(b.added_at).getTime() : 0;
+      return tb - ta; // newest first
+    }
+    return 0;
+  });
+
   return (
     <section className="shopping-list">
       <h2>Einkaufszettel</h2>
-      <div>
-        <span className="shopping-sum">Gesamt: {totalSum.toFixed(2)} €</span>
-      </div>
+      <span className="shopping-sum">Gesamt: {totalSum.toFixed(2)} €</span>
       <div>Anzahl {itemAmount}</div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: 6,
+        }}
+      >
+        <button
+          className={"btn" + (sortBy === "name" ? " active" : "")}
+          onClick={() => setSortBy((s) => (s === "name" ? "none" : "name"))}
+          title="Alphabetisch nach Name"
+        >
+          A–Z
+        </button>
+        <button
+          className={"btn" + (sortBy === "added_at" ? " active" : "")}
+          onClick={() =>
+            setSortBy((s) => (s === "added_at" ? "none" : "added_at"))
+          }
+          title="Nach hinzugefügt (neueste zuerst)"
+        >
+          Datum
+        </button>
+      </div>
       {items.length > 0 ? (
         <ul className="list-wrapper">
-          {items.map((item) => (
+          {sortedItems.map((item) => (
             <li
               key={item.id ?? item.item_name}
               className={`product ${item.item_on_list ? "on-list" : ""} ${
