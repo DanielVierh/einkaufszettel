@@ -179,48 +179,55 @@ const NewItemForm = ({
         >
           <h3>Neues Produkt anlegen</h3>
           <form onSubmit={createNewProduct}>
-            <div style={{ marginBottom: 8 }}>
-              <label>Bezeichnung:</label>
-              <div>{itemname}</div>
-            </div>
-            <div style={{ marginBottom: 8 }}>
-              <label style={{ marginRight: 12 }}>Preis:</label>
-              <input
-                type="number"
-                step="0.01"
-                value={item_price}
-                onChange={(e) => setItem_price(e.target.value)}
-                className="input-fields"
-              />
-            </div>
-            <div style={{ marginBottom: 8 }}>
-              <label style={{ marginRight: 12 }}>Menge:</label>
-              <input
-                type="number"
-                min="1"
-                value={item_amount}
-                onChange={(e) => setItem_amount(e.target.value)}
-                className="input-fields"
-              />
-            </div>
-            <div style={{ marginBottom: 8 }}>
-              <label style={{ marginRight: 12 }}>Kommentar:</label>
-              <input
-                type="text"
-                value={item_comment}
-                onChange={(e) => setItem_comment(e.target.value)}
-                className="input-fields"
-              />
-            </div>
-            <div style={{ marginBottom: 8 }}>
-              <label>
+            <div className="modal-form editing">
+              <label className="modal-label">
+                Bezeichnung
+                <span>{itemname}</span>
+              </label>
+
+              <label className="modal-label">
+                Preis
                 <input
+                  type="number"
+                  step="0.01"
+                  value={item_price}
+                  onChange={(e) => setItem_price(e.target.value)}
+                  className="input-fields"
+                />
+              </label>
+
+              <label className="modal-label">
+                Menge
+                <input
+                  type="number"
+                  min="1"
+                  value={item_amount}
+                  onChange={(e) => setItem_amount(e.target.value)}
+                  className="input-fields"
+                />
+              </label>
+
+              <label className="modal-label">
+                Kommentar
+                <input
+                  type="text"
+                  value={item_comment}
+                  onChange={(e) => setItem_comment(e.target.value)}
+                  className="input-fields"
+                />
+              </label>
+
+              <label
+                className="modal-label"
+                style={{ flexDirection: "row", alignItems: "center" }}
+              >
+                Auf Wochenliste
+                <input
+                  className="input-checkbox"
                   type="checkbox"
                   checked={item_on_weekly_list}
                   onChange={(e) => setItem_on_weekly_list(e.target.checked)}
-                  style={{ marginRight: 8 }}
                 />
-                Auf Wochenliste
               </label>
             </div>
 

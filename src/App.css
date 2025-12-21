@@ -601,3 +601,67 @@ body::before {
 }
 
 /* utility: apply .modal-open on body when modal visible from JS */
+
+/* --- Edit-mode field styles --- */
+/* Applied when editing inside the modal: .modal-form.editing */
+.modal-form.editing {
+  gap: 12px;
+}
+.modal-form.editing .modal-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+.modal-form.editing .modal-label > span,
+.modal-form.editing .modal-label > strong {
+  min-width: 120px;
+  text-align: left;
+}
+.modal-form.editing .modal-label > .input-fields,
+.modal-form.editing .modal-label > textarea.input-fields {
+  flex: 1 1 auto;
+  width: auto;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.45);
+  transition: box-shadow 180ms ease, border-color 160ms ease,
+    transform 120ms ease;
+}
+.modal-form.editing textarea.input-fields {
+  min-height: 84px;
+  resize: vertical;
+}
+.modal-form.editing .input-fields:focus,
+.modal-form.editing textarea.input-fields:focus {
+  outline: none;
+  box-shadow: 0 10px 30px rgba(98, 72, 255, 0.14);
+  border-color: var(--accent-2);
+  transform: translateY(-1px);
+}
+.modal-form.editing .input-checkbox {
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  accent-color: var(--accent-2);
+  cursor: pointer;
+}
+
+/* Make label text a little clearer in edit mode */
+.modal-form.editing .modal-label {
+  font-size: 14px;
+  color: #e6eef8;
+}
+
+.btn-save {
+  background-color: #0a7113;
+}

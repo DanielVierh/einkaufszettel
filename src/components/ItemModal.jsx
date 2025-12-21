@@ -187,7 +187,7 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
               ) : null}
             </>
           ) : (
-            <div className="modal-form">
+            <div className="modal-form editing">
               <label className="modal-label">
                 Name
                 <input
@@ -200,6 +200,7 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
               <label className="modal-label">
                 Auf Wochenliste
                 <input
+                  className="input-checkbox"
                   type="checkbox"
                   checked={!!form.item_on_weekly_list}
                   onChange={(e) =>
@@ -250,7 +251,7 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
             </>
           ) : (
             <>
-              <button className="btn" onClick={handleSave}>
+              <button className="btn btn-save" onClick={handleSave}>
                 Save
               </button>
               <button className="btn cancel-btn" onClick={handleCancel}>

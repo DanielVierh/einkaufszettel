@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import supabase from "../lib/supabaseClient";
 import ItemModal from "./ItemModal";
 
-const ShoppingList = ({ onToggleItemList, userId, user_name } = {}) => {
+const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
   const [items, setItems] = useState([]);
   const [sortBy, setSortBy] = useState("added_at");
   const [selectedItem, setSelectedItem] = useState(null);
