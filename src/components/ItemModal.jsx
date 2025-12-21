@@ -1,4 +1,5 @@
 import { useState } from "react";
+import formatDate from "../lib/formatDate";
 
 const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
   const [amount, setAmount] = useState(() => item?.item_amount ?? 1);
@@ -171,7 +172,7 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
                 <div className="modal-row">
                   <strong>Hinzugefügt am:</strong>
                   <span className="modal-comment">
-                    {new Date(item.added_at).toLocaleString("de-DE")}
+                    {formatDate(item.added_at)}
                   </span>
                 </div>
               ) : null}
