@@ -69,11 +69,16 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
   }, []);
 
   async function handle_create_weeklyList() {
-    items.map((item) => {
-      if (item.item_on_weekly_list) {
-        addExistingItem(item.id);
-      }
-    });
+    const confirm = window.confirm(
+      "Soll der Wocheneinkaufszettel erstellt werden?"
+    );
+    if (confirm) {
+      items.map((item) => {
+        if (item.item_on_weekly_list) {
+          addExistingItem(item.id);
+        }
+      });
+    }
   }
 
   const filteredItems =
