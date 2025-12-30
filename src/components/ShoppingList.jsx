@@ -7,6 +7,31 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
   const [sortBy, setSortBy] = useState("added_at");
   const [selectedItem, setSelectedItem] = useState(null);
   const [itemAmount, setItemAmount] = useState(0);
+  // palette for supermarkets (will be selected deterministically by name)
+  const supermarketPalette = [
+    "#ff6b6b",
+    "#6bcB77",
+    "#4dabf7",
+    "#f59e0b",
+    "#a78bfa",
+    "#38bdf8",
+    "#fb7185",
+    "#34d399",
+    "#f97316",
+    "#60a5fa",
+  ];
+
+  const colorForSupermarket = (name) => {
+    if (!name) return null;
+    // simple deterministic hash
+    let h = 0;
+    for (let i = 0; i < name.length; i++) {
+      h = (h << 5) - h + name.charCodeAt(i);
+      h |= 0;
+    }
+    const idx = Math.abs(h) % supermarketPalette.length;
+    return supermarketPalette[idx];
+  };
 
   async function handleGetList() {
     try {
@@ -168,6 +193,21 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
               }`}
               onClick={() => setSelectedItem(item)}
             >
+              {/* colored dot for supermarket */}
+              {item.supermarket ? (
+                <div
+                  title={item.supermarket}
+                  style={{
+                    position: "absolute",
+                    left: 8,
+                    top: 12,
+                    width: 12,
+                    height: 12,
+                    borderRadius: "50%",
+                    backgroundColor: colorForSupermarket(item.supermarket),
+                  }}
+                />
+              ) : null}
               <div
                 className={`item-price ${
                   item.item_amount > 1 && "multiple-amount"
