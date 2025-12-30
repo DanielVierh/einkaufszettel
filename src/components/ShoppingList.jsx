@@ -102,6 +102,16 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
       const bn = (b.item_name || "").toString();
       return an.localeCompare(bn, undefined, { sensitivity: "base" });
     }
+    if (sortBy === "supermarket") {
+      const sa = (a.supermarket || "").toString();
+      const sb = (b.supermarket || "").toString();
+      const cmp = sa.localeCompare(sb, undefined, { sensitivity: "base" });
+      if (cmp !== 0) return cmp;
+      // fallback to name when supermarkets equal
+      const an = (a.item_name || "").toString();
+      const bn = (b.item_name || "").toString();
+      return an.localeCompare(bn, undefined, { sensitivity: "base" });
+    }
     if (sortBy === "added_at") {
       const ta = a.added_at ? new Date(a.added_at).getTime() : 0;
       const tb = b.added_at ? new Date(b.added_at).getTime() : 0;
@@ -128,6 +138,13 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
           title="Alphabetisch nach Name"
         >
           A–Z
+        </button>
+        <button
+          className={"btn" + (sortBy === "supermarket" ? " active" : "")}
+          onClick={() => setSortBy((s) => (s === "supermarket" ? "none" : "supermarket"))}
+          title="Nach Supermarkt"
+        >
+          Supermarkt
         </button>
         <button
           className={"btn" + (sortBy === "added_at" ? " active" : "")}
