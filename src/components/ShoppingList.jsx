@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import supabase from "../lib/supabaseClient";
 import ItemModal from "./ItemModal";
 
@@ -32,6 +32,14 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
     const idx = Math.abs(h) % supermarketPalette.length;
     return supermarketPalette[idx];
   };
+
+  const supermarketsList = useMemo(() => {
+    const arr = (items || [])
+      .map((it) => it.supermarket)
+      .filter((s) => s && s.toString().trim() !== "")
+      .map((s) => s.toString().trim());
+    return Array.from(new Set(arr)).sort();
+  }, [items]);
 
   async function handleGetList() {
     try {
@@ -148,6 +156,34 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
   return (
     <section className="shopping-list">
       <h2>Einkaufszettel</h2>
+      {supermarketsList.length > 0 ? (
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            flexWrap: "wrap",
+            margin: "8px 10px",
+          }}
+        >
+          {supermarketsList.map((s) => (
+            <div
+              key={s}
+              style={{ display: "flex", alignItems: "center", gap: 6 }}
+            >
+              <span
+                style={{
+                  display: "inline-block",
+                  width: 12,
+                  height: 12,
+                  borderRadius: "50%",
+                  backgroundColor: colorForSupermarket(s),
+                }}
+              />
+              <span style={{ fontSize: 12, color: "#666" }}>{s}</span>
+            </div>
+          ))}
+        </div>
+      ) : null}
       <span className="shopping-sum">Gesamt: {totalSum.toFixed(2)} €</span>
       <div>Anzahl {itemAmount}</div>
       <div
@@ -199,8 +235,8 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
                   title={item.supermarket}
                   style={{
                     position: "absolute",
-                    left: 8,
-                    top: 12,
+                    left: 5,
+                    top: 5,
                     width: 12,
                     height: 12,
                     borderRadius: "50%",
