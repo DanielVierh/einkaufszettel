@@ -141,7 +141,9 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
         </button>
         <button
           className={"btn" + (sortBy === "supermarket" ? " active" : "")}
-          onClick={() => setSortBy((s) => (s === "supermarket" ? "none" : "supermarket"))}
+          onClick={() =>
+            setSortBy((s) => (s === "supermarket" ? "none" : "supermarket"))
+          }
           title="Nach Supermarkt"
         >
           Supermarkt
