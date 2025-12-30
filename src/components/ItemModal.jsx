@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import formatDate from "../lib/formatDate";
+import supabase from "../lib/supabaseClient";
 
 const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
   const [amount, setAmount] = useState(() => item?.item_amount ?? 1);
@@ -9,7 +10,40 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
     item_on_weekly_list: !!item?.item_on_weekly_list,
     item_price: item?.item_price ?? "",
     item_comment: item?.item_comment ?? "",
+    supermarket: item?.supermarket ?? "",
   }));
+  const [supermarkets, setSupermarkets] = useState([]);
+  const [showCustomSupermarket, setShowCustomSupermarket] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadSupermarkets() {
+      try {
+        const { data, error } = await supabase
+          .from("shopping_items")
+          .select("supermarket");
+        if (error) {
+          console.error("Supabase error (supermarkets):", error);
+          return;
+        }
+        if (!mounted) return;
+        const arr = (data || [])
+          .map((r) => r.supermarket)
+          .filter((s) => s && s.toString().trim() !== "");
+        const unique = Array.from(
+          new Set(arr.map((s) => s.toString().trim()))
+        ).sort();
+        setSupermarkets(unique);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    loadSupermarkets();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   if (!item) return null;
 
@@ -38,7 +72,12 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
       item_on_weekly_list: !!item?.item_on_weekly_list,
       item_price: item?.item_price ?? "",
       item_comment: item?.item_comment ?? "",
+      supermarket: item?.supermarket ?? "",
     });
+    // If the current supermarket is not among loaded supermarkets, show custom input
+    const isCustom =
+      !!item?.supermarket && !supermarkets.includes(item?.supermarket);
+    setShowCustomSupermarket(Boolean(isCustom));
     setIsEditing(true);
   };
 
@@ -52,6 +91,7 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
       item_on_weekly_list: !!form.item_on_weekly_list,
       item_price: form.item_price === "" ? null : form.item_price,
       item_comment: form.item_comment,
+      supermarket: form.supermarket ?? null,
     };
     try {
       if (typeof onUpdate === "function") await onUpdate(item.id, payload);
@@ -168,6 +208,13 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
                 </span>
               </div>
 
+              <div className="modal-row">
+                <strong>Supermarkt:</strong>
+                <span className="modal-comment">
+                  {item.supermarket ? item.supermarket : "—"}
+                </span>
+              </div>
+
               {item.item_on_list && item.added_at ? (
                 <div className="modal-row">
                   <strong>Hinzugefügt am:</strong>
@@ -230,6 +277,49 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
                   onChange={(e) => handleChange("item_comment", e.target.value)}
                   onFocus={(e) => e.target.select()}
                 />
+              </label>
+
+              <label className="modal-label">
+                Supermarkt
+                <select
+                  className="input-fields"
+                  value={
+                    showCustomSupermarket ? "__other__" : form.supermarket ?? ""
+                  }
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    if (v === "__other__") {
+                      setShowCustomSupermarket(true);
+                      handleChange("supermarket", "");
+                    } else {
+                      setShowCustomSupermarket(false);
+                      handleChange("supermarket", v);
+                    }
+                  }}
+                  style={{ width: "48%", minWidth: 160 }}
+                >
+                  <option value="">— auswählen —</option>
+                  {supermarkets.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                  <option value="__other__">
+                    Neuen Supermarkt hinzufügen…
+                  </option>
+                </select>
+                {showCustomSupermarket ? (
+                  <input
+                    list="supermarket-list"
+                    placeholder="Neuer Supermarkt"
+                    value={form.supermarket ?? ""}
+                    onChange={(e) => {
+                      handleChange("supermarket", e.target.value);
+                    }}
+                    className="input-fields"
+                    style={{ width: "48%" }}
+                  />
+                ) : null}
               </label>
             </div>
           )}
