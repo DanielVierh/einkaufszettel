@@ -9,14 +9,13 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
   const [itemAmount, setItemAmount] = useState(0);
   // palette for supermarkets (will be selected deterministically by name)
   const supermarketPalette = [
-    "#000000ff",
     "#0c90e2ff",
+    "#f97316",
     "#11b47eff",
     "#ffffffff",
     "#ebf838ff",
     "#c017f3ff",
     "#ed1414ff",
-    "#f97316",
   ];
 
   const colorForSupermarket = (name) => {
