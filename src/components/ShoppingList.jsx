@@ -2,22 +2,22 @@ import { useEffect, useState, useMemo } from "react";
 import supabase from "../lib/supabaseClient";
 import ItemModal from "./ItemModal";
 
+const supermarketPalette = [
+  "#0c90e2ff",
+  "#f97316",
+  "#11b47eff",
+  "#ffffffff",
+  "#ebf838ff",
+  "#ed1414ff",
+  "teal",
+  "aqua",
+];
+
 const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
   const [items, setItems] = useState([]);
   const [sortBy, setSortBy] = useState("added_at");
   const [selectedItem, setSelectedItem] = useState(null);
   const [itemAmount, setItemAmount] = useState(0);
-  // palette for supermarkets (will be selected deterministically by name)
-  const supermarketPalette = [
-    "#0c90e2ff",
-    "#f97316",
-    "#11b47eff",
-    "#ffffffff",
-    "#ebf838ff",
-    "#c017f3ff",
-    "#ed1414ff",
-  ];
-
   const colorForSupermarket = (name) => {
     if (!name) return null;
     // simple deterministic hash
@@ -37,6 +37,19 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
       .map((s) => s.toString().trim());
     return Array.from(new Set(arr)).sort();
   }, [items]);
+
+  const supermarketColorMap = useMemo(() => {
+    const map = {};
+    supermarketsList.forEach((s, i) => {
+      if (i < supermarketPalette.length) {
+        map[s] = supermarketPalette[i];
+      } else {
+        const hue = Math.round((i * 137.508) % 360); // golden angle for distribution
+        map[s] = `hsl(${hue}, 65%, 55%)`;
+      }
+    });
+    return map;
+  }, [supermarketsList]);
 
   async function handleGetList() {
     try {
@@ -173,7 +186,8 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
                   width: 12,
                   height: 12,
                   borderRadius: "50%",
-                  backgroundColor: colorForSupermarket(s),
+                  backgroundColor:
+                    supermarketColorMap[s] ?? colorForSupermarket(s),
                 }}
               />
               <span style={{ fontSize: 12, color: "#666" }}>{s}</span>
@@ -237,7 +251,9 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
                     width: 12,
                     height: 12,
                     borderRadius: "50%",
-                    backgroundColor: colorForSupermarket(item.supermarket),
+                    backgroundColor:
+                      supermarketColorMap[item.supermarket] ??
+                      colorForSupermarket(item.supermarket),
                   }}
                 />
               ) : null}
