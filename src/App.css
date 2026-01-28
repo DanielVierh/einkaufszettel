@@ -275,6 +275,7 @@ h2 {
   position: relative;
   display: flex;
   flex-direction: column;
+  gap: 12px;
   max-height: calc(100vh - 32px);
   max-height: calc(100dvh - 32px);
   overflow: hidden;
@@ -301,19 +302,33 @@ h2 {
 @container dialog (max-width: 420px) {
   .modal-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 10px;
   }
 
   .modal-row {
-    flex-direction: column;
-    align-items: flex-start;
+    grid-template-columns: 1fr;
     gap: 6px;
+    padding: 12px 0;
   }
 
-  .modal-comment {
+  .modal-header .btn {
     width: 100%;
-    margin-left: 0;
+    justify-content: center;
+  }
+
+  .modal-row > strong {
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: rgba(230, 240, 248, 0.85);
+  }
+
+  .modal-row .amount-controls {
+    justify-content: flex-start;
+  }
+
+  .modal-row .modal-comment {
+    width: 100%;
   }
 }
 .modal-header {
@@ -321,6 +336,17 @@ h2 {
   justify-content: space-between;
   align-items: center;
   flex: 0 0 auto;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.modal-header h3 {
+  margin: 0;
+  text-align: left;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.modal-header .btn {
+  margin: 0;
 }
 .modal-close {
   background: transparent;
@@ -330,17 +356,28 @@ h2 {
   cursor: pointer;
 }
 .modal-body {
-  margin-top: 12px;
+  margin-top: 0;
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  padding-right: 4px;
 }
 .modal-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
+  display: grid;
+  grid-template-columns: 130px 1fr;
   align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.modal-body .modal-row:last-child {
+  border-bottom: none;
+}
+.modal-row > strong {
+  text-align: left;
+  font-weight: 650;
+  color: rgba(230, 240, 248, 0.92);
 }
 .amount-controls {
   display: flex;
@@ -348,7 +385,7 @@ h2 {
   gap: 8px;
 }
 .amount-btn {
-  padding: 6px 10px;
+  padding: 6px 12px;
   font-size: 18px;
   cursor: pointer;
 }
@@ -363,6 +400,9 @@ h2 {
   margin-top: 12px;
   flex: 0 0 auto;
 }
+.modal-footer .btn {
+  margin: 0;
+}
 
 .modal-comment {
   font-size: 14px;
@@ -373,10 +413,10 @@ h2 {
     rgba(255, 255, 255, 0.02)
   );
   color: #e6f0f8;
-  margin-left: 5px;
-  padding: 10px;
+  margin-left: 0;
+  padding: 5px 10px;
   border-radius: 10px;
-  width: 60%;
+  width: auto;
   border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
