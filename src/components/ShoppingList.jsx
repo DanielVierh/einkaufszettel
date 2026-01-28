@@ -297,16 +297,7 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
           onDelete={deleteItem}
         />
       ) : null}
-      <div style={{ marginTop: 12 }}>
-        <button
-          className="btn shopping-list--refresh-btn"
-          onClick={async () => {
-            window.location.reload();
-          }}
-        >
-          Aktualisieren
-        </button>
-        <br />
+      <div style={{ marginTop: 3 }}>
         <button
           className="btn shopping-list--add-btn"
           onClick={() => {
