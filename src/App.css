@@ -69,8 +69,8 @@
 
 .list-wrapper .product {
   box-sizing: border-box;
-  width: 140px;
-  height: 140px;
+  width: 100px;
+  height: 100px;
   margin: 3px;
   color: white;
   display: flex;
@@ -78,6 +78,7 @@
   justify-content: space-around;
   align-items: center;
   text-align: center;
+  font-size: 12px;
   border-radius: 14px;
   padding: 10px 12px;
   overflow: hidden;
@@ -359,7 +360,7 @@ h2 {
   color: white;
   font-weight: bold;
   padding: 3px 6px;
-  font-size: 12px;
+  font-size: 10px;
   border-radius: 8px;
 }
 
@@ -369,7 +370,6 @@ h2 {
   font-weight: bold;
   padding: 2px 10px;
   border-radius: 7px;
-  font-size: 14px;
 }
 
 /* --- Extra UI enhancements: animated gradients, sheen, buttons, modal pop --- */
@@ -599,8 +599,8 @@ body::before {
 /* small responsive tweak */
 @media (max-width: 640px) {
   .list-wrapper .product {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
   }
   .modal {
     width: 96%;
