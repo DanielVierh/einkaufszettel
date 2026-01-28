@@ -28,7 +28,7 @@ const NewItemForm = ({
     const q = (itemname || "").toString().toLowerCase();
     if (!q) return [];
     return items.filter((it) =>
-      it.item_name.toString().toLowerCase().includes(q)
+      it.item_name.toString().toLowerCase().includes(q),
     );
   }, [items, itemname]);
 
@@ -53,7 +53,7 @@ const NewItemForm = ({
     // Only block creation if there is an exact (case-insensitive) name match.
     const q = (itemname || "").toString().trim().toLowerCase();
     const hasExact = (matches || []).some(
-      (it) => it.item_name.toString().trim().toLowerCase() === q
+      (it) => it.item_name.toString().trim().toLowerCase() === q,
     );
 
     if (!hasExact) {
@@ -128,7 +128,7 @@ const NewItemForm = ({
           .map((r) => r.supermarket)
           .filter((s) => s && s.toString().trim() !== "");
         const unique = Array.from(
-          new Set(arr.map((s) => s.toString().trim()))
+          new Set(arr.map((s) => s.toString().trim())),
         ).sort();
         setSupermarkets(unique);
       } catch (err) {
@@ -144,6 +144,19 @@ const NewItemForm = ({
       window.removeEventListener("items:changed", onItemsChanged);
     };
   }, []);
+
+  useEffect(() => {
+    if (!showModal) return;
+    document.body.classList.add("modal-open");
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setShowModal(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.classList.remove("modal-open");
+    };
+  }, [showModal]);
 
   return (
     <div style={{ position: "relative", marginBottom: 12 }}>
@@ -209,134 +222,140 @@ const NewItemForm = ({
       {/* Modal */}
       {showModal && (
         <div
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            top: "100%",
-            background: "#1b2336ff",
-            border: "1px solid #ccc",
-            padding: 12,
-            zIndex: 50,
-            boxShadow: "0 6px 18px rgba(0,0,0,0.1)",
+          className="modal-overlay"
+          onClick={() => {
+            setShowModal(false);
           }}
         >
-          <h3>Neues Produkt anlegen</h3>
-          <form onSubmit={createNewProduct}>
-            <div className="modal-form editing">
-              <label className="modal-label">
-                Bezeichnung
-                <span>{itemname}</span>
-              </label>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <form
+              onSubmit={createNewProduct}
+              style={{ display: "flex", flexDirection: "column", minHeight: 0 }}
+            >
+              <div className="modal-header">
+                <h3 style={{ margin: 0 }}>Neues Produkt anlegen</h3>
+              </div>
 
-              <label className="modal-label">
-                Supermarkt
-                <select
-                  className="input-fields"
-                  value={showCustomSupermarket ? "__other__" : supermarket}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    if (v === "__other__") {
-                      setShowCustomSupermarket(true);
-                      setCustomSupermarket("");
-                      setSupermarket("");
-                    } else {
-                      setShowCustomSupermarket(false);
-                      setSupermarket(v);
-                      setCustomSupermarket("");
-                    }
+              <div className="modal-body">
+                <div className="modal-form editing">
+                  <label className="modal-label">
+                    Bezeichnung
+                    <span>{itemname}</span>
+                  </label>
+
+                  <label className="modal-label">
+                    Supermarkt
+                    <select
+                      className="input-fields"
+                      value={showCustomSupermarket ? "__other__" : supermarket}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        if (v === "__other__") {
+                          setShowCustomSupermarket(true);
+                          setCustomSupermarket("");
+                          setSupermarket("");
+                        } else {
+                          setShowCustomSupermarket(false);
+                          setSupermarket(v);
+                          setCustomSupermarket("");
+                        }
+                      }}
+                      style={{ width: "48%", minWidth: 160 }}
+                    >
+                      <option value="">— auswählen —</option>
+                      {supermarkets.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                      <option value="__other__">
+                        Neuen Supermarkt hinzufügen…
+                      </option>
+                    </select>
+                    {showCustomSupermarket ? (
+                      <input
+                        list="supermarket-list"
+                        placeholder="Neuer Supermarkt"
+                        value={customSupermarket}
+                        onChange={(e) => {
+                          setCustomSupermarket(e.target.value);
+                          setSupermarket(e.target.value);
+                        }}
+                        className="input-fields"
+                        style={{ width: "48%" }}
+                      />
+                    ) : null}
+                  </label>
+
+                  <label className="modal-label">
+                    Preis
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={item_price}
+                      onChange={(e) => setItem_price(e.target.value)}
+                      onFocus={(e) => e.target.select()}
+                      className="input-fields"
+                    />
+                  </label>
+
+                  <label className="modal-label">
+                    Menge
+                    <input
+                      type="number"
+                      min="1"
+                      value={item_amount}
+                      onChange={(e) => setItem_amount(e.target.value)}
+                      onFocus={(e) => e.target.select()}
+                      className="input-fields"
+                    />
+                  </label>
+
+                  <label className="modal-label">
+                    Kommentar
+                    <input
+                      type="text"
+                      value={item_comment}
+                      onChange={(e) => setItem_comment(e.target.value)}
+                      onFocus={(e) => e.target.select()}
+                      className="input-fields"
+                    />
+                  </label>
+
+                  <label
+                    className="modal-label"
+                    style={{ flexDirection: "row", alignItems: "center" }}
+                  >
+                    Auf Wochenliste
+                    <input
+                      className="input-checkbox"
+                      type="checkbox"
+                      checked={item_on_weekly_list}
+                      onChange={(e) => setItem_on_weekly_list(e.target.checked)}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div
+                className="modal-footer"
+                style={{ display: "flex", gap: 8, justifyContent: "center" }}
+              >
+                <button
+                  type="button"
+                  className="btn cancel-btn"
+                  onClick={() => {
+                    setShowModal(false);
                   }}
-                  style={{ width: "48%", minWidth: 160 }}
                 >
-                  <option value="">— auswählen —</option>
-                  {supermarkets.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                  <option value="__other__">
-                    Neuen Supermarkt hinzufügen…
-                  </option>
-                </select>
-                {showCustomSupermarket ? (
-                  <input
-                    list="supermarket-list"
-                    placeholder="Neuer Supermarkt"
-                    value={customSupermarket}
-                    onChange={(e) => {
-                      setCustomSupermarket(e.target.value);
-                      setSupermarket(e.target.value);
-                    }}
-                    className="input-fields"
-                    style={{ width: "48%" }}
-                  />
-                ) : null}
-              </label>
-
-              <label className="modal-label">
-                Preis
-                <input
-                  type="number"
-                  step="0.01"
-                  value={item_price}
-                  onChange={(e) => setItem_price(e.target.value)}
-                  onFocus={(e) => e.target.select()}
-                  className="input-fields"
-                />
-              </label>
-
-              <label className="modal-label">
-                Menge
-                <input
-                  type="number"
-                  min="1"
-                  value={item_amount}
-                  onChange={(e) => setItem_amount(e.target.value)}
-                  onFocus={(e) => e.target.select()}
-                  className="input-fields"
-                />
-              </label>
-
-              <label className="modal-label">
-                Kommentar
-                <input
-                  type="text"
-                  value={item_comment}
-                  onChange={(e) => setItem_comment(e.target.value)}
-                  onFocus={(e) => e.target.select()}
-                  className="input-fields"
-                />
-              </label>
-
-              <label
-                className="modal-label"
-                style={{ flexDirection: "row", alignItems: "center" }}
-              >
-                Auf Wochenliste
-                <input
-                  className="input-checkbox"
-                  type="checkbox"
-                  checked={item_on_weekly_list}
-                  onChange={(e) => setItem_on_weekly_list(e.target.checked)}
-                />
-              </label>
-            </div>
-
-            <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
-              <button
-                type="button"
-                className="btn cancel-btn"
-                onClick={() => {
-                  setShowModal(false);
-                }}
-              >
-                Abbrechen
-              </button>
-              <button type="submit" className="btn submit-btn">
-                Erstellen
-              </button>
-            </div>
-          </form>
+                  Abbrechen
+                </button>
+                <button type="submit" className="btn submit-btn">
+                  Erstellen
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

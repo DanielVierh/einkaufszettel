@@ -16,6 +16,21 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
   const [showCustomSupermarket, setShowCustomSupermarket] = useState(false);
 
   useEffect(() => {
+    if (!item) return;
+    document.body.classList.add("modal-open");
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        if (typeof onClose === "function") onClose();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.classList.remove("modal-open");
+    };
+  }, [item, onClose]);
+
+  useEffect(() => {
     let mounted = true;
     async function loadSupermarkets() {
       try {
@@ -31,7 +46,7 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
           .map((r) => r.supermarket)
           .filter((s) => s && s.toString().trim() !== "");
         const unique = Array.from(
-          new Set(arr.map((s) => s.toString().trim()))
+          new Set(arr.map((s) => s.toString().trim())),
         ).sort();
         setSupermarkets(unique);
       } catch (err) {
@@ -284,7 +299,9 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
                 <select
                   className="input-fields"
                   value={
-                    showCustomSupermarket ? "__other__" : form.supermarket ?? ""
+                    showCustomSupermarket
+                      ? "__other__"
+                      : (form.supermarket ?? "")
                   }
                   onChange={(e) => {
                     const v = e.target.value;

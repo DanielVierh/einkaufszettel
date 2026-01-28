@@ -65,6 +65,8 @@
   max-width: 800px;
   padding: 10px;
   z-index: 1;
+  container-type: inline-size;
+  container-name: list;
 }
 
 .list-wrapper .product {
@@ -253,6 +255,14 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 16px;
+  padding-top: max(16px, env(safe-area-inset-top));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  padding-left: max(16px, env(safe-area-inset-left));
   z-index: 9999;
 }
 .modal {
@@ -262,15 +272,55 @@ h2 {
   border-radius: 12px;
   width: 92%;
   max-width: 640px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow: hidden;
   box-shadow: 0 18px 50px rgba(2, 6, 23, 0.65);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(10px) saturate(120%);
   -webkit-backdrop-filter: blur(10px) saturate(120%);
+  container-type: inline-size;
+  container-name: dialog;
+}
+
+@container list (max-width: 420px) {
+  .list-wrapper {
+    max-height: 60vh;
+  }
+  .list-wrapper .product {
+    width: calc(50% - 10px);
+    max-width: 180px;
+    height: 110px;
+    font-size: 12px;
+  }
+}
+
+@container dialog (max-width: 420px) {
+  .modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .modal-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .modal-comment {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex: 0 0 auto;
 }
 .modal-close {
   background: transparent;
@@ -281,6 +331,10 @@ h2 {
 }
 .modal-body {
   margin-top: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .modal-row {
   display: flex;
@@ -307,6 +361,7 @@ h2 {
   display: flex;
   justify-content: flex-end;
   margin-top: 12px;
+  flex: 0 0 auto;
 }
 
 .modal-comment {
@@ -542,7 +597,7 @@ body::before {
 }
 .modal-open .modal {
   /* legacy helper: when body/modal-open is toggled, animation still applies */
-  transform: translateY(0) scale(1);
+  transform: translateY(30px) scale(1);
   opacity: 1;
 }
 .modal::before {
@@ -598,6 +653,9 @@ body::before {
 
 /* small responsive tweak */
 @media (max-width: 640px) {
+  .modal-overlay {
+    align-items: flex-start;
+  }
   .list-wrapper .product {
     width: 100px;
     height: 100px;
@@ -608,6 +666,9 @@ body::before {
 }
 
 /* utility: apply .modal-open on body when modal visible from JS */
+body.modal-open {
+  overflow: hidden;
+}
 
 /* --- Edit-mode field styles --- */
 /* Applied when editing inside the modal: .modal-form.editing */
