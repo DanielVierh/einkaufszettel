@@ -70,7 +70,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
 
   async function handle_create_weeklyList() {
     const confirm = window.confirm(
-      "Soll der Wocheneinkaufszettel erstellt werden?"
+      "Soll der Wocheneinkaufszettel erstellt werden?",
     );
     if (confirm) {
       items.map((item) => {
@@ -87,7 +87,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
           it.item_name
             .toString()
             .toLowerCase()
-            .includes(searchTerm.toString().toLowerCase())
+            .includes(searchTerm.toString().toLowerCase()),
         )
       : items;
 
@@ -112,7 +112,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
 
   return (
     <section className={`product-list ${visible ? "active" : ""}`}>
-      <h2>Alle Produkte</h2>
+      <h2>Alle Produkte ({filteredItems.length})</h2>
       <NewItemForm
         userId={userId}
         user_name={user_name}
