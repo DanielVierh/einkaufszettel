@@ -775,3 +775,19 @@ body.modal-open {
 .btn-save {
   background-color: #0a7113;
 }
+
+.status {
+  display: none;
+  color: black;
+  font-weight: bold;
+  background-color: greenyellow;
+  width: fit-content;
+  padding: 5px 10px;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgb(74, 236, 74);
+}
+
+.status.active {
+  display: block;
+}

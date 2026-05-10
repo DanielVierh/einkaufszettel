@@ -7,6 +7,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [status, setStatus] = useState("");
 
   async function updateItem(id, changes) {
     try {
@@ -91,7 +92,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
         )
       : items;
 
-  async function addExistingItem(id) {
+  async function addExistingItem(id, product_name) {
     try {
       const { error } = await supabase
         .from("shopping_items")
@@ -101,6 +102,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
           item_creator: user_name ?? null,
         })
         .eq("id", id);
+      handle_status(product_name);
       if (error) throw error;
       window.dispatchEvent(new CustomEvent("items:changed"));
       setSearchTerm("");
@@ -108,6 +110,15 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
       console.error("Add existing error", err);
       alert("Fehler beim Hinzufügen: " + String(err));
     }
+  }
+
+  function handle_status(product_name) {
+    setStatus(`${product_name} hinzugefügt`);
+    document.getElementById("status").classList.add("active");
+    setTimeout(() => {
+      setStatus("");
+      document.getElementById("status").classList.remove("active");
+    }, 3000);
   }
 
   return (
@@ -121,6 +132,9 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
         setSearchTerm={setSearchTerm}
         addExistingItem={addExistingItem}
       />
+      <p id="status" className="status">
+        {status}
+      </p>
       <ul className="list-wrapper">
         {filteredItems.map((item) => (
           <li

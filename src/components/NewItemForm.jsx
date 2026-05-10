@@ -194,7 +194,7 @@ const NewItemForm = ({
                     <button
                       type="button"
                       onClick={() => {
-                        addExistingItem(m.id);
+                        addExistingItem(m.id, m.item_name);
                         // clear local and parent search state immediately
                         setItemname("");
                         setSearchTerm("");
