@@ -1,0 +1,154 @@
+<mxfile host="65bd71144e">
+    <diagram id="ov8rsYIztDlBurb407Eu" name="Page-1">
+        <mxGraphModel dx="1095" dy="1791" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="8" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios7.misc.ipad13inch;strokeColor=#c0c0c0;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="-50" width="572" height="813.0000000000001" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="" style="dashed=0;shape=rect;fillColor=#ffffff;strokeColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="170" y="21.5" width="510" height="670" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="12:30" style="dashed=0;shape=rect;align=right;fillColor=#00A0B4;strokeColor=none;fontColor=#FFFFFF;spacingRight=4;spacingTop=1;fontStyle=0;fontSize=13;resizeWidth=1;whiteSpace=wrap;html=1;" vertex="1" parent="9">
+                    <mxGeometry width="510" height="24" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="" style="dashed=0;shape=mxgraph.gmdl.top_bar;strokeColor=none;" vertex="1" parent="10">
+                    <mxGeometry x="1" y="0.5" width="46" height="14" relative="1" as="geometry">
+                        <mxPoint x="-92" y="-7" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="12" value="" style="dashed=0;shape=rect;strokeColor=none;fillColor=#00BCD4;resizeWidth=1;" vertex="1" parent="9">
+                    <mxGeometry width="510" height="104" relative="1" as="geometry">
+                        <mxPoint y="24" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="13" value="Search People &amp;amp; Places" style="dashed=0;shape=mxgraph.gmdl.marginRect;rectMargin=8;strokeColor=none;fillColor=#ffffff;shadow=1;fontColor=#CCCCCC;fontSize=14;align=left;spacingLeft=72;resizeWidth=1;whiteSpace=wrap;html=1;" vertex="1" parent="12">
+                    <mxGeometry width="510" height="64" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="" style="dashed=0;shape=mxgraph.gmdl.search;strokeColor=#ADADAD;fillColor=none;strokeWidth=2;" vertex="1" parent="13">
+                    <mxGeometry y="0.5" width="16" height="16" relative="1" as="geometry">
+                        <mxPoint x="28" y="-8" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="15" value="" style="dashed=0;shape=mxgraph.gmdl.voice;strokeColor=#ADADAD;fillColor=#ADADAD;strokeWidth=2;" vertex="1" parent="13">
+                    <mxGeometry x="1" y="0.5" width="10" height="16" relative="1" as="geometry">
+                        <mxPoint x="-40" y="-8" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="16" value="Einkaufszettel" style="text;fontSize=13;fontColor=#FFFFFF;verticalAlign=middle;align=center;resizeWidth=1;whiteSpace=wrap;html=1;" vertex="1" parent="12">
+                    <mxGeometry y="1" width="169.52513966480447" height="48" relative="1" as="geometry">
+                        <mxPoint y="-48" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="17" value="Wochenplan" style="text;fontSize=13;fontColor=#FFFFFF;verticalAlign=middle;align=center;textOpacity=80;resizeWidth=1;whiteSpace=wrap;html=1;" vertex="1" parent="12">
+                    <mxGeometry x="0.33" y="1" width="170.94972067039106" height="48" relative="1" as="geometry">
+                        <mxPoint y="-48" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="18" value="Mahlzeiten" style="text;fontSize=13;fontColor=#FFFFFF;verticalAlign=middle;align=center;textOpacity=80;resizeWidth=1;whiteSpace=wrap;html=1;" vertex="1" parent="12">
+                    <mxGeometry x="0.67" y="1" width="169.52513966480447" height="48" relative="1" as="geometry">
+                        <mxPoint y="-48" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="19" value="" style="dashed=0;shape=rect;strokeColor=none;fillColor=#F1FB8F;resizeWidth=1;" vertex="1" parent="12">
+                    <mxGeometry y="1" width="169.52513966480447" height="4" relative="1" as="geometry">
+                        <mxPoint y="-3" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="20" value="" style="dashed=0;shape=rect;strokeColor=none;fillColor=#000000;resizeWidth=1;" vertex="1" parent="9">
+                    <mxGeometry y="1" width="510" height="48" relative="1" as="geometry">
+                        <mxPoint y="-48" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="21" value="" style="dashed=0;shape=mxgraph.gmdl.back;strokeColor=#ffffff;fillColor=#000000;strokeWidth=2;" vertex="1" parent="20">
+                    <mxGeometry x="0.25" y="0.5" width="14" height="14" relative="1" as="geometry">
+                        <mxPoint x="-7" y="-7" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="22" value="" style="shape=ellipse;strokeColor=#ffffff;fillColor=#000000;strokeWidth=2;" vertex="1" parent="20">
+                    <mxGeometry x="0.5" y="0.5" width="14" height="14" relative="1" as="geometry">
+                        <mxPoint x="-7" y="-7" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="23" value="" style="shape=rect;strokeColor=#ffffff;fillColor=#000000;strokeWidth=2;" vertex="1" parent="20">
+                    <mxGeometry x="0.75" y="0.5" width="14" height="14" relative="1" as="geometry">
+                        <mxPoint x="-7" y="-7" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="25" value="Spaghetti Bolognese" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iComboBox;spacingTop=2;spacingLeft=2;align=left;strokeColor=#444444;fontColor=#666666;buttonText=;fontSize=8;fillColor=#dddddd;fillColor2=#3D5565;sketch=0;whiteSpace=wrap;" vertex="1" parent="9">
+                    <mxGeometry x="130" y="160" width="350" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="Montag" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=center;" vertex="1" parent="9">
+                    <mxGeometry x="40" y="160" width="75.5" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="Chicken mit Reis" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iComboBox;spacingTop=2;spacingLeft=2;align=left;strokeColor=#444444;fontColor=#666666;buttonText=;fontSize=8;fillColor=#dddddd;fillColor2=#3D5565;sketch=0;whiteSpace=wrap;" vertex="1" parent="9">
+                    <mxGeometry x="130" y="190" width="350" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="Dienstag" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=center;" vertex="1" parent="9">
+                    <mxGeometry x="40" y="190" width="75.5" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="Lasagne" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iComboBox;spacingTop=2;spacingLeft=2;align=left;strokeColor=#444444;fontColor=#666666;buttonText=;fontSize=8;fillColor=#dddddd;fillColor2=#3D5565;sketch=0;whiteSpace=wrap;" vertex="1" parent="9">
+                    <mxGeometry x="130" y="220" width="350" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="Mittwoch" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#6c8ebf;buttonText=;fontSize=8;whiteSpace=wrap;align=center;fillColor=#dae8fc;" vertex="1" parent="9">
+                    <mxGeometry x="40" y="220" width="75.5" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="Auswählen" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iComboBox;spacingTop=2;spacingLeft=2;align=left;strokeColor=#444444;fontColor=#666666;buttonText=;fontSize=8;fillColor=#dddddd;fillColor2=#3D5565;sketch=0;whiteSpace=wrap;" vertex="1" parent="9">
+                    <mxGeometry x="130" y="250" width="350" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="Donnerstag" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=center;" vertex="1" parent="9">
+                    <mxGeometry x="40" y="250" width="75.5" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="&lt;span style=&quot;color: rgb(102, 102, 102);&quot;&gt;Auswählen&lt;/span&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iComboBox;spacingTop=2;spacingLeft=2;align=left;strokeColor=#444444;fontColor=#666666;buttonText=;fontSize=8;fillColor=#dddddd;fillColor2=#3D5565;sketch=0;whiteSpace=wrap;" vertex="1" parent="9">
+                    <mxGeometry x="130" y="280" width="350" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="Freitag" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=center;" vertex="1" parent="9">
+                    <mxGeometry x="40" y="280" width="75.5" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" value="&lt;span style=&quot;color: rgb(102, 102, 102);&quot;&gt;Auswählen&lt;/span&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iComboBox;spacingTop=2;spacingLeft=2;align=left;strokeColor=#444444;fontColor=#666666;buttonText=;fontSize=8;fillColor=#dddddd;fillColor2=#3D5565;sketch=0;whiteSpace=wrap;" vertex="1" parent="9">
+                    <mxGeometry x="130" y="310" width="350" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="36" value="Samstag" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=center;" vertex="1" parent="9">
+                    <mxGeometry x="40" y="310" width="75.5" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" value="&lt;span style=&quot;color: rgb(102, 102, 102);&quot;&gt;Auswählen&lt;/span&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iComboBox;spacingTop=2;spacingLeft=2;align=left;strokeColor=#444444;fontColor=#666666;buttonText=;fontSize=8;fillColor=#dddddd;fillColor2=#3D5565;sketch=0;whiteSpace=wrap;" vertex="1" parent="9">
+                    <mxGeometry x="130" y="340" width="350" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="Sonntag" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=center;" vertex="1" parent="9">
+                    <mxGeometry x="40" y="340" width="75.5" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="" style="endArrow=open;endFill=1;endSize=12;html=1;" edge="1" parent="9" target="39">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="290" y="150" as="sourcePoint"/>
+                        <mxPoint x="450" y="150" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="54" value="Mahlzeiten verwalten" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.rrect;rSize=5;strokeColor=none;strokeWidth=1;fillColor=#0085FC;fontColor=#FFFFFF;whiteSpace=wrap;align=center;verticalAlign=middle;spacingLeft=0;fontStyle=1;fontSize=14;spacing=5;" vertex="1" parent="9">
+                    <mxGeometry x="185" y="390" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" value="Dish" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="600" y="-250" width="140" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="+ id: int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="39">
+                    <mxGeometry y="26" width="140" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" value="+ name: char" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="39">
+                    <mxGeometry y="52" width="140" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" value="Weekly Plan Table" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="160" y="-350" width="140" height="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" value="+ field: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="49">
+                    <mxGeometry y="26" width="140" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="+ field: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="49">
+                    <mxGeometry y="52" width="140" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" value="+ field: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="49">
+                    <mxGeometry y="78" width="140" height="26" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
