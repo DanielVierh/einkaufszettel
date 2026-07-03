@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import supabase from "../lib/supabaseClient";
 import ItemModal from "./ItemModal";
+import RefreshButton from "./RefreshButton";
 
 const supermarketPalette = [
   "#0c90e2ff",
@@ -166,6 +167,7 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
   return (
     <section className="shopping-list">
       <h2>Einkaufszettel</h2>
+      <RefreshButton />
       {supermarketsList.length > 0 ? (
         <div
           style={{
