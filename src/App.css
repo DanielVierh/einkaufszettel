@@ -842,6 +842,70 @@ body.modal-open {
   flex-wrap: wrap;
 }
 
+.weekly-recipe-suggestions {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.weekly-recipe-suggestion {
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  border-radius: 10px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+.weekly-recipe-suggestion:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.weekly-recipe-hint {
+  margin: 6px 0 0;
+  font-size: 0.82rem;
+  color: #b7d1e8;
+}
+
+.weekly-picker-modal {
+  max-width: 720px;
+}
+
+.weekly-picker-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 46vh;
+  overflow-y: auto;
+}
+
+.weekly-picker-item {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  border-radius: 10px;
+  padding: 9px 10px;
+  cursor: pointer;
+}
+
+.weekly-picker-item span {
+  font-size: 0.84rem;
+  color: #d6e5f5;
+}
+
+.weekly-picker-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
 .recipe-ingredient-list {
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 10px;

@@ -13,6 +13,9 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
   const [recipes, setRecipes] = useState([]);
   const [weeklyEntries, setWeeklyEntries] = useState([]);
   const [showRecipeModal, setShowRecipeModal] = useState(false);
+  const [showRecipePicker, setShowRecipePicker] = useState(false);
+  const [pickerWeekday, setPickerWeekday] = useState(null);
+  const [pickerSearch, setPickerSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
@@ -26,6 +29,12 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
           setShowRecipeModal(false);
           return;
         }
+        if (showRecipePicker) {
+          setShowRecipePicker(false);
+          setPickerWeekday(null);
+          setPickerSearch("");
+          return;
+        }
         onClose?.();
       }
     };
@@ -34,7 +43,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
       window.removeEventListener("keydown", onKeyDown);
       document.body.classList.remove("modal-open");
     };
-  }, [visible, showRecipeModal, onClose]);
+  }, [visible, showRecipeModal, showRecipePicker, onClose]);
 
   const loadAll = useCallback(async () => {
     if (!userId) return;
@@ -75,6 +84,12 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
     });
     return map;
   }, [weeklyEntries]);
+
+  function openRecipePicker(weekday) {
+    setPickerWeekday(weekday);
+    setPickerSearch("");
+    setShowRecipePicker(true);
+  }
 
   async function handleAssign(weekday, recipeId) {
     setStatus("");
@@ -127,6 +142,26 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
     }
   }
 
+  async function handlePickRecipe(recipeId) {
+    if (!pickerWeekday) return;
+    await handleAssign(pickerWeekday, recipeId);
+    setShowRecipePicker(false);
+    setPickerWeekday(null);
+    setPickerSearch("");
+  }
+
+  const filteredRecipesForPicker = useMemo(() => {
+    const q = (pickerSearch ?? "").toString().trim().toLowerCase();
+    if (!q) return recipes;
+    return recipes.filter((recipe) =>
+      (recipe.title ?? "").toString().toLowerCase().includes(q),
+    );
+  }, [pickerSearch, recipes]);
+
+  const pickerWeekdayLabel = useMemo(() => {
+    return WEEK_DAYS.find((day) => day.value === pickerWeekday)?.label ?? "";
+  }, [pickerWeekday]);
+
   if (!visible) return null;
 
   return (
@@ -148,22 +183,32 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
             {WEEK_DAYS.map((day) => {
               const entry = entryByWeekday.get(day.value);
               const selectedRecipeId = entry?.recipe_id ?? "";
+              const selectedRecipe = recipes.find(
+                (recipe) => recipe.id === selectedRecipeId,
+              );
 
               return (
                 <div key={day.value} className="weekly-day-card">
                   <h4>{day.label}</h4>
-                  <select
-                    className="input-fields"
-                    value={selectedRecipeId}
-                    onChange={(e) => handleAssign(day.value, e.target.value)}
-                  >
-                    <option value="">Nicht geplant</option>
-                    {recipes.map((recipe) => (
-                      <option key={recipe.id} value={recipe.id}>
-                        {recipe.title}
-                      </option>
-                    ))}
-                  </select>
+                  <p className="weekly-recipe-hint">
+                    {selectedRecipe
+                      ? "Aktuell zugewiesen:"
+                      : "Aktuell zugewiesen: Nicht geplant"}
+                    {selectedRecipe ? (
+                      <strong style={{ marginLeft: 6 }}>
+                        {selectedRecipe.title}
+                      </strong>
+                    ) : null}
+                  </p>
+
+                  <div className="weekly-day-actions" style={{ marginTop: 8 }}>
+                    <button
+                      className="btn"
+                      onClick={() => openRecipePicker(day.value)}
+                    >
+                      {selectedRecipe ? "Rezept ändern" : "Rezept hinzufügen"}
+                    </button>
+                  </div>
 
                   <p className="weekly-day-desc">
                     {entry?.recipes?.description || "Kein Rezept zugewiesen."}
@@ -212,6 +257,75 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
             window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
           }}
         />
+
+        {showRecipePicker ? (
+          <div
+            className="modal-overlay"
+            onClick={() => setShowRecipePicker(false)}
+          >
+            <div
+              className="modal weekly-picker-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h3>Rezept auswählen: {pickerWeekdayLabel}</h3>
+              </div>
+              <div className="modal-body">
+                <input
+                  className="input-fields"
+                  placeholder="Rezept suchen..."
+                  value={pickerSearch}
+                  onChange={(e) => setPickerSearch(e.target.value)}
+                />
+
+                <div className="weekly-picker-list">
+                  {filteredRecipesForPicker.length === 0 ? (
+                    <p className="weekly-recipe-hint">
+                      Keine Rezepte gefunden.
+                    </p>
+                  ) : (
+                    filteredRecipesForPicker.map((recipe) => (
+                      <button
+                        key={recipe.id}
+                        type="button"
+                        className="weekly-picker-item"
+                        onClick={() => handlePickRecipe(recipe.id)}
+                      >
+                        <strong>{recipe.title}</strong>
+                        <span>
+                          {recipe.description || "Keine Beschreibung"}
+                        </span>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+              <div className="modal-footer" style={{ gap: 8 }}>
+                <button
+                  className="btn cancel-btn"
+                  onClick={async () => {
+                    if (pickerWeekday) await handleRemove(pickerWeekday);
+                    setShowRecipePicker(false);
+                    setPickerWeekday(null);
+                    setPickerSearch("");
+                  }}
+                >
+                  Nicht geplant
+                </button>
+                <button
+                  className="btn cancel-btn"
+                  onClick={() => {
+                    setShowRecipePicker(false);
+                    setPickerWeekday(null);
+                    setPickerSearch("");
+                  }}
+                >
+                  Schließen
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
