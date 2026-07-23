@@ -14,7 +14,12 @@ const supermarketPalette = [
   "aqua",
 ];
 
-const ShoppingList = ({ onToggleItemList, onOpenWeeklyPlan, userId, user_name } = {}) => {
+const ShoppingList = ({
+  onToggleItemList,
+  onOpenWeeklyPlan,
+  userId,
+  user_name,
+} = {}) => {
   const [items, setItems] = useState([]);
   const [sortBy, setSortBy] = useState("added_at");
   const [selectedItem, setSelectedItem] = useState(null);

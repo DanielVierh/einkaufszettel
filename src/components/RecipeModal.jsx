@@ -103,7 +103,10 @@ const RecipeModal = ({ visible, userId, onClose, onCreated } = {}) => {
   return (
     <div className="modal-overlay" onClick={() => onClose?.()}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <form onSubmit={handleCreate} style={{ minHeight: 0, display: "flex", flexDirection: "column" }}>
+        <form
+          onSubmit={handleCreate}
+          style={{ minHeight: 0, display: "flex", flexDirection: "column" }}
+        >
           <div className="modal-header">
             <h3>Rezept hinzufügen</h3>
           </div>
@@ -142,7 +145,9 @@ const RecipeModal = ({ visible, userId, onClose, onCreated } = {}) => {
 
               <div className="recipe-ingredient-list">
                 {filteredItems.length === 0 ? (
-                  <p style={{ margin: 0, color: "#bbb" }}>Keine passenden Zutaten gefunden.</p>
+                  <p style={{ margin: 0, color: "#bbb" }}>
+                    Keine passenden Zutaten gefunden.
+                  </p>
                 ) : (
                   filteredItems.map((item) => {
                     const selected = selectedIngredients.includes(item.id);
@@ -154,7 +159,9 @@ const RecipeModal = ({ visible, userId, onClose, onCreated } = {}) => {
                           onChange={() => toggleIngredient(item.id)}
                         />
                         <span>{item.item_name}</span>
-                        <span className="recipe-ingredient-market">{item.supermarket || "-"}</span>
+                        <span className="recipe-ingredient-market">
+                          {item.supermarket || "-"}
+                        </span>
                       </label>
                     );
                   })
@@ -169,8 +176,15 @@ const RecipeModal = ({ visible, userId, onClose, onCreated } = {}) => {
             </div>
           </div>
 
-          <div className="modal-footer" style={{ gap: 8, justifyContent: "center" }}>
-            <button type="button" className="btn cancel-btn" onClick={() => onClose?.()}>
+          <div
+            className="modal-footer"
+            style={{ gap: 8, justifyContent: "center" }}
+          >
+            <button
+              type="button"
+              className="btn cancel-btn"
+              onClick={() => onClose?.()}
+            >
               Abbrechen
             </button>
             <button type="submit" className="btn submit-btn" disabled={saving}>

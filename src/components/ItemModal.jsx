@@ -2,7 +2,14 @@ import { useState, useEffect } from "react";
 import formatDate from "../lib/formatDate";
 import supabase from "../lib/supabaseClient";
 
-const ItemModal = ({ item, onClose, onUpdate, onDelete, userId, user_name } = {}) => {
+const ItemModal = ({
+  item,
+  onClose,
+  onUpdate,
+  onDelete,
+  userId,
+  user_name,
+} = {}) => {
   const [amount, setAmount] = useState(() => item?.item_amount ?? 1);
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(() => ({

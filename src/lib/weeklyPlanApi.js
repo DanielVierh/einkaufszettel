@@ -45,7 +45,12 @@ export async function fetchShoppingItemsForRecipe(userId) {
   return data ?? [];
 }
 
-export async function createRecipe({ userId, title, description, ingredientItemIds }) {
+export async function createRecipe({
+  userId,
+  title,
+  description,
+  ingredientItemIds,
+}) {
   const cleanTitle = (title ?? "").toString().trim();
   if (!cleanTitle) {
     throw new Error("Rezepttitel ist erforderlich");
@@ -109,7 +114,10 @@ export async function removeRecipeFromWeekday({ userId, weekday }) {
   if (error) throw error;
 }
 
-export async function addRecipeIngredientsToShoppingList({ recipeId, userName }) {
+export async function addRecipeIngredientsToShoppingList({
+  recipeId,
+  userName,
+}) {
   const { data: ingredients, error: ingredientsError } = await supabase
     .from("recipe_ingredients")
     .select("shopping_item_id")
@@ -118,7 +126,9 @@ export async function addRecipeIngredientsToShoppingList({ recipeId, userName })
   if (ingredientsError) throw ingredientsError;
 
   const itemIds = Array.from(
-    new Set((ingredients ?? []).map((row) => row.shopping_item_id).filter(Boolean)),
+    new Set(
+      (ingredients ?? []).map((row) => row.shopping_item_id).filter(Boolean),
+    ),
   );
 
   if (itemIds.length === 0) return 0;

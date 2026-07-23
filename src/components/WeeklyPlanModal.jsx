@@ -64,7 +64,8 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
     if (!visible) return;
     const onWeeklyChanged = () => loadAll();
     window.addEventListener("weekly-plan:changed", onWeeklyChanged);
-    return () => window.removeEventListener("weekly-plan:changed", onWeeklyChanged);
+    return () =>
+      window.removeEventListener("weekly-plan:changed", onWeeklyChanged);
   }, [visible, loadAll]);
 
   const entryByWeekday = useMemo(() => {
