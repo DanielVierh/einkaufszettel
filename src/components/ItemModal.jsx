@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import formatDate from "../lib/formatDate";
 import supabase from "../lib/supabaseClient";
 
-const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
+const ItemModal = ({ item, onClose, onUpdate, onDelete, userId, user_name } = {}) => {
   const [amount, setAmount] = useState(() => item?.item_amount ?? 1);
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(() => ({
@@ -36,7 +36,8 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
       try {
         const { data, error } = await supabase
           .from("shopping_items")
-          .select("supermarket");
+          .select("supermarket")
+          .eq("user_id", userId);
         if (error) {
           console.error("Supabase error (supermarkets):", error);
           return;
@@ -58,7 +59,7 @@ const ItemModal = ({ item, onClose, onUpdate, onDelete, user_name } = {}) => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [userId]);
 
   if (!item) return null;
 

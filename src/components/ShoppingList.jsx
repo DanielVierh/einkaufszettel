@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import supabase from "../lib/supabaseClient";
 import ItemModal from "./ItemModal";
 import RefreshButton from "./RefreshButton";
@@ -14,7 +14,7 @@ const supermarketPalette = [
   "aqua",
 ];
 
-const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
+const ShoppingList = ({ onToggleItemList, onOpenWeeklyPlan, userId, user_name } = {}) => {
   const [items, setItems] = useState([]);
   const [sortBy, setSortBy] = useState("added_at");
   const [selectedItem, setSelectedItem] = useState(null);
@@ -52,12 +52,13 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
     return map;
   }, [supermarketsList]);
 
-  async function handleGetList() {
+  const handleGetList = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("shopping_items")
         .select("*")
-        .eq("item_on_list", true);
+        .eq("item_on_list", true)
+        .eq("user_id", userId);
 
       if (error) {
         console.error("Supabase error:", error);
@@ -68,7 +69,7 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
       console.error(err);
       return [];
     }
-  }
+  }, [userId]);
 
   async function updateItem(id, changes) {
     try {
@@ -125,7 +126,7 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
       mounted = false;
       window.removeEventListener("items:changed", onItemsChanged);
     };
-  }, []);
+  }, [handleGetList]);
 
   const parsePrice = (val) => {
     const n = parseFloat(val);
@@ -293,6 +294,7 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
         <ItemModal
           key={selectedItem.id ?? "item-modal"}
           item={selectedItem}
+          userId={userId}
           user_name={user_name}
           onClose={() => setSelectedItem(null)}
           onUpdate={updateItem}
@@ -300,6 +302,14 @@ const ShoppingList = ({ onToggleItemList, user_name } = {}) => {
         />
       ) : null}
       <div style={{ marginTop: 3 }}>
+        <button
+          className="btn"
+          onClick={() => {
+            if (typeof onOpenWeeklyPlan === "function") onOpenWeeklyPlan();
+          }}
+        >
+          Wochenplan
+        </button>
         <button
           className="btn shopping-list--add-btn"
           onClick={() => {

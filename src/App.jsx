@@ -9,14 +9,20 @@ import {
 import ItemList from "./components/ItemList";
 import NewItemForm from "./components/NewItemForm";
 import ShoppingList from "./components/ShoppingList";
+import WeeklyPlanModal from "./components/WeeklyPlanModal";
 import { useState } from "react";
 
 function App() {
   const { user } = useUser();
   const [showItemList, setShowItemList] = useState(false);
+  const [showWeeklyPlan, setShowWeeklyPlan] = useState(false);
 
   function toggleItemList() {
     setShowItemList((s) => !s);
+  }
+
+  function toggleWeeklyPlan() {
+    setShowWeeklyPlan((s) => !s);
   }
   console.log(user);
 
@@ -36,6 +42,7 @@ function App() {
             </header>
             <ShoppingList
               onToggleItemList={toggleItemList}
+              onOpenWeeklyPlan={toggleWeeklyPlan}
               userId={user.id}
               user_name={user.firstName}
             />
@@ -46,6 +53,12 @@ function App() {
               user_name={user.firstName}
             />
             <NewItemForm userId={user.id} user_name={user.firstName} />
+            <WeeklyPlanModal
+              visible={showWeeklyPlan}
+              onClose={toggleWeeklyPlan}
+              userId={user.id}
+              userName={user.firstName}
+            />
           </>
         ) : (
           <p>Loading User...</p>

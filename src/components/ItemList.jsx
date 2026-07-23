@@ -45,7 +45,11 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
 
     async function load() {
       try {
-        const { data, error } = await supabase.from("shopping_items").select();
+        const { data, error } = await supabase
+          .from("shopping_items")
+          .select()
+          .eq("user_id", userId);
+
         if (error) {
           console.error("Supabase error:", error);
           return;
@@ -67,7 +71,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
       mounted = false;
       window.removeEventListener("items:changed", onItemsChanged);
     };
-  }, []);
+  }, [userId]);
 
   async function handle_create_weeklyList() {
     const confirm = window.confirm(
@@ -169,6 +173,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
         <ItemModal
           key={selectedItem.id ?? "item-modal"}
           item={selectedItem}
+          userId={userId}
           user_name={user_name}
           onClose={() => setSelectedItem(null)}
           onUpdate={updateItem}

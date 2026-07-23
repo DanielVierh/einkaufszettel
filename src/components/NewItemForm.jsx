@@ -118,7 +118,8 @@ const NewItemForm = ({
       try {
         const { data, error } = await supabase
           .from("shopping_items")
-          .select("supermarket");
+          .select("supermarket")
+          .eq("user_id", userId);
         if (error) {
           console.error("Supabase error (supermarkets):", error);
           return;
@@ -143,7 +144,7 @@ const NewItemForm = ({
       mounted = false;
       window.removeEventListener("items:changed", onItemsChanged);
     };
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     if (!showModal) return;
