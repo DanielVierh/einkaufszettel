@@ -13,6 +13,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
   const [recipes, setRecipes] = useState([]);
   const [weeklyEntries, setWeeklyEntries] = useState([]);
   const [showRecipeModal, setShowRecipeModal] = useState(false);
+  const [editingRecipe, setEditingRecipe] = useState(null);
   const [showRecipePicker, setShowRecipePicker] = useState(false);
   const [pickerWeekday, setPickerWeekday] = useState(null);
   const [pickerSearch, setPickerSearch] = useState("");
@@ -169,7 +170,13 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
       <div className="modal weekly-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>Wochenplan Essen</h3>
-          <button className="btn" onClick={() => setShowRecipeModal(true)}>
+          <button
+            className="btn"
+            onClick={() => {
+              setEditingRecipe(null);
+              setShowRecipeModal(true);
+            }}
+          >
             Rezept hinzufügen
           </button>
         </div>
@@ -195,7 +202,13 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                       ? "Aktuell zugewiesen:"
                       : "Aktuell zugewiesen: Nicht geplant"}
                     {selectedRecipe ? (
-                      <strong style={{ marginLeft: 6 }}>
+                      <strong
+                        style={{
+                          marginLeft: 6,
+                          color: "lightgreen",
+                          fontSize: 14,
+                        }}
+                      >
                         {selectedRecipe.title}
                       </strong>
                     ) : null}
@@ -251,9 +264,26 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
         <RecipeModal
           visible={showRecipeModal}
           userId={userId}
-          onClose={() => setShowRecipeModal(false)}
+          recipeToEdit={editingRecipe}
+          onClose={() => {
+            setShowRecipeModal(false);
+            setEditingRecipe(null);
+          }}
           onCreated={() => {
             setShowRecipeModal(false);
+            setEditingRecipe(null);
+            window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
+          }}
+          onUpdated={() => {
+            setShowRecipeModal(false);
+            setEditingRecipe(null);
+            setStatus("Rezept wurde aktualisiert.");
+            window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
+          }}
+          onDeleted={() => {
+            setShowRecipeModal(false);
+            setEditingRecipe(null);
+            setStatus("Rezept wurde gelöscht.");
             window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
           }}
         />
@@ -285,17 +315,30 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                     </p>
                   ) : (
                     filteredRecipesForPicker.map((recipe) => (
-                      <button
-                        key={recipe.id}
-                        type="button"
-                        className="weekly-picker-item"
-                        onClick={() => handlePickRecipe(recipe.id)}
-                      >
-                        <strong>{recipe.title}</strong>
-                        <span>
-                          {recipe.description || "Keine Beschreibung"}
-                        </span>
-                      </button>
+                      <div key={recipe.id} className="weekly-picker-row">
+                        <button
+                          type="button"
+                          className="weekly-picker-main"
+                          onClick={() => handlePickRecipe(recipe.id)}
+                        >
+                          <strong>{recipe.title}</strong>
+                          <span>
+                            {recipe.description || "Keine Beschreibung"}
+                          </span>
+                        </button>
+                        <div className="weekly-picker-actions">
+                          <button
+                            type="button"
+                            className="btn"
+                            onClick={() => {
+                              setEditingRecipe(recipe);
+                              setShowRecipeModal(true);
+                            }}
+                          >
+                            Bearbeiten
+                          </button>
+                        </div>
+                      </div>
                     ))
                   )}
                 </div>

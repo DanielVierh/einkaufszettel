@@ -1,10 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   createRecipe,
+  deleteRecipe,
   fetchShoppingItemsForRecipe,
+  updateRecipe,
 } from "../lib/weeklyPlanApi";
 
-const RecipeModal = ({ visible, userId, onClose, onCreated } = {}) => {
+const RecipeModal = ({
+  visible,
+  userId,
+  onClose,
+  onCreated,
+  onUpdated,
+  onDeleted,
+  recipeToEdit,
+} = {}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [search, setSearch] = useState("");
@@ -13,6 +23,29 @@ const RecipeModal = ({ visible, userId, onClose, onCreated } = {}) => {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const isEditMode = Boolean(recipeToEdit?.id);
+
+  useEffect(() => {
+    if (!visible) return;
+
+    if (isEditMode && recipeToEdit) {
+      setTitle(recipeToEdit.title ?? "");
+      setDescription(recipeToEdit.description ?? "");
+      setSelectedIngredients(
+        (recipeToEdit.recipe_ingredients ?? [])
+          .map((it) => it.shopping_item_id)
+          .filter(Boolean),
+      );
+    } else {
+      setTitle("");
+      setDescription("");
+      setSelectedIngredients([]);
+    }
+
+    setSearch("");
+    setStatus("");
+    setError("");
+  }, [visible, isEditMode, recipeToEdit]);
 
   useEffect(() => {
     if (!visible) return;
@@ -63,7 +96,7 @@ const RecipeModal = ({ visible, userId, onClose, onCreated } = {}) => {
     });
   }
 
-  async function handleCreate(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError("");
     setStatus("");
@@ -75,20 +108,47 @@ const RecipeModal = ({ visible, userId, onClose, onCreated } = {}) => {
 
     setSaving(true);
     try {
-      const recipe = await createRecipe({
-        userId,
-        title,
-        description,
-        ingredientItemIds: selectedIngredients,
-      });
+      if (isEditMode && recipeToEdit?.id) {
+        await updateRecipe({
+          recipeId: recipeToEdit.id,
+          title,
+          description,
+          ingredientItemIds: selectedIngredients,
+        });
+        setStatus("Rezept wurde aktualisiert.");
+        if (typeof onUpdated === "function") onUpdated(recipeToEdit.id);
+      } else {
+        const recipe = await createRecipe({
+          userId,
+          title,
+          description,
+          ingredientItemIds: selectedIngredients,
+        });
 
-      setStatus("Rezept wurde erstellt.");
-      setTitle("");
-      setDescription("");
-      setSelectedIngredients([]);
-      setSearch("");
+        setStatus("Rezept wurde erstellt.");
+        if (typeof onCreated === "function") onCreated(recipe);
+      }
+      onClose?.();
+    } catch (err) {
+      console.error(err);
+      setError(String(err.message || err));
+    } finally {
+      setSaving(false);
+    }
+  }
 
-      if (typeof onCreated === "function") onCreated(recipe);
+  async function handleDelete() {
+    if (!recipeToEdit?.id) return;
+    if (!window.confirm(`Rezept "${recipeToEdit.title}" wirklich löschen?`)) {
+      return;
+    }
+
+    setSaving(true);
+    setError("");
+    setStatus("");
+    try {
+      await deleteRecipe(recipeToEdit.id);
+      if (typeof onDeleted === "function") onDeleted(recipeToEdit.id);
       onClose?.();
     } catch (err) {
       console.error(err);
@@ -104,11 +164,11 @@ const RecipeModal = ({ visible, userId, onClose, onCreated } = {}) => {
     <div className="modal-overlay" onClick={() => onClose?.()}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <form
-          onSubmit={handleCreate}
+          onSubmit={handleSubmit}
           style={{ minHeight: 0, display: "flex", flexDirection: "column" }}
         >
           <div className="modal-header">
-            <h3>Rezept hinzufügen</h3>
+            <h3>{isEditMode ? "Rezept bearbeiten" : "Rezept hinzufügen"}</h3>
           </div>
 
           <div className="modal-body">
@@ -187,8 +247,23 @@ const RecipeModal = ({ visible, userId, onClose, onCreated } = {}) => {
             >
               Abbrechen
             </button>
+            {isEditMode ? (
+              <button
+                type="button"
+                className="btn product-list--delete-btn"
+                onClick={handleDelete}
+                disabled={saving}
+                style={{ color: "red" }}
+              >
+                Löschen
+              </button>
+            ) : null}
             <button type="submit" className="btn submit-btn" disabled={saving}>
-              {saving ? "Speichern..." : "Rezept speichern"}
+              {saving
+                ? "Speichern..."
+                : isEditMode
+                  ? "Änderungen speichern"
+                  : "Rezept speichern"}
             </button>
           </div>
         </form>

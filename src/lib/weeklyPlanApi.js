@@ -68,13 +68,32 @@ export async function createRecipe({
 
   if (recipeError) throw recipeError;
 
+  await replaceRecipeIngredients({
+    recipeId: recipe.id,
+    ingredientItemIds,
+  });
+
+  return recipe;
+}
+
+export async function replaceRecipeIngredients({
+  recipeId,
+  ingredientItemIds,
+}) {
+  const { error: deleteIngredientsError } = await supabase
+    .from("recipe_ingredients")
+    .delete()
+    .eq("recipe_id", recipeId);
+
+  if (deleteIngredientsError) throw deleteIngredientsError;
+
   const uniqueIngredientIds = Array.from(
     new Set((ingredientItemIds ?? []).filter(Boolean)),
   );
 
   if (uniqueIngredientIds.length > 0) {
     const payload = uniqueIngredientIds.map((shoppingItemId) => ({
-      recipe_id: recipe.id,
+      recipe_id: recipeId,
       shopping_item_id: shoppingItemId,
     }));
 
@@ -84,8 +103,40 @@ export async function createRecipe({
 
     if (ingredientsError) throw ingredientsError;
   }
+}
 
-  return recipe;
+export async function updateRecipe({
+  recipeId,
+  title,
+  description,
+  ingredientItemIds,
+}) {
+  const cleanTitle = (title ?? "").toString().trim();
+  if (!cleanTitle) {
+    throw new Error("Rezepttitel ist erforderlich");
+  }
+
+  const { error: updateError } = await supabase
+    .from("recipes")
+    .update({
+      title: cleanTitle,
+      description: (description ?? "").toString().trim() || null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", recipeId);
+
+  if (updateError) throw updateError;
+
+  await replaceRecipeIngredients({
+    recipeId,
+    ingredientItemIds,
+  });
+}
+
+export async function deleteRecipe(recipeId) {
+  const { error } = await supabase.from("recipes").delete().eq("id", recipeId);
+
+  if (error) throw error;
 }
 
 export async function assignRecipeToWeekday({ userId, weekday, recipeId }) {
