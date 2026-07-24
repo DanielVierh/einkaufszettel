@@ -89,6 +89,12 @@ const RecipeModal = ({
     );
   }, [availableItems, search]);
 
+  const selectedIngredientItems = useMemo(() => {
+    if (!selectedIngredients.length) return [];
+    const selectedSet = new Set(selectedIngredients);
+    return (availableItems ?? []).filter((item) => selectedSet.has(item.id));
+  }, [availableItems, selectedIngredients]);
+
   function toggleIngredient(itemId) {
     setSelectedIngredients((prev) => {
       if (prev.includes(itemId)) return prev.filter((id) => id !== itemId);
@@ -161,7 +167,7 @@ const RecipeModal = ({
   if (!visible) return null;
 
   return (
-    <div className="modal-overlay" onClick={() => onClose?.()}>
+    <div className="modal-overlay recipe-modal-overlay" onClick={() => onClose?.()}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <form
           onSubmit={handleSubmit}
@@ -202,6 +208,26 @@ const RecipeModal = ({
                   placeholder="Nach Item suchen"
                 />
               </label>
+
+              {isEditMode ? (
+                <div className="recipe-selected-ingredients">
+                  <p className="recipe-selected-title">Aktuell im Rezept</p>
+                  {selectedIngredientItems.length === 0 ? (
+                    <p className="recipe-selected-empty">
+                      Noch keine Zutaten ausgewählt.
+                    </p>
+                  ) : (
+                    <div className="recipe-selected-list">
+                      {selectedIngredientItems.map((item) => (
+                        <div key={item.id} className="recipe-selected-item">
+                          <span>{item.item_name}</span>
+                          <small>{item.supermarket || "-"}</small>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : null}
 
               <div className="recipe-ingredient-list">
                 {filteredItems.length === 0 ? (
