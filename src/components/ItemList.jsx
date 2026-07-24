@@ -45,10 +45,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
 
     async function load() {
       try {
-        const { data, error } = await supabase
-          .from("shopping_items")
-          .select()
-          .eq("user_id", userId);
+        const { data, error } = await supabase.from("shopping_items").select();
 
         if (error) {
           console.error("Supabase error:", error);

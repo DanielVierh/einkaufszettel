@@ -118,8 +118,7 @@ const NewItemForm = ({
       try {
         const { data, error } = await supabase
           .from("shopping_items")
-          .select("supermarket")
-          .eq("user_id", userId);
+          .select("supermarket");
         if (error) {
           console.error("Supabase error (supermarkets):", error);
           return;

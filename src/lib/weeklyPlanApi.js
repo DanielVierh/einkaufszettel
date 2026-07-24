@@ -34,11 +34,10 @@ export async function fetchWeeklyPlan(userId) {
   return data ?? [];
 }
 
-export async function fetchShoppingItemsForRecipe(userId) {
+export async function fetchShoppingItemsForRecipe() {
   const { data, error } = await supabase
     .from("shopping_items")
     .select("id, item_name, supermarket, item_on_list")
-    .eq("user_id", userId)
     .order("item_name", { ascending: true });
 
   if (error) throw error;

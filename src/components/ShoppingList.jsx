@@ -62,8 +62,7 @@ const ShoppingList = ({
       const { data, error } = await supabase
         .from("shopping_items")
         .select("*")
-        .eq("item_on_list", true)
-        .eq("user_id", userId);
+        .eq("item_on_list", true);
 
       if (error) {
         console.error("Supabase error:", error);
@@ -74,7 +73,7 @@ const ShoppingList = ({
       console.error(err);
       return [];
     }
-  }, [userId]);
+  }, []);
 
   async function updateItem(id, changes) {
     try {
