@@ -167,7 +167,10 @@ const RecipeModal = ({
   if (!visible) return null;
 
   return (
-    <div className="modal-overlay recipe-modal-overlay" onClick={() => onClose?.()}>
+    <div
+      className="modal-overlay recipe-modal-overlay"
+      onClick={() => onClose?.()}
+    >
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <form
           onSubmit={handleSubmit}
