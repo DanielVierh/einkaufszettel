@@ -161,6 +161,14 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
     return WEEK_DAYS.find((day) => day.value === pickerWeekday)?.label ?? "";
   }, [pickerWeekday]);
 
+  const orderedWeekDays = useMemo(() => {
+    const jsDay = new Date().getDay();
+    const todayWeekday = jsDay === 0 ? 7 : jsDay;
+    const startIndex = WEEK_DAYS.findIndex((day) => day.value === todayWeekday);
+    if (startIndex < 0) return WEEK_DAYS;
+    return [...WEEK_DAYS.slice(startIndex), ...WEEK_DAYS.slice(0, startIndex)];
+  }, []);
+
   if (!visible) return null;
 
   return (
@@ -185,7 +193,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
           {status ? <p style={{ color: "lightgreen" }}>{status}</p> : null}
 
           <div className="weekly-grid">
-            {WEEK_DAYS.map((day) => {
+            {orderedWeekDays.map((day) => {
               const entry = entryByWeekday.get(day.value);
               const selectedRecipeId = entry?.recipe_id ?? "";
               const selectedRecipe = recipes.find(
