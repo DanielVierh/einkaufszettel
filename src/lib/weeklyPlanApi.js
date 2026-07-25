@@ -173,6 +173,47 @@ export async function removeRecipeFromWeekday({ weekday }) {
   if (error) throw error;
 }
 
+export async function fetchRecipeIngredientItems(recipeId) {
+  if (!recipeId) return [];
+
+  const { data, error } = await supabase
+    .from("recipe_ingredients")
+    .select("shopping_item_id, shopping_items(id, item_name, supermarket)")
+    .eq("recipe_id", recipeId);
+
+  if (error) throw error;
+
+  const uniqueById = new Map();
+  (data ?? []).forEach((row) => {
+    const item = row?.shopping_items;
+    if (item?.id) uniqueById.set(item.id, item);
+  });
+
+  return Array.from(uniqueById.values()).sort((a, b) =>
+    (a.item_name ?? "").localeCompare(b.item_name ?? "", undefined, {
+      sensitivity: "base",
+    }),
+  );
+}
+
+export async function addIngredientItemsToShoppingList({ itemIds, userName }) {
+  const uniqueItemIds = Array.from(new Set((itemIds ?? []).filter(Boolean)));
+  if (uniqueItemIds.length === 0) return 0;
+
+  const { error: updateError } = await supabase
+    .from("shopping_items")
+    .update({
+      item_on_list: true,
+      added_at: new Date().toISOString(),
+      item_creator: userName ?? null,
+    })
+    .in("id", uniqueItemIds);
+
+  if (updateError) throw updateError;
+
+  return uniqueItemIds.length;
+}
+
 export async function addRecipeIngredientsToShoppingList({
   recipeId,
   userName,
@@ -190,18 +231,5 @@ export async function addRecipeIngredientsToShoppingList({
     ),
   );
 
-  if (itemIds.length === 0) return 0;
-
-  const { error: updateError } = await supabase
-    .from("shopping_items")
-    .update({
-      item_on_list: true,
-      added_at: new Date().toISOString(),
-      item_creator: userName ?? null,
-    })
-    .in("id", itemIds);
-
-  if (updateError) throw updateError;
-
-  return itemIds.length;
+  return addIngredientItemsToShoppingList({ itemIds, userName });
 }

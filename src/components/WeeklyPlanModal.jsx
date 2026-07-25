@@ -92,6 +92,12 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
     setShowRecipePicker(true);
   }
 
+  function openRecipeModal(recipe) {
+    if (!recipe) return;
+    setEditingRecipe(recipe);
+    setShowRecipeModal(true);
+  }
+
   async function handleAssign(weekday, recipeId) {
     setStatus("");
     setError("");
@@ -202,15 +208,23 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                       ? "Aktuell zugewiesen:"
                       : "Aktuell zugewiesen: Nicht geplant"}
                     {selectedRecipe ? (
-                      <strong
+                      <button
+                        type="button"
+                        className="btn"
+                        onClick={() => openRecipeModal(selectedRecipe)}
                         style={{
                           marginLeft: 6,
                           color: "lightgreen",
                           fontSize: 14,
+                          padding: 0,
+                          background: "transparent",
+                          border: "none",
+                          textDecoration: "underline",
+                          cursor: "pointer",
                         }}
                       >
                         {selectedRecipe.title}
-                      </strong>
+                      </button>
                     ) : null}
                   </p>
 
@@ -264,6 +278,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
         <RecipeModal
           visible={showRecipeModal}
           userId={userId}
+          userName={userName}
           recipeToEdit={editingRecipe}
           onClose={() => {
             setShowRecipeModal(false);

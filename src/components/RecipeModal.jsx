@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  addIngredientItemsToShoppingList,
   createRecipe,
   deleteRecipe,
+  fetchRecipeIngredientItems,
   fetchShoppingItemsForRecipe,
   updateRecipe,
 } from "../lib/weeklyPlanApi";
@@ -9,6 +11,7 @@ import {
 const RecipeModal = ({
   visible,
   userId,
+  userName,
   onClose,
   onCreated,
   onUpdated,
@@ -23,6 +26,10 @@ const RecipeModal = ({
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [showListSelectionModal, setShowListSelectionModal] = useState(false);
+  const [listSelectionItems, setListSelectionItems] = useState([]);
+  const [selectedListItemIds, setSelectedListItemIds] = useState([]);
+  const [listSelectionLoading, setListSelectionLoading] = useState(false);
   const isEditMode = Boolean(recipeToEdit?.id);
 
   useEffect(() => {
@@ -45,6 +52,10 @@ const RecipeModal = ({
     setSearch("");
     setStatus("");
     setError("");
+    setShowListSelectionModal(false);
+    setListSelectionItems([]);
+    setSelectedListItemIds([]);
+    setListSelectionLoading(false);
   }, [visible, isEditMode, recipeToEdit]);
 
   useEffect(() => {
@@ -100,6 +111,52 @@ const RecipeModal = ({
       if (prev.includes(itemId)) return prev.filter((id) => id !== itemId);
       return [...prev, itemId];
     });
+  }
+
+  function toggleListSelectionItem(itemId) {
+    setSelectedListItemIds((prev) => {
+      if (prev.includes(itemId)) return prev.filter((id) => id !== itemId);
+      return [...prev, itemId];
+    });
+  }
+
+  async function openListSelectionModal() {
+    if (!recipeToEdit?.id) return;
+
+    setError("");
+    setStatus("");
+    setListSelectionLoading(true);
+    try {
+      const ingredientItems = await fetchRecipeIngredientItems(recipeToEdit.id);
+      setListSelectionItems(ingredientItems);
+      setSelectedListItemIds(ingredientItems.map((item) => item.id));
+      setShowListSelectionModal(true);
+    } catch (err) {
+      console.error(err);
+      setError("Zutaten konnten nicht geladen werden.");
+    } finally {
+      setListSelectionLoading(false);
+    }
+  }
+
+  async function handleAddSelectedItemsToList() {
+    setError("");
+    setStatus("");
+    setSaving(true);
+    try {
+      const count = await addIngredientItemsToShoppingList({
+        itemIds: selectedListItemIds,
+        userName,
+      });
+      setStatus(`${count} Zutaten auf Einkaufsliste gesetzt.`);
+      setShowListSelectionModal(false);
+      window.dispatchEvent(new CustomEvent("items:changed"));
+    } catch (err) {
+      console.error(err);
+      setError(String(err.message || err));
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function handleSubmit(e) {
@@ -269,6 +326,18 @@ const RecipeModal = ({
             className="modal-footer"
             style={{ gap: 8, justifyContent: "center" }}
           >
+            {isEditMode ? (
+              <button
+                type="button"
+                className="btn"
+                onClick={openListSelectionModal}
+                disabled={saving || listSelectionLoading}
+              >
+                {listSelectionLoading
+                  ? "Lade Zutaten..."
+                  : "Zutaten auf Einkaufsliste"}
+              </button>
+            ) : null}
             <button
               type="button"
               className="btn cancel-btn"
@@ -296,6 +365,68 @@ const RecipeModal = ({
             </button>
           </div>
         </form>
+
+        {showListSelectionModal ? (
+          <div
+            className="modal-overlay"
+            onClick={() => setShowListSelectionModal(false)}
+          >
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Zutaten wählen: {recipeToEdit?.title}</h3>
+              </div>
+
+              <div className="modal-body">
+                {listSelectionItems.length === 0 ? (
+                  <p style={{ margin: 0, color: "#bbb" }}>
+                    Dieses Rezept hat keine hinterlegten Zutaten.
+                  </p>
+                ) : (
+                  <div className="recipe-ingredient-list">
+                    {listSelectionItems.map((item) => {
+                      const selected = selectedListItemIds.includes(item.id);
+                      return (
+                        <label key={item.id} className="recipe-ingredient-row">
+                          <input
+                            type="checkbox"
+                            checked={selected}
+                            onChange={() => toggleListSelectionItem(item.id)}
+                          />
+                          <span>{item.item_name}</span>
+                          <span className="recipe-ingredient-market">
+                            {item.supermarket || "-"}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <p style={{ marginTop: 10, marginBottom: 0, color: "#bbb" }}>
+                  Ausgewählt: {selectedListItemIds.length}
+                </p>
+              </div>
+
+              <div className="modal-footer" style={{ gap: 8 }}>
+                <button
+                  type="button"
+                  className="btn cancel-btn"
+                  onClick={() => setShowListSelectionModal(false)}
+                >
+                  Abbrechen
+                </button>
+                <button
+                  type="button"
+                  className="btn submit-btn"
+                  onClick={handleAddSelectedItemsToList}
+                  disabled={saving || selectedListItemIds.length === 0}
+                >
+                  {saving ? "Setze auf Liste..." : "Final auf Liste setzen"}
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
