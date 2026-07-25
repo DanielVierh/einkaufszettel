@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   addIngredientItemsToShoppingList,
   createRecipe,
@@ -12,6 +12,7 @@ const RecipeModal = ({
   visible,
   userId,
   userName,
+  openListSelectionInitially = false,
   onClose,
   onCreated,
   onUpdated,
@@ -30,6 +31,8 @@ const RecipeModal = ({
   const [listSelectionItems, setListSelectionItems] = useState([]);
   const [selectedListItemIds, setSelectedListItemIds] = useState([]);
   const [listSelectionLoading, setListSelectionLoading] = useState(false);
+  const [didAutoOpenListSelection, setDidAutoOpenListSelection] =
+    useState(false);
   const isEditMode = Boolean(recipeToEdit?.id);
 
   useEffect(() => {
@@ -56,6 +59,7 @@ const RecipeModal = ({
     setListSelectionItems([]);
     setSelectedListItemIds([]);
     setListSelectionLoading(false);
+    setDidAutoOpenListSelection(false);
   }, [visible, isEditMode, recipeToEdit]);
 
   useEffect(() => {
@@ -120,7 +124,7 @@ const RecipeModal = ({
     });
   }
 
-  async function openListSelectionModal() {
+  const openListSelectionModal = useCallback(async () => {
     if (!recipeToEdit?.id) return;
 
     setError("");
@@ -137,7 +141,26 @@ const RecipeModal = ({
     } finally {
       setListSelectionLoading(false);
     }
-  }
+  }, [recipeToEdit]);
+
+  useEffect(() => {
+    if (!visible) return;
+    if (!openListSelectionInitially) return;
+    if (!isEditMode || !recipeToEdit?.id) return;
+    if (didAutoOpenListSelection) return;
+    if (showListSelectionModal || listSelectionLoading) return;
+    setDidAutoOpenListSelection(true);
+    openListSelectionModal();
+  }, [
+    visible,
+    openListSelectionInitially,
+    isEditMode,
+    recipeToEdit,
+    didAutoOpenListSelection,
+    showListSelectionModal,
+    listSelectionLoading,
+    openListSelectionModal,
+  ]);
 
   async function handleAddSelectedItemsToList() {
     setError("");
@@ -265,6 +288,7 @@ const RecipeModal = ({
                   className="input-fields"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
+                  onClick={(e) => e.currentTarget.select()}
                   placeholder="Nach Item suchen"
                 />
               </label>
@@ -324,7 +348,7 @@ const RecipeModal = ({
 
           <div
             className="modal-footer"
-            style={{ gap: 8, justifyContent: "center" }}
+            style={{ gap: 20, justifyContent: "center" }}
           >
             {isEditMode ? (
               <button
@@ -421,7 +445,7 @@ const RecipeModal = ({
                   onClick={handleAddSelectedItemsToList}
                   disabled={saving || selectedListItemIds.length === 0}
                 >
-                  {saving ? "Setze auf Liste..." : "Final auf Liste setzen"}
+                  {saving ? "Setze auf Liste..." : "Auf Liste setzen"}
                 </button>
               </div>
             </div>

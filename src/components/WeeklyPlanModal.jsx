@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import RecipeModal from "./RecipeModal";
 import {
   WEEK_DAYS,
-  addRecipeIngredientsToShoppingList,
   assignRecipeToWeekday,
   fetchRecipes,
   fetchWeeklyPlan,
@@ -13,6 +12,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
   const [recipes, setRecipes] = useState([]);
   const [weeklyEntries, setWeeklyEntries] = useState([]);
   const [showRecipeModal, setShowRecipeModal] = useState(false);
+  const [openListSelectionOnOpen, setOpenListSelectionOnOpen] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState(null);
   const [showRecipePicker, setShowRecipePicker] = useState(false);
   const [pickerWeekday, setPickerWeekday] = useState(null);
@@ -94,6 +94,14 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
 
   function openRecipeModal(recipe) {
     if (!recipe) return;
+    setOpenListSelectionOnOpen(false);
+    setEditingRecipe(recipe);
+    setShowRecipeModal(true);
+  }
+
+  function openRecipeListSelectionModal(recipe) {
+    if (!recipe) return;
+    setOpenListSelectionOnOpen(true);
     setEditingRecipe(recipe);
     setShowRecipeModal(true);
   }
@@ -127,22 +135,6 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
       await removeRecipeFromWeekday({ userId, weekday });
       setStatus("Zuordnung entfernt.");
       window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
-    } catch (err) {
-      console.error(err);
-      setError(String(err.message || err));
-    }
-  }
-
-  async function handleAddIngredients(recipeId) {
-    setStatus("");
-    setError("");
-    try {
-      const count = await addRecipeIngredientsToShoppingList({
-        recipeId,
-        userName,
-      });
-      setStatus(`${count} Zutaten auf Einkaufsliste gesetzt.`);
-      window.dispatchEvent(new CustomEvent("items:changed"));
     } catch (err) {
       console.error(err);
       setError(String(err.message || err));
@@ -216,10 +208,9 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                           marginLeft: 6,
                           color: "lightgreen",
                           fontSize: 14,
-                          padding: 0,
-                          background: "transparent",
-                          border: "none",
-                          textDecoration: "underline",
+                          padding: 10,
+                          background: "green",
+                          borderRadius: 8,
                           cursor: "pointer",
                         }}
                       >
@@ -237,15 +228,13 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                     </button>
                   </div>
 
-                  <p className="weekly-day-desc">
-                    {entry?.recipes?.description || "Kein Rezept zugewiesen."}
-                  </p>
-
                   <div className="weekly-day-actions">
                     <button
                       className="btn"
                       disabled={!selectedRecipeId}
-                      onClick={() => handleAddIngredients(selectedRecipeId)}
+                      onClick={() =>
+                        openRecipeListSelectionModal(selectedRecipe)
+                      }
                     >
                       Zutaten auf Liste
                     </button>
@@ -279,24 +268,29 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
           visible={showRecipeModal}
           userId={userId}
           userName={userName}
+          openListSelectionInitially={openListSelectionOnOpen}
           recipeToEdit={editingRecipe}
           onClose={() => {
             setShowRecipeModal(false);
+            setOpenListSelectionOnOpen(false);
             setEditingRecipe(null);
           }}
           onCreated={() => {
             setShowRecipeModal(false);
+            setOpenListSelectionOnOpen(false);
             setEditingRecipe(null);
             window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
           }}
           onUpdated={() => {
             setShowRecipeModal(false);
+            setOpenListSelectionOnOpen(false);
             setEditingRecipe(null);
             setStatus("Rezept wurde aktualisiert.");
             window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
           }}
           onDeleted={() => {
             setShowRecipeModal(false);
+            setOpenListSelectionOnOpen(false);
             setEditingRecipe(null);
             setStatus("Rezept wurde gelöscht.");
             window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
