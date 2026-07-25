@@ -940,6 +940,11 @@ body.modal-open {
   cursor: pointer;
 }
 
+.weekly-recipe-btn {
+  background: #137b86;
+  margin-bottom: 15px !important;
+}
+
 .weekly-picker-main span {
   font-size: 0.84rem;
   color: #d6e5f5;

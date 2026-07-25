@@ -14,6 +14,8 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
   const [showRecipeModal, setShowRecipeModal] = useState(false);
   const [openListSelectionOnOpen, setOpenListSelectionOnOpen] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState(null);
+  const [showAllRecipesModal, setShowAllRecipesModal] = useState(false);
+  const [allRecipesSearch, setAllRecipesSearch] = useState("");
   const [showRecipePicker, setShowRecipePicker] = useState(false);
   const [pickerWeekday, setPickerWeekday] = useState(null);
   const [pickerSearch, setPickerSearch] = useState("");
@@ -30,6 +32,11 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
           setShowRecipeModal(false);
           return;
         }
+        if (showAllRecipesModal) {
+          setShowAllRecipesModal(false);
+          setAllRecipesSearch("");
+          return;
+        }
         if (showRecipePicker) {
           setShowRecipePicker(false);
           setPickerWeekday(null);
@@ -44,7 +51,13 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
       window.removeEventListener("keydown", onKeyDown);
       document.body.classList.remove("modal-open");
     };
-  }, [visible, showRecipeModal, showRecipePicker, onClose]);
+  }, [
+    visible,
+    showRecipeModal,
+    showAllRecipesModal,
+    showRecipePicker,
+    onClose,
+  ]);
 
   const loadAll = useCallback(async () => {
     if (!userId) return;
@@ -161,6 +174,14 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
     return WEEK_DAYS.find((day) => day.value === pickerWeekday)?.label ?? "";
   }, [pickerWeekday]);
 
+  const filteredAllRecipes = useMemo(() => {
+    const q = (allRecipesSearch ?? "").toString().trim().toLowerCase();
+    if (!q) return recipes;
+    return recipes.filter((recipe) =>
+      (recipe.title ?? "").toString().toLowerCase().includes(q),
+    );
+  }, [allRecipesSearch, recipes]);
+
   const orderedWeekDays = useMemo(() => {
     const jsDay = new Date().getDay();
     const todayWeekday = jsDay === 0 ? 7 : jsDay;
@@ -177,7 +198,16 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
         <div className="modal-header">
           <h3>Wochenplan Essen</h3>
           <button
-            className="btn"
+            className="btn weekly-recipe-btn"
+            onClick={() => {
+              setShowAllRecipesModal(true);
+              setAllRecipesSearch("");
+            }}
+          >
+            Alle Rezepte anzeigen
+          </button>
+          <button
+            className="btn weekly-recipe-btn"
             onClick={() => {
               setEditingRecipe(null);
               setShowRecipeModal(true);
@@ -304,6 +334,70 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
             window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
           }}
         />
+
+        {showAllRecipesModal ? (
+          <div
+            className="modal-overlay"
+            onClick={() => {
+              setShowAllRecipesModal(false);
+              setAllRecipesSearch("");
+            }}
+          >
+            <div
+              className="modal weekly-picker-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h3>Alle Rezepte</h3>
+              </div>
+
+              <div className="modal-body">
+                <input
+                  className="input-fields"
+                  placeholder="Rezept suchen..."
+                  value={allRecipesSearch}
+                  onChange={(e) => setAllRecipesSearch(e.target.value)}
+                />
+
+                <div className="weekly-picker-list">
+                  {filteredAllRecipes.length === 0 ? (
+                    <p className="weekly-recipe-hint">
+                      Keine Rezepte gefunden.
+                    </p>
+                  ) : (
+                    filteredAllRecipes.map((recipe) => (
+                      <div key={recipe.id} className="weekly-picker-row">
+                        <button
+                          type="button"
+                          className="weekly-picker-main"
+                          onClick={() => {
+                            setShowAllRecipesModal(false);
+                            setAllRecipesSearch("");
+                            openRecipeModal(recipe);
+                          }}
+                        >
+                          <strong>{recipe.title}</strong>
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div className="modal-footer" style={{ gap: 8 }}>
+                <button
+                  className="btn cancel-btn"
+                  onClick={() => {
+                    setShowAllRecipesModal(false);
+                    setAllRecipesSearch("");
+                  }}
+                >
+                  Schließen
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
 
         {showRecipePicker ? (
           <div
