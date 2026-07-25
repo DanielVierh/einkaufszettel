@@ -273,12 +273,11 @@ const RecipeModal = ({
               </label>
 
               <label className="modal-label">
-                Beschreibung
                 <textarea
                   className="input-fields"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Kurzbeschreibung"
+                  placeholder="Anleitung"
                 />
               </label>
 
