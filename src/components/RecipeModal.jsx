@@ -171,7 +171,7 @@ const RecipeModal = ({
       className="modal-overlay recipe-modal-overlay"
       onClick={() => onClose?.()}
     >
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal recipe-modal" onClick={(e) => e.stopPropagation()}>
         <form
           onSubmit={handleSubmit}
           style={{ minHeight: 0, display: "flex", flexDirection: "column" }}

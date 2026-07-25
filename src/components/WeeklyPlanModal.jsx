@@ -335,7 +335,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                               setShowRecipeModal(true);
                             }}
                           >
-                            Bearbeiten
+                            Edit
                           </button>
                         </div>
                       </div>

@@ -815,6 +815,13 @@ body.modal-open {
   max-width: 900px;
 }
 
+.recipe-modal,
+.weekly-modal,
+.weekly-picker-modal {
+  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.717);
+}
+
 .weekly-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -877,7 +884,8 @@ body.modal-open {
 }
 
 .weekly-picker-modal {
-  max-width: 720px;
+  width: 100%;
+  max-width: 900px;
 }
 
 .weekly-picker-list {
