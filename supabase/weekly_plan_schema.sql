@@ -8,9 +8,11 @@ create table if not exists public.recipes (
   description text null,
   created_at timestamp without time zone null default now(),
   updated_at timestamp without time zone null default now(),
-  constraint recipes_pkey primary key (id),
-  constraint recipes_user_title_unique unique (user_id, title)
+  constraint recipes_pkey primary key (id)
 ) tablespace pg_default;
+
+alter table public.recipes
+  drop constraint if exists recipes_user_title_unique;
 
 create table if not exists public.recipe_ingredients (
   id uuid not null default extensions.uuid_generate_v4(),
@@ -39,6 +41,7 @@ create table if not exists public.weekly_plan (
 ) tablespace pg_default;
 
 create index if not exists idx_recipes_user_id on public.recipes (user_id);
+create index if not exists idx_recipes_user_title on public.recipes (user_id, title);
 create index if not exists idx_recipe_ingredients_recipe_id on public.recipe_ingredients (recipe_id);
 create index if not exists idx_recipe_ingredients_item_id on public.recipe_ingredients (shopping_item_id);
 create index if not exists idx_weekly_plan_user_id on public.weekly_plan (user_id);
@@ -51,9 +54,10 @@ drop policy if exists recipes_select_own on public.recipes;
 drop policy if exists recipes_insert_own on public.recipes;
 drop policy if exists recipes_update_own on public.recipes;
 drop policy if exists recipes_delete_own on public.recipes;
+drop policy if exists recipes_select_all_authenticated on public.recipes;
 
-create policy recipes_select_own on public.recipes
-for select using (user_id = auth.uid()::text);
+create policy recipes_select_all_authenticated on public.recipes
+for select using (auth.role() = 'authenticated');
 
 create policy recipes_insert_own on public.recipes
 for insert with check (user_id = auth.uid()::text);
@@ -69,35 +73,32 @@ drop policy if exists weekly_plan_select_own on public.weekly_plan;
 drop policy if exists weekly_plan_insert_own on public.weekly_plan;
 drop policy if exists weekly_plan_update_own on public.weekly_plan;
 drop policy if exists weekly_plan_delete_own on public.weekly_plan;
+drop policy if exists weekly_plan_select_all_authenticated on public.weekly_plan;
+drop policy if exists weekly_plan_insert_all_authenticated on public.weekly_plan;
+drop policy if exists weekly_plan_update_all_authenticated on public.weekly_plan;
+drop policy if exists weekly_plan_delete_all_authenticated on public.weekly_plan;
 
-create policy weekly_plan_select_own on public.weekly_plan
-for select using (user_id = auth.uid()::text);
+create policy weekly_plan_select_all_authenticated on public.weekly_plan
+for select using (auth.role() = 'authenticated');
 
-create policy weekly_plan_insert_own on public.weekly_plan
-for insert with check (user_id = auth.uid()::text);
+create policy weekly_plan_insert_all_authenticated on public.weekly_plan
+for insert with check (auth.role() = 'authenticated');
 
-create policy weekly_plan_update_own on public.weekly_plan
-for update using (user_id = auth.uid()::text)
-with check (user_id = auth.uid()::text);
+create policy weekly_plan_update_all_authenticated on public.weekly_plan
+for update using (auth.role() = 'authenticated')
+with check (auth.role() = 'authenticated');
 
-create policy weekly_plan_delete_own on public.weekly_plan
-for delete using (user_id = auth.uid()::text);
+create policy weekly_plan_delete_all_authenticated on public.weekly_plan
+for delete using (auth.role() = 'authenticated');
 
 drop policy if exists recipe_ingredients_select_own on public.recipe_ingredients;
 drop policy if exists recipe_ingredients_insert_own on public.recipe_ingredients;
 drop policy if exists recipe_ingredients_update_own on public.recipe_ingredients;
 drop policy if exists recipe_ingredients_delete_own on public.recipe_ingredients;
+drop policy if exists recipe_ingredients_select_all_authenticated on public.recipe_ingredients;
 
-create policy recipe_ingredients_select_own on public.recipe_ingredients
-for select
-using (
-  exists (
-    select 1
-    from public.recipes r
-    where r.id = recipe_ingredients.recipe_id
-      and r.user_id = auth.uid()::text
-  )
-);
+create policy recipe_ingredients_select_all_authenticated on public.recipe_ingredients
+for select using (auth.role() = 'authenticated');
 
 create policy recipe_ingredients_insert_own on public.recipe_ingredients
 for insert

@@ -1,5 +1,8 @@
 import supabase from "./supabaseClient";
 
+// Shared scope key for one common weekly plan across all users.
+const SHARED_WEEKLY_PLAN_SCOPE = "shared-weekly-plan";
+
 export const WEEK_DAYS = [
   { value: 1, label: "Montag" },
   { value: 2, label: "Dienstag" },
@@ -10,24 +13,23 @@ export const WEEK_DAYS = [
   { value: 7, label: "Sonntag" },
 ];
 
-export async function fetchRecipes(userId) {
+export async function fetchRecipes() {
   const { data, error } = await supabase
     .from("recipes")
     .select(
       "id, title, description, created_at, recipe_ingredients(shopping_item_id, shopping_items(id, item_name, supermarket))",
     )
-    .eq("user_id", userId)
     .order("title", { ascending: true });
 
   if (error) throw error;
   return data ?? [];
 }
 
-export async function fetchWeeklyPlan(userId) {
+export async function fetchWeeklyPlan() {
   const { data, error } = await supabase
     .from("weekly_plan")
     .select("id, weekday, recipe_id, recipes(id, title, description)")
-    .eq("user_id", userId)
+    .eq("user_id", SHARED_WEEKLY_PLAN_SCOPE)
     .order("weekday", { ascending: true });
 
   if (error) throw error;
@@ -65,7 +67,14 @@ export async function createRecipe({
     .select("id, title, description")
     .single();
 
-  if (recipeError) throw recipeError;
+  if (recipeError) {
+    if (recipeError.code === "23505") {
+      throw new Error(
+        "Ein Rezept mit diesem Titel existiert bereits. Bitte passe den Titel an oder bearbeite das bestehende Rezept.",
+      );
+    }
+    throw recipeError;
+  }
 
   await replaceRecipeIngredients({
     recipeId: recipe.id,
@@ -138,10 +147,10 @@ export async function deleteRecipe(recipeId) {
   if (error) throw error;
 }
 
-export async function assignRecipeToWeekday({ userId, weekday, recipeId }) {
+export async function assignRecipeToWeekday({ weekday, recipeId }) {
   const { error } = await supabase.from("weekly_plan").upsert(
     {
-      user_id: userId,
+      user_id: SHARED_WEEKLY_PLAN_SCOPE,
       weekday,
       recipe_id: recipeId,
       updated_at: new Date().toISOString(),
@@ -154,11 +163,11 @@ export async function assignRecipeToWeekday({ userId, weekday, recipeId }) {
   if (error) throw error;
 }
 
-export async function removeRecipeFromWeekday({ userId, weekday }) {
+export async function removeRecipeFromWeekday({ weekday }) {
   const { error } = await supabase
     .from("weekly_plan")
     .delete()
-    .eq("user_id", userId)
+    .eq("user_id", SHARED_WEEKLY_PLAN_SCOPE)
     .eq("weekday", weekday);
 
   if (error) throw error;
