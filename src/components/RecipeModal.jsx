@@ -21,7 +21,9 @@ const RecipeModal = ({
 } = {}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [search, setSearch] = useState("");
+  const [ingredientSearch, setIngredientSearch] = useState("");
+  const [showIngredientPickerModal, setShowIngredientPickerModal] =
+    useState(false);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [availableItems, setAvailableItems] = useState([]);
   const [status, setStatus] = useState("");
@@ -52,7 +54,8 @@ const RecipeModal = ({
       setSelectedIngredients([]);
     }
 
-    setSearch("");
+    setIngredientSearch("");
+    setShowIngredientPickerModal(false);
     setStatus("");
     setError("");
     setShowListSelectionModal(false);
@@ -97,12 +100,12 @@ const RecipeModal = ({
   }, [visible, userId]);
 
   const filteredItems = useMemo(() => {
-    const q = (search ?? "").toString().trim().toLowerCase();
+    const q = (ingredientSearch ?? "").toString().trim().toLowerCase();
     if (!q) return availableItems;
     return (availableItems ?? []).filter((item) =>
       (item.item_name ?? "").toString().toLowerCase().includes(q),
     );
-  }, [availableItems, search]);
+  }, [availableItems, ingredientSearch]);
 
   const selectedIngredientItems = useMemo(() => {
     if (!selectedIngredients.length) return [];
@@ -282,58 +285,30 @@ const RecipeModal = ({
               </label>
 
               <label className="modal-label">
-                Zutaten suchen
-                <input
-                  className="input-fields"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  onClick={(e) => e.currentTarget.select()}
-                  placeholder="Nach Item suchen"
-                />
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => setShowIngredientPickerModal(true)}
+                >
+                  Zutaten hinzufügen
+                </button>
               </label>
 
-              {isEditMode ? (
-                <div className="recipe-selected-ingredients">
-                  <p className="recipe-selected-title">Aktuell im Rezept</p>
-                  {selectedIngredientItems.length === 0 ? (
-                    <p className="recipe-selected-empty">
-                      Noch keine Zutaten ausgewählt.
-                    </p>
-                  ) : (
-                    <div className="recipe-selected-list">
-                      {selectedIngredientItems.map((item) => (
-                        <div key={item.id} className="recipe-selected-item">
-                          <span>{item.item_name}</span>
-                          <small>{item.supermarket || "-"}</small>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ) : null}
-
-              <div className="recipe-ingredient-list">
-                {filteredItems.length === 0 ? (
-                  <p style={{ margin: 0, color: "#bbb" }}>
-                    Keine passenden Zutaten gefunden.
+              <div className="recipe-selected-ingredients">
+                <p className="recipe-selected-title">Aktuell im Rezept</p>
+                {selectedIngredientItems.length === 0 ? (
+                  <p className="recipe-selected-empty">
+                    Noch keine Zutaten ausgewählt.
                   </p>
                 ) : (
-                  filteredItems.map((item) => {
-                    const selected = selectedIngredients.includes(item.id);
-                    return (
-                      <label key={item.id} className="recipe-ingredient-row">
-                        <input
-                          type="checkbox"
-                          checked={selected}
-                          onChange={() => toggleIngredient(item.id)}
-                        />
+                  <div className="recipe-selected-list">
+                    {selectedIngredientItems.map((item) => (
+                      <div key={item.id} className="recipe-selected-item">
                         <span>{item.item_name}</span>
-                        <span className="recipe-ingredient-market">
-                          {item.supermarket || "-"}
-                        </span>
-                      </label>
-                    );
-                  })
+                        <small>{item.supermarket || "-"}</small>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
 
@@ -445,6 +420,85 @@ const RecipeModal = ({
                   disabled={saving || selectedListItemIds.length === 0}
                 >
                   {saving ? "Setze auf Liste..." : "Auf Liste setzen"}
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {showIngredientPickerModal ? (
+          <div
+            className="modal-overlay"
+            onClick={() => setShowIngredientPickerModal(false)}
+          >
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Zutaten hinzufügen</h3>
+              </div>
+
+              <div className="modal-body">
+                <label className="modal-label">
+                  Zutaten suchen
+                  <input
+                    className="input-fields"
+                    value={ingredientSearch}
+                    onChange={(e) => setIngredientSearch(e.target.value)}
+                    onClick={(e) => e.currentTarget.select()}
+                    placeholder="Nach Item suchen"
+                  />
+                </label>
+
+                <div className="recipe-ingredient-list">
+                  {filteredItems.length === 0 ? (
+                    <p style={{ margin: 0, color: "#bbb" }}>
+                      Keine passenden Zutaten gefunden.
+                    </p>
+                  ) : (
+                    filteredItems.map((item) => {
+                      const selected = selectedIngredients.includes(item.id);
+                      return (
+                        <label key={item.id} className="recipe-ingredient-row">
+                          <input
+                            type="checkbox"
+                            checked={selected}
+                            onChange={() => toggleIngredient(item.id)}
+                          />
+                          <span>{item.item_name}</span>
+                          <span className="recipe-ingredient-market">
+                            {item.supermarket || "-"}
+                          </span>
+                        </label>
+                      );
+                    })
+                  )}
+                </div>
+
+                <div className="recipe-selected-ingredients">
+                  <p className="recipe-selected-title">Ausgewählt im Rezept</p>
+                  {selectedIngredientItems.length === 0 ? (
+                    <p className="recipe-selected-empty">
+                      Noch keine Zutaten ausgewählt.
+                    </p>
+                  ) : (
+                    <div className="recipe-selected-list">
+                      {selectedIngredientItems.map((item) => (
+                        <div key={item.id} className="recipe-selected-item">
+                          <span>{item.item_name}</span>
+                          <small>{item.supermarket || "-"}</small>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="modal-footer" style={{ gap: 8 }}>
+                <button
+                  type="button"
+                  className="btn cancel-btn"
+                  onClick={() => setShowIngredientPickerModal(false)}
+                >
+                  Schließen
                 </button>
               </div>
             </div>
