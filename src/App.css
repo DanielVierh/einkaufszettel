@@ -251,7 +251,7 @@ h2 {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -264,6 +264,7 @@ h2 {
   padding-bottom: max(16px, env(safe-area-inset-bottom));
   padding-left: max(16px, env(safe-area-inset-left));
   z-index: 9999;
+  backdrop-filter: blue(4px);
 }
 
 .recipe-modal-overlay {
@@ -928,6 +929,12 @@ body.modal-open {
   align-items: stretch;
 }
 
+.btn-weekplan {
+  position: fixed;
+  top: 55px;
+  right: 0;
+}
+
 .weekly-picker-main {
   display: flex;
   flex-direction: column;
@@ -939,11 +946,17 @@ body.modal-open {
   border-radius: 10px;
   padding: 9px 10px;
   cursor: pointer;
+  margin: 10px 0;
 }
 
 .weekly-recipe-btn {
   background: #137b86;
   margin-bottom: 15px !important;
+  height: 40px;
+}
+
+.weekly-recipe-btn--new {
+  background: linear-gradient(to bottom, green, rgb(1, 63, 1));
 }
 
 .weekly-picker-main span {

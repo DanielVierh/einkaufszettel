@@ -207,7 +207,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
             Alle Rezepte anzeigen
           </button>
           <button
-            className="btn weekly-recipe-btn"
+            className="btn weekly-recipe-btn weekly-recipe-btn--new"
             onClick={() => {
               setEditingRecipe(null);
               setShowRecipeModal(true);
@@ -433,9 +433,6 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                           onClick={() => handlePickRecipe(recipe.id)}
                         >
                           <strong>{recipe.title}</strong>
-                          <span>
-                            {recipe.description || "Keine Beschreibung"}
-                          </span>
                         </button>
                         <div className="weekly-picker-actions">
                           <button
@@ -455,17 +452,6 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                 </div>
               </div>
               <div className="modal-footer" style={{ gap: 8 }}>
-                <button
-                  className="btn cancel-btn"
-                  onClick={async () => {
-                    if (pickerWeekday) await handleRemove(pickerWeekday);
-                    setShowRecipePicker(false);
-                    setPickerWeekday(null);
-                    setPickerSearch("");
-                  }}
-                >
-                  Nicht geplant
-                </button>
                 <button
                   className="btn cancel-btn"
                   onClick={() => {

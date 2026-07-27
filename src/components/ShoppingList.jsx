@@ -307,7 +307,7 @@ const ShoppingList = ({
       ) : null}
       <div style={{ marginTop: 3 }}>
         <button
-          className="btn"
+          className="btn btn-weekplan"
           onClick={() => {
             if (typeof onOpenWeeklyPlan === "function") onOpenWeeklyPlan();
           }}
