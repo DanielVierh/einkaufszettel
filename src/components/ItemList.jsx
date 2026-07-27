@@ -8,6 +8,10 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("");
+  const [showWeeklySelectionModal, setShowWeeklySelectionModal] =
+    useState(false);
+  const [selectedWeeklyItemIds, setSelectedWeeklyItemIds] = useState([]);
+  const [weeklySelectionSaving, setWeeklySelectionSaving] = useState(false);
 
   async function updateItem(id, changes) {
     try {
@@ -71,15 +75,51 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
   }, [userId]);
 
   async function handle_create_weeklyList() {
-    const confirm = window.confirm(
-      "Soll der Wocheneinkaufszettel erstellt werden?",
-    );
-    if (confirm) {
-      items.map((item) => {
-        if (item.item_on_weekly_list) {
-          addExistingItem(item.id);
-        }
-      });
+    const recurringItems = (items ?? []).filter((item) => item.item_on_weekly_list);
+    setSelectedWeeklyItemIds(recurringItems.map((item) => item.id).filter(Boolean));
+    setShowWeeklySelectionModal(true);
+  }
+
+  function toggleWeeklySelectionItem(itemId) {
+    setSelectedWeeklyItemIds((prev) => {
+      if (prev.includes(itemId)) return prev.filter((id) => id !== itemId);
+      return [...prev, itemId];
+    });
+  }
+
+  async function handleApplyWeeklySelection() {
+    if (selectedWeeklyItemIds.length === 0) return;
+
+    setWeeklySelectionSaving(true);
+    try {
+      const { error } = await supabase
+        .from("shopping_items")
+        .update({
+          item_on_list: true,
+          added_at: new Date().toISOString(),
+          item_creator: user_name ?? null,
+        })
+        .in("id", selectedWeeklyItemIds);
+      if (error) throw error;
+
+      setStatus(
+        `${selectedWeeklyItemIds.length} Items auf Einkaufsliste gesetzt`,
+      );
+      const statusEl = document.getElementById("status");
+      statusEl?.classList.add("active");
+      setTimeout(() => {
+        setStatus("");
+        statusEl?.classList.remove("active");
+      }, 3000);
+
+      setShowWeeklySelectionModal(false);
+      window.dispatchEvent(new CustomEvent("items:changed"));
+      setSearchTerm("");
+    } catch (err) {
+      console.error("Apply weekly selection error", err);
+      alert("Fehler beim Erstellen der Wocheneinkaufsliste: " + String(err));
+    } finally {
+      setWeeklySelectionSaving(false);
     }
   }
 
@@ -92,6 +132,8 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
             .includes(searchTerm.toString().toLowerCase()),
         )
       : items;
+
+  const recurringItems = (items ?? []).filter((item) => item.item_on_weekly_list);
 
   async function addExistingItem(id, product_name) {
     try {
@@ -115,10 +157,11 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
 
   function handle_status(product_name) {
     setStatus(`${product_name} hinzugefügt`);
-    document.getElementById("status").classList.add("active");
+    const statusEl = document.getElementById("status");
+    statusEl?.classList.add("active");
     setTimeout(() => {
       setStatus("");
-      document.getElementById("status").classList.remove("active");
+      statusEl?.classList.remove("active");
     }, 3000);
   }
 
@@ -180,6 +223,74 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
       <button className="btn" onClick={handle_create_weeklyList}>
         Wocheneinkaufsliste
       </button>
+      {showWeeklySelectionModal ? (
+        <div
+          className="modal-overlay"
+          onClick={() => {
+            if (weeklySelectionSaving) return;
+            setShowWeeklySelectionModal(false);
+          }}
+        >
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Wocheneinkaufsliste erstellen</h3>
+            </div>
+
+            <div className="modal-body">
+              {recurringItems.length === 0 ? (
+                <p style={{ margin: 0, color: "#bbb" }}>
+                  Es sind keine wiederkehrenden Items vorhanden.
+                </p>
+              ) : (
+                <div className="recipe-ingredient-list">
+                  {recurringItems.map((item) => {
+                    const selected = selectedWeeklyItemIds.includes(item.id);
+                    return (
+                      <label key={item.id} className="recipe-ingredient-row">
+                        <input
+                          type="checkbox"
+                          checked={selected}
+                          onChange={() => toggleWeeklySelectionItem(item.id)}
+                        />
+                        <span>{item.item_name}</span>
+                        <span className="recipe-ingredient-market">
+                          {item.supermarket || "-"}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              )}
+              <p style={{ marginTop: 10, marginBottom: 0, color: "#bbb" }}>
+                Ausgewählt: {selectedWeeklyItemIds.length}
+              </p>
+            </div>
+
+            <div className="modal-footer" style={{ gap: 8 }}>
+              <button
+                type="button"
+                className="btn cancel-btn"
+                onClick={() => setShowWeeklySelectionModal(false)}
+                disabled={weeklySelectionSaving}
+              >
+                Abbrechen
+              </button>
+              <button
+                type="button"
+                className="btn submit-btn"
+                onClick={handleApplyWeeklySelection}
+                disabled={
+                  weeklySelectionSaving || selectedWeeklyItemIds.length === 0
+                }
+              >
+                {weeklySelectionSaving
+                  ? "Setze auf Liste..."
+                  : "Auf Einkaufsliste setzen"}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <button
         className="btn product-list--button-ready"
         onClick={() => {
