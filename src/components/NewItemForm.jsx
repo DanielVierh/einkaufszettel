@@ -8,6 +8,7 @@ const NewItemForm = ({
   searchTerm = "",
   setSearchTerm = () => {},
   addExistingItem = () => {},
+  onCreatedItem = () => {},
 }) => {
   const [itemname, setItemname] = useState(searchTerm ?? "");
   const [error, setError] = useState("");
@@ -77,19 +78,25 @@ const NewItemForm = ({
     }
 
     try {
-      await supabase.from("shopping_items").insert({
-        user_id: userId,
-        item_name: itemname,
-        item_price: Number(item_price) || 0.0,
-        item_on_list: true,
-        item_is_open: true,
-        item_amount: Number(item_amount) || 1,
-        item_on_weekly_list: Boolean(item_on_weekly_list),
-        item_comment: item_comment || "",
-        supermarket: supermarket || null,
-        item_creator: user_name,
-        added_at: new Date().toISOString(),
-      });
+      const { data: createdItem, error: createError } = await supabase
+        .from("shopping_items")
+        .insert({
+          user_id: userId,
+          item_name: itemname,
+          item_price: Number(item_price) || 0.0,
+          item_on_list: true,
+          item_is_open: true,
+          item_amount: Number(item_amount) || 1,
+          item_on_weekly_list: Boolean(item_on_weekly_list),
+          item_comment: item_comment || "",
+          supermarket: supermarket || null,
+          item_creator: user_name,
+          added_at: new Date().toISOString(),
+        })
+        .select("id, item_name")
+        .single();
+
+      if (createError) throw createError;
 
       setSuccess("Neues Produkt erstellt und zur Liste hinzugefügt");
       setItemname("");
@@ -100,6 +107,10 @@ const NewItemForm = ({
       setItem_on_weekly_list(false);
       setItem_comment("");
       setSupermarket("");
+
+      if (typeof onCreatedItem === "function") {
+        onCreatedItem(createdItem);
+      }
 
       try {
         window.dispatchEvent(new CustomEvent("items:changed"));

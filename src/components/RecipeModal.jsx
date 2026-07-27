@@ -7,6 +7,7 @@ import {
   fetchShoppingItemsForRecipe,
   updateRecipe,
 } from "../lib/weeklyPlanApi";
+import NewItemForm from "./NewItemForm";
 
 const RecipeModal = ({
   visible,
@@ -24,6 +25,7 @@ const RecipeModal = ({
   const [ingredientSearch, setIngredientSearch] = useState("");
   const [showIngredientPickerModal, setShowIngredientPickerModal] =
     useState(false);
+  const [showIngredientCreator, setShowIngredientCreator] = useState(false);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [availableItems, setAvailableItems] = useState([]);
   const [status, setStatus] = useState("");
@@ -56,6 +58,7 @@ const RecipeModal = ({
 
     setIngredientSearch("");
     setShowIngredientPickerModal(false);
+    setShowIngredientCreator(false);
     setStatus("");
     setError("");
     setShowListSelectionModal(false);
@@ -94,8 +97,13 @@ const RecipeModal = ({
     }
 
     load();
+    const onItemsChanged = () => {
+      load();
+    };
+    window.addEventListener("items:changed", onItemsChanged);
     return () => {
       mounted = false;
+      window.removeEventListener("items:changed", onItemsChanged);
     };
   }, [visible, userId]);
 
@@ -442,7 +450,10 @@ const RecipeModal = ({
                   <input
                     className="input-fields"
                     value={ingredientSearch}
-                    onChange={(e) => setIngredientSearch(e.target.value)}
+                    onChange={(e) => {
+                      setIngredientSearch(e.target.value);
+                      setShowIngredientCreator(false);
+                    }}
                     onClick={(e) => e.currentTarget.select()}
                     placeholder="Nach Item suchen"
                   />
@@ -450,9 +461,51 @@ const RecipeModal = ({
 
                 <div className="recipe-ingredient-list">
                   {filteredItems.length === 0 ? (
-                    <p style={{ margin: 0, color: "#bbb" }}>
-                      Keine passenden Zutaten gefunden.
-                    </p>
+                    <div>
+                      <p style={{ margin: 0, color: "#bbb" }}>
+                        Keine passenden Zutaten gefunden.
+                      </p>
+                      {ingredientSearch.trim() ? (
+                        <>
+                          <button
+                            type="button"
+                            className="btn"
+                            onClick={() =>
+                              setShowIngredientCreator((prev) => !prev)
+                            }
+                          >
+                            {showIngredientCreator
+                              ? "Formular ausblenden"
+                              : "Neue Zutat anlegen"}
+                          </button>
+                          {showIngredientCreator ? (
+                            <NewItemForm
+                              userId={userId}
+                              user_name={userName}
+                              items={availableItems}
+                              searchTerm={ingredientSearch}
+                              setSearchTerm={setIngredientSearch}
+                              addExistingItem={(_, itemName) => {
+                                setStatus(
+                                  `${itemName} gefunden. Bitte im Rezept auswählen.`,
+                                );
+                                setIngredientSearch(itemName);
+                                setShowIngredientCreator(false);
+                              }}
+                              onCreatedItem={(createdItem) => {
+                                const createdName =
+                                  createdItem?.item_name || ingredientSearch;
+                                setStatus(
+                                  `${createdName} wurde angelegt. Bitte als Zutat auswählen.`,
+                                );
+                                setIngredientSearch(createdName);
+                                setShowIngredientCreator(false);
+                              }}
+                            />
+                          ) : null}
+                        </>
+                      ) : null}
+                    </div>
                   ) : (
                     filteredItems.map((item) => {
                       const selected = selectedIngredients.includes(item.id);
