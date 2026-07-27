@@ -212,14 +212,16 @@ const ShoppingList = ({
         }}
       >
         <button
-          className={"btn" + (sortBy === "name" ? " active" : "")}
+          className={"btn filter-btn" + (sortBy === "name" ? " active" : "")}
           onClick={() => setSortBy((s) => (s === "name" ? "none" : "name"))}
           title="Alphabetisch nach Name"
         >
           A–Z
         </button>
         <button
-          className={"btn" + (sortBy === "supermarket" ? " active" : "")}
+          className={
+            "btn filter-btn" + (sortBy === "supermarket" ? " active" : "")
+          }
           onClick={() =>
             setSortBy((s) => (s === "supermarket" ? "none" : "supermarket"))
           }
@@ -228,7 +230,9 @@ const ShoppingList = ({
           Supermarkt
         </button>
         <button
-          className={"btn" + (sortBy === "added_at" ? " active" : "")}
+          className={
+            "btn filter-btn" + (sortBy === "added_at" ? " active" : "")
+          }
           onClick={() =>
             setSortBy((s) => (s === "added_at" ? "none" : "added_at"))
           }

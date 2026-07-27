@@ -75,8 +75,12 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
   }, [userId]);
 
   async function handle_create_weeklyList() {
-    const recurringItems = (items ?? []).filter((item) => item.item_on_weekly_list);
-    setSelectedWeeklyItemIds(recurringItems.map((item) => item.id).filter(Boolean));
+    const recurringItems = (items ?? []).filter(
+      (item) => item.item_on_weekly_list,
+    );
+    setSelectedWeeklyItemIds(
+      recurringItems.map((item) => item.id).filter(Boolean),
+    );
     setShowWeeklySelectionModal(true);
   }
 
@@ -133,7 +137,9 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
         )
       : items;
 
-  const recurringItems = (items ?? []).filter((item) => item.item_on_weekly_list);
+  const recurringItems = (items ?? []).filter(
+    (item) => item.item_on_weekly_list,
+  );
 
   async function addExistingItem(id, product_name) {
     try {

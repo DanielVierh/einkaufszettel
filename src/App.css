@@ -1068,3 +1068,7 @@ body.modal-open {
 .modal::before {
   border-radius: 12px;
 }
+
+.filter-btn.active {
+  background-color: #075431;
+}
