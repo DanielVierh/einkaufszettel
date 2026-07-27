@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   addIngredientItemsToShoppingList,
   createRecipe,
@@ -258,276 +259,57 @@ const RecipeModal = ({
   if (!visible) return null;
 
   return (
-    <div
-      className="modal-overlay recipe-modal-overlay"
-      onClick={() => onClose?.()}
-    >
-      <div className="modal recipe-modal" onClick={(e) => e.stopPropagation()}>
-        <form
-          onSubmit={handleSubmit}
-          style={{ minHeight: 0, display: "flex", flexDirection: "column" }}
+    <>
+      <div
+        className="modal-overlay recipe-modal-overlay"
+        onClick={() => onClose?.()}
+      >
+        <div
+          className="modal recipe-modal"
+          onClick={(e) => e.stopPropagation()}
         >
-          <div className="modal-header">
-            <h3>{isEditMode ? "Rezept bearbeiten" : "Rezept hinzufügen"}</h3>
-          </div>
-
-          <div className="modal-body">
-            <div className="modal-form editing">
-              <label className="modal-label">
-                Titel
-                <input
-                  className="input-fields"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="z.B. Nudeln mit Tomatensauce"
-                />
-              </label>
-
-              <label className="modal-label">
-                <textarea
-                  className="input-fields"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Anleitung"
-                />
-              </label>
-
-              <label className="modal-label">
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => setShowIngredientPickerModal(true)}
-                >
-                  Zutaten hinzufügen
-                </button>
-              </label>
-
-              <div className="recipe-selected-ingredients">
-                <p className="recipe-selected-title">Aktuell im Rezept</p>
-                {selectedIngredientItems.length === 0 ? (
-                  <p className="recipe-selected-empty">
-                    Noch keine Zutaten ausgewählt.
-                  </p>
-                ) : (
-                  <div className="recipe-selected-list">
-                    {selectedIngredientItems.map((item) => (
-                      <div key={item.id} className="recipe-selected-item">
-                        <span>{item.item_name}</span>
-                        <small>{item.supermarket || "-"}</small>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <p style={{ margin: 0, color: "#bbb" }}>
-                Ausgewählt: {selectedIngredients.length}
-              </p>
-              {status ? <p style={{ color: "lightgreen" }}>{status}</p> : null}
-              {error ? <p style={{ color: "salmon" }}>{error}</p> : null}
+          <form
+            className="recipe-modal-form"
+            onSubmit={handleSubmit}
+            style={{ minHeight: 0, display: "flex", flexDirection: "column" }}
+          >
+            <div className="modal-header">
+              <h3>{isEditMode ? "Rezept bearbeiten" : "Rezept hinzufügen"}</h3>
             </div>
-          </div>
 
-          <div
-            className="modal-footer"
-            style={{ gap: 20, justifyContent: "center" }}
-          >
-            {isEditMode ? (
-              <button
-                type="button"
-                className="btn"
-                onClick={openListSelectionModal}
-                disabled={saving || listSelectionLoading}
-              >
-                {listSelectionLoading
-                  ? "Lade Zutaten..."
-                  : "Zutaten auf Einkaufsliste"}
-              </button>
-            ) : null}
-            <button
-              type="button"
-              className="btn cancel-btn"
-              onClick={() => onClose?.()}
-            >
-              Abbrechen
-            </button>
-            {isEditMode ? (
-              <button
-                type="button"
-                className="btn product-list--delete-btn"
-                onClick={handleDelete}
-                disabled={saving}
-                style={{ color: "red" }}
-              >
-                Löschen
-              </button>
-            ) : null}
-            <button type="submit" className="btn submit-btn" disabled={saving}>
-              {saving
-                ? "Speichern..."
-                : isEditMode
-                  ? "Änderungen speichern"
-                  : "Rezept speichern"}
-            </button>
-          </div>
-        </form>
-
-        {showListSelectionModal ? (
-          <div
-            className="modal-overlay"
-            onClick={() => setShowListSelectionModal(false)}
-          >
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3>Zutaten wählen: {recipeToEdit?.title}</h3>
-              </div>
-
-              <div className="modal-body">
-                {listSelectionItems.length === 0 ? (
-                  <p style={{ margin: 0, color: "#bbb" }}>
-                    Dieses Rezept hat keine hinterlegten Zutaten.
-                  </p>
-                ) : (
-                  <div className="recipe-ingredient-list">
-                    {listSelectionItems.map((item) => {
-                      const selected = selectedListItemIds.includes(item.id);
-                      return (
-                        <label key={item.id} className="recipe-ingredient-row">
-                          <input
-                            type="checkbox"
-                            checked={selected}
-                            onChange={() => toggleListSelectionItem(item.id)}
-                          />
-                          <span>{item.item_name}</span>
-                          <span className="recipe-ingredient-market">
-                            {item.supermarket || "-"}
-                          </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                )}
-
-                <p style={{ marginTop: 10, marginBottom: 0, color: "#bbb" }}>
-                  Ausgewählt: {selectedListItemIds.length}
-                </p>
-              </div>
-
-              <div className="modal-footer" style={{ gap: 8 }}>
-                <button
-                  type="button"
-                  className="btn cancel-btn"
-                  onClick={() => setShowListSelectionModal(false)}
-                >
-                  Abbrechen
-                </button>
-                <button
-                  type="button"
-                  className="btn submit-btn"
-                  onClick={handleAddSelectedItemsToList}
-                  disabled={saving || selectedListItemIds.length === 0}
-                >
-                  {saving ? "Setze auf Liste..." : "Auf Liste setzen"}
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : null}
-
-        {showIngredientPickerModal ? (
-          <div
-            className="modal-overlay"
-            onClick={() => setShowIngredientPickerModal(false)}
-          >
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3>Zutaten hinzufügen</h3>
-              </div>
-
-              <div className="modal-body">
+            <div className="modal-body">
+              <div className="modal-form editing">
                 <label className="modal-label">
-                  Zutaten suchen
+                  Titel
                   <input
                     className="input-fields"
-                    value={ingredientSearch}
-                    onChange={(e) => {
-                      setIngredientSearch(e.target.value);
-                      setShowIngredientCreator(false);
-                    }}
-                    onClick={(e) => e.currentTarget.select()}
-                    placeholder="Nach Item suchen"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="z.B. Nudeln mit Tomatensauce"
                   />
                 </label>
 
-                <div className="recipe-ingredient-list">
-                  {filteredItems.length === 0 ? (
-                    <div>
-                      <p style={{ margin: 0, color: "#bbb" }}>
-                        Keine passenden Zutaten gefunden.
-                      </p>
-                      {ingredientSearch.trim() ? (
-                        <>
-                          <button
-                            type="button"
-                            className="btn"
-                            onClick={() =>
-                              setShowIngredientCreator((prev) => !prev)
-                            }
-                          >
-                            {showIngredientCreator
-                              ? "Formular ausblenden"
-                              : "Neue Zutat anlegen"}
-                          </button>
-                          {showIngredientCreator ? (
-                            <NewItemForm
-                              userId={userId}
-                              user_name={userName}
-                              items={availableItems}
-                              searchTerm={ingredientSearch}
-                              setSearchTerm={setIngredientSearch}
-                              addExistingItem={(_, itemName) => {
-                                setStatus(
-                                  `${itemName} gefunden. Bitte im Rezept auswählen.`,
-                                );
-                                setIngredientSearch(itemName);
-                                setShowIngredientCreator(false);
-                              }}
-                              onCreatedItem={(createdItem) => {
-                                const createdName =
-                                  createdItem?.item_name || ingredientSearch;
-                                setStatus(
-                                  `${createdName} wurde angelegt. Bitte als Zutat auswählen.`,
-                                );
-                                setIngredientSearch(createdName);
-                                setShowIngredientCreator(false);
-                              }}
-                            />
-                          ) : null}
-                        </>
-                      ) : null}
-                    </div>
-                  ) : (
-                    filteredItems.map((item) => {
-                      const selected = selectedIngredients.includes(item.id);
-                      return (
-                        <label key={item.id} className="recipe-ingredient-row">
-                          <input
-                            type="checkbox"
-                            checked={selected}
-                            onChange={() => toggleIngredient(item.id)}
-                          />
-                          <span>{item.item_name}</span>
-                          <span className="recipe-ingredient-market">
-                            {item.supermarket || "-"}
-                          </span>
-                        </label>
-                      );
-                    })
-                  )}
-                </div>
+                <label className="modal-label">
+                  <textarea
+                    className="input-fields"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Anleitung"
+                  />
+                </label>
+
+                <label className="modal-label">
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => setShowIngredientPickerModal(true)}
+                  >
+                    Zutaten hinzufügen
+                  </button>
+                </label>
 
                 <div className="recipe-selected-ingredients">
-                  <p className="recipe-selected-title">Ausgewählt im Rezept</p>
+                  <p className="recipe-selected-title">Aktuell im Rezept</p>
                   {selectedIngredientItems.length === 0 ? (
                     <p className="recipe-selected-empty">
                       Noch keine Zutaten ausgewählt.
@@ -543,22 +325,262 @@ const RecipeModal = ({
                     </div>
                   )}
                 </div>
-              </div>
 
-              <div className="modal-footer" style={{ gap: 8 }}>
-                <button
-                  type="button"
-                  className="btn cancel-btn"
-                  onClick={() => setShowIngredientPickerModal(false)}
-                >
-                  Schließen
-                </button>
+                <p style={{ margin: 0, color: "#bbb" }}>
+                  Ausgewählt: {selectedIngredients.length}
+                </p>
+                {status ? (
+                  <p style={{ color: "lightgreen" }}>{status}</p>
+                ) : null}
+                {error ? <p style={{ color: "salmon" }}>{error}</p> : null}
               </div>
             </div>
-          </div>
-        ) : null}
+
+            <div
+              className="modal-footer"
+              style={{ gap: 20, justifyContent: "center" }}
+            >
+              {isEditMode ? (
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={openListSelectionModal}
+                  disabled={saving || listSelectionLoading}
+                >
+                  {listSelectionLoading
+                    ? "Lade Zutaten..."
+                    : "Zutaten auf Einkaufsliste"}
+                </button>
+              ) : null}
+              <button
+                type="button"
+                className="btn cancel-btn"
+                onClick={() => onClose?.()}
+              >
+                Abbrechen
+              </button>
+              <button
+                type="submit"
+                className="btn submit-btn"
+                disabled={saving}
+              >
+                {saving
+                  ? "Speichern..."
+                  : isEditMode
+                    ? "Änderungen speichern"
+                    : "Rezept speichern"}
+              </button>
+              {isEditMode ? (
+                <button
+                  type="button"
+                  className="btn product-list--delete-btn"
+                  onClick={handleDelete}
+                  disabled={saving}
+                  style={{ color: "red" }}
+                >
+                  Löschen
+                </button>
+              ) : null}
+            </div>
+          </form>
+
+          {showListSelectionModal ? (
+            <div
+              className="modal-overlay"
+              onClick={() => setShowListSelectionModal(false)}
+            >
+              <div className="modal" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <h3>Zutaten wählen: {recipeToEdit?.title}</h3>
+                </div>
+
+                <div className="modal-body">
+                  {listSelectionItems.length === 0 ? (
+                    <p style={{ margin: 0, color: "#bbb" }}>
+                      Dieses Rezept hat keine hinterlegten Zutaten.
+                    </p>
+                  ) : (
+                    <div className="recipe-ingredient-list">
+                      {listSelectionItems.map((item) => {
+                        const selected = selectedListItemIds.includes(item.id);
+                        return (
+                          <label
+                            key={item.id}
+                            className="recipe-ingredient-row"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selected}
+                              onChange={() => toggleListSelectionItem(item.id)}
+                            />
+                            <span>{item.item_name}</span>
+                            <span className="recipe-ingredient-market">
+                              {item.supermarket || "-"}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  <p style={{ marginTop: 10, marginBottom: 0, color: "#bbb" }}>
+                    Ausgewählt: {selectedListItemIds.length}
+                  </p>
+                </div>
+
+                <div className="modal-footer" style={{ gap: 8 }}>
+                  <button
+                    type="button"
+                    className="btn cancel-btn"
+                    onClick={() => setShowListSelectionModal(false)}
+                  >
+                    Abbrechen
+                  </button>
+                  <button
+                    type="button"
+                    className="btn submit-btn"
+                    onClick={handleAddSelectedItemsToList}
+                    disabled={saving || selectedListItemIds.length === 0}
+                  >
+                    {saving ? "Setze auf Liste..." : "Auf Liste setzen"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          {showIngredientPickerModal ? (
+            <div
+              className="modal-overlay"
+              onClick={() => setShowIngredientPickerModal(false)}
+            >
+              <div className="modal" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <h3>Zutaten hinzufügen</h3>
+                </div>
+
+                <div className="modal-body">
+                  <label className="modal-label">
+                    Zutaten suchen
+                    <input
+                      className="input-fields"
+                      value={ingredientSearch}
+                      onChange={(e) => {
+                        setIngredientSearch(e.target.value);
+                        setShowIngredientCreator(false);
+                      }}
+                      onClick={(e) => e.currentTarget.select()}
+                      placeholder="Nach Item suchen"
+                    />
+                  </label>
+
+                  <div className="recipe-ingredient-list">
+                    {filteredItems.length === 0 ? (
+                      <div>
+                        <p style={{ margin: 0, color: "#bbb" }}>
+                          Keine passenden Zutaten gefunden.
+                        </p>
+                        {ingredientSearch.trim() ? (
+                          <>
+                            <button
+                              type="button"
+                              className="btn"
+                              onClick={() => setShowIngredientCreator(true)}
+                            >
+                              Neue Zutat anlegen
+                            </button>
+                          </>
+                        ) : null}
+                      </div>
+                    ) : (
+                      filteredItems.map((item) => {
+                        const selected = selectedIngredients.includes(item.id);
+                        return (
+                          <label
+                            key={item.id}
+                            className="recipe-ingredient-row"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selected}
+                              onChange={() => toggleIngredient(item.id)}
+                            />
+                            <span>{item.item_name}</span>
+                            <span className="recipe-ingredient-market">
+                              {item.supermarket || "-"}
+                            </span>
+                          </label>
+                        );
+                      })
+                    )}
+                  </div>
+
+                  <div className="recipe-selected-ingredients">
+                    <p className="recipe-selected-title">
+                      Ausgewählt im Rezept
+                    </p>
+                    {selectedIngredientItems.length === 0 ? (
+                      <p className="recipe-selected-empty">
+                        Noch keine Zutaten ausgewählt.
+                      </p>
+                    ) : (
+                      <div className="recipe-selected-list">
+                        {selectedIngredientItems.map((item) => (
+                          <div key={item.id} className="recipe-selected-item">
+                            <span>{item.item_name}</span>
+                            <small>{item.supermarket || "-"}</small>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="modal-footer" style={{ gap: 8 }}>
+                  <button
+                    type="button"
+                    className="btn cancel-btn"
+                    onClick={() => setShowIngredientPickerModal(false)}
+                  >
+                    Schließen
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
-    </div>
+
+      {showIngredientCreator
+        ? createPortal(
+            <NewItemForm
+              userId={userId}
+              user_name={userName}
+              items={availableItems}
+              searchTerm={ingredientSearch}
+              setSearchTerm={setIngredientSearch}
+              modalOnly
+              openModalOnMount
+              onModalClose={() => setShowIngredientCreator(false)}
+              modalOverlayZIndex={10300}
+              addExistingItem={(_, itemName) => {
+                setStatus(`${itemName} gefunden. Bitte im Rezept auswählen.`);
+                setIngredientSearch(itemName);
+                setShowIngredientCreator(false);
+              }}
+              onCreatedItem={(createdItem) => {
+                const createdName = createdItem?.item_name || ingredientSearch;
+                setStatus(
+                  `${createdName} wurde angelegt. Bitte als Zutat auswählen.`,
+                );
+                setIngredientSearch(createdName);
+                setShowIngredientCreator(false);
+              }}
+            />,
+            document.body,
+          )
+        : null}
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import supabase from "../lib/supabaseClient";
 
 const NewItemForm = ({
@@ -9,6 +9,10 @@ const NewItemForm = ({
   setSearchTerm = () => {},
   addExistingItem = () => {},
   onCreatedItem = () => {},
+  modalOverlayZIndex,
+  modalOnly = false,
+  openModalOnMount = false,
+  onModalClose = () => {},
 }) => {
   const [itemname, setItemname] = useState(searchTerm ?? "");
   const [error, setError] = useState("");
@@ -24,7 +28,6 @@ const NewItemForm = ({
   const [customSupermarket, setCustomSupermarket] = useState("");
   const [showCustomSupermarket, setShowCustomSupermarket] = useState(false);
 
-  // compute matches from provided items
   const matches = useMemo(() => {
     const q = (itemname || "").toString().toLowerCase();
     if (!q) return [];
@@ -32,6 +35,22 @@ const NewItemForm = ({
       it.item_name.toString().toLowerCase().includes(q),
     );
   }, [items, itemname]);
+
+  useEffect(() => {
+    setItemname(searchTerm ?? "");
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (!openModalOnMount) return;
+    setShowModal(true);
+  }, [openModalOnMount]);
+
+  const closeModal = useCallback(() => {
+    setShowModal(false);
+    if (typeof onModalClose === "function") {
+      onModalClose();
+    }
+  }, [onModalClose]);
 
   function handleInputChange(e) {
     const v = e.target.value;
@@ -51,19 +70,16 @@ const NewItemForm = ({
       return;
     }
 
-    // Only block creation if there is an exact (case-insensitive) name match.
     const q = (itemname || "").toString().trim().toLowerCase();
     const hasExact = (matches || []).some(
       (it) => it.item_name.toString().trim().toLowerCase() === q,
     );
 
     if (!hasExact) {
-      // open modal to collect more data for new product
       setShowModal(true);
       return;
     }
 
-    // if exact match exists, instruct user to click the found item
     setSuccess("Produkt bereits vorhanden — bitte aus der Liste auswählen");
   }
 
@@ -101,7 +117,7 @@ const NewItemForm = ({
       setSuccess("Neues Produkt erstellt und zur Liste hinzugefügt");
       setItemname("");
       setSearchTerm("");
-      setShowModal(false);
+      closeModal();
       setItem_amount(1);
       setItem_price(0);
       setItem_on_weekly_list(false);
@@ -114,8 +130,8 @@ const NewItemForm = ({
 
       try {
         window.dispatchEvent(new CustomEvent("items:changed"));
-      } catch (e) {
-        console.log(e);
+      } catch (evtErr) {
+        console.log(evtErr);
       }
     } catch (err) {
       setError(String(err));
@@ -127,11 +143,11 @@ const NewItemForm = ({
     let mounted = true;
     async function loadSupermarkets() {
       try {
-        const { data, error } = await supabase
+        const { data, error: loadError } = await supabase
           .from("shopping_items")
           .select("supermarket");
-        if (error) {
-          console.error("Supabase error (supermarkets):", error);
+        if (loadError) {
+          console.error("Supabase error (supermarkets):", loadError);
           return;
         }
         if (!mounted) return;
@@ -160,83 +176,88 @@ const NewItemForm = ({
     if (!showModal) return;
     document.body.classList.add("modal-open");
     const onKeyDown = (e) => {
-      if (e.key === "Escape") setShowModal(false);
+      if (e.key === "Escape") closeModal();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
       document.body.classList.remove("modal-open");
     };
-  }, [showModal]);
+  }, [showModal, closeModal]);
 
   return (
-    <div style={{ position: "relative", marginBottom: 12 }}>
-      <h4 style={{ margin: "0" }}>Produkt Suchen/Hinzufügen</h4>
-      <form onSubmit={handleAddItem}>
-        <input
-          type="text"
-          value={itemname}
-          onChange={handleInputChange}
-          placeholder="Item Bezeichnung"
-          className="searchbar"
-        />
-        <datalist id="supermarket-list">
-          {supermarkets.map((s) => (
-            <option key={s} value={s} />
-          ))}
-        </datalist>
-        <button className="btn">Neu Hinzufügen</button>
-        <div style={{ marginTop: 8, marginBottom: 8 }}>
-          {matches.length > 0 && (
-            <div style={{ border: "1px solid #ddd", padding: 8 }}>
-              <div style={{ fontSize: 12, marginBottom: 6 }}>Treffer:</div>
-              <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
-                {matches.map((m) => (
-                  <li
-                    key={m.id}
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: 8,
-                      padding: 6,
-                    }}
-                  >
-                    <span>{m.item_name}</span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        addExistingItem(m.id, m.item_name);
-                        // clear local and parent search state immediately
-                        setItemname("");
-                        setSearchTerm("");
-                      }}
-                      title={`Zur Einkaufsliste hinzufügen: ${m.item_name}`}
-                      className="btn"
-                    >
-                      Hinzufügen
-                    </button>
-                  </li>
-                ))}
-              </ul>
+    <div style={{ position: "relative", marginBottom: modalOnly ? 0 : 12 }}>
+      {modalOnly ? null : (
+        <>
+          <h4 style={{ margin: "0" }}>Produkt Suchen/Hinzufügen</h4>
+          <form onSubmit={handleAddItem}>
+            <input
+              type="text"
+              value={itemname}
+              onChange={handleInputChange}
+              placeholder="Item Bezeichnung"
+              className="searchbar"
+            />
+            <datalist id="supermarket-list">
+              {supermarkets.map((s) => (
+                <option key={s} value={s} />
+              ))}
+            </datalist>
+            <button className="btn">Neu Hinzufügen</button>
+            <div style={{ marginTop: 8, marginBottom: 8 }}>
+              {matches.length > 0 && (
+                <div style={{ border: "1px solid #ddd", padding: 8 }}>
+                  <div style={{ fontSize: 12, marginBottom: 6 }}>Treffer:</div>
+                  <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
+                    {matches.map((m) => (
+                      <li
+                        key={m.id}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          gap: 8,
+                          padding: 6,
+                        }}
+                      >
+                        <span>{m.item_name}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            addExistingItem(m.id, m.item_name);
+                            setItemname("");
+                            setSearchTerm("");
+                          }}
+                          title={`Zur Einkaufsliste hinzufügen: ${m.item_name}`}
+                          className="btn"
+                        >
+                          Hinzufügen
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        {error ? (
-          <p style={{ color: "red" }}>
-            Da ist etwas schief gelaufen <br></br> {error}
-          </p>
-        ) : (
-          <p style={{ color: "green" }}>{success}</p>
-        )}
-      </form>
+            {error ? (
+              <p style={{ color: "red" }}>
+                Da ist etwas schief gelaufen <br></br> {error}
+              </p>
+            ) : (
+              <p style={{ color: "green" }}>{success}</p>
+            )}
+          </form>
+        </>
+      )}
 
-      {/* Modal */}
       {showModal && (
         <div
           className="modal-overlay"
-          onClick={() => {
-            setShowModal(false);
-          }}
+          style={
+            Number.isFinite(modalOverlayZIndex)
+              ? { zIndex: modalOverlayZIndex }
+              : undefined
+          }
+          onClick={closeModal}
         >
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <form
@@ -355,9 +376,7 @@ const NewItemForm = ({
                 <button
                   type="button"
                   className="btn cancel-btn"
-                  onClick={() => {
-                    setShowModal(false);
-                  }}
+                  onClick={closeModal}
                 >
                   Abbrechen
                 </button>
