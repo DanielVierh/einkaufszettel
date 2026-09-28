@@ -253,7 +253,7 @@ h2 {
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -705,7 +705,7 @@ body::before {
 /* small responsive tweak */
 @media (max-width: 640px) {
   .modal-overlay {
-    align-items: flex-start;
+    align-items: center;
   }
   .list-wrapper .product {
     width: 100px;
