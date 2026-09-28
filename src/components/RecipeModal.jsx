@@ -274,6 +274,13 @@ const RecipeModal = ({
             style={{ minHeight: 0, display: "flex", flexDirection: "column" }}
           >
             <div className="modal-header">
+              <button
+                type="button"
+                className="btn cancel-btn"
+                onClick={() => onClose?.()}
+              >
+                Schließen
+              </button>
               <h3>{isEditMode ? "Rezept bearbeiten" : "Rezept hinzufügen"}</h3>
             </div>
 
@@ -352,13 +359,6 @@ const RecipeModal = ({
                     : "Zutaten auf Einkaufsliste"}
                 </button>
               ) : null}
-              <button
-                type="button"
-                className="btn cancel-btn"
-                onClick={() => onClose?.()}
-              >
-                Abbrechen
-              </button>
               <button
                 type="submit"
                 className="btn submit-btn"

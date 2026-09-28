@@ -184,7 +184,7 @@ h2 {
 
 .cancel-btn {
   background-color: black;
-  color: lightgray;
+  color: yellow;
 }
 
 .shopping-list {
@@ -633,7 +633,7 @@ body::before {
     rgba(0, 0, 0, 0.5),
     rgba(255, 255, 255, 0.02)
   );
-  color: #ddd;
+  color: yellow;
   border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
@@ -948,7 +948,7 @@ body.modal-open {
   flex-direction: column;
   text-align: left;
   gap: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(16, 118, 220, 0.925);
   background: rgba(255, 255, 255, 0.04);
   color: #fff;
   border-radius: 10px;
