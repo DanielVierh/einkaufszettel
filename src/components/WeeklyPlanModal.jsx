@@ -196,6 +196,9 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
     <div className="modal-overlay" onClick={() => onClose?.()}>
       <div className="modal weekly-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
+          <button className="btn cancel-btn" onClick={() => onClose?.()}>
+            Schließen
+          </button>
           <h3>Wochenplan Essen</h3>
           <button
             className="btn weekly-recipe-btn"
