@@ -825,7 +825,7 @@ body.modal-open {
 .weekly-modal,
 .weekly-picker-modal {
   backdrop-filter: blur(3px);
-  background: rgba(0, 0, 0, 0.717);
+  background: rgb(9 44 64);
 }
 
 .recipe-modal-form {
