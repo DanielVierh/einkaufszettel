@@ -270,22 +270,24 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                   </div>
 
                   <div className="weekly-day-actions">
-                    <button
-                      className="btn"
-                      disabled={!selectedRecipeId}
-                      onClick={() =>
-                        openRecipeListSelectionModal(selectedRecipe)
-                      }
-                    >
-                      Zutaten auf Liste
-                    </button>
-                    <button
-                      className="btn cancel-btn"
-                      disabled={!selectedRecipeId}
-                      onClick={() => handleRemove(day.value)}
-                    >
-                      Entfernen
-                    </button>
+                    {selectedRecipeId ? (
+                      <button
+                        className="btn"
+                        onClick={() =>
+                          openRecipeListSelectionModal(selectedRecipe)
+                        }
+                      >
+                        Zutaten auf Liste
+                      </button>
+                    ) : null}
+                    {selectedRecipeId ? (
+                      <button
+                        className="btn cancel-btn"
+                        onClick={() => handleRemove(day.value)}
+                      >
+                        Entfernen
+                      </button>
+                    ) : null}
                   </div>
                 </div>
               );
