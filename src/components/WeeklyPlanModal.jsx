@@ -19,6 +19,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
   const [showRecipePicker, setShowRecipePicker] = useState(false);
   const [pickerWeekday, setPickerWeekday] = useState(null);
   const [pickerSearch, setPickerSearch] = useState("");
+  const [createRecipeForWeekday, setCreateRecipeForWeekday] = useState(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
@@ -100,6 +101,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
   }, [weeklyEntries]);
 
   function openRecipePicker(weekday) {
+    setCreateRecipeForWeekday(null);
     setPickerWeekday(weekday);
     setPickerSearch("");
     setShowRecipePicker(true);
@@ -107,6 +109,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
 
   function openRecipeModal(recipe) {
     if (!recipe) return;
+    setCreateRecipeForWeekday(null);
     setOpenListSelectionOnOpen(false);
     setEditingRecipe(recipe);
     setShowRecipeModal(true);
@@ -114,6 +117,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
 
   function openRecipeListSelectionModal(recipe) {
     if (!recipe) return;
+    setCreateRecipeForWeekday(null);
     setOpenListSelectionOnOpen(true);
     setEditingRecipe(recipe);
     setShowRecipeModal(true);
@@ -124,7 +128,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
     setError("");
     if (!recipeId) {
       await handleRemove(weekday);
-      return;
+      return true;
     }
 
     try {
@@ -135,9 +139,11 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
       });
       setStatus("Rezept wurde dem Tag zugewiesen.");
       window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
+      return true;
     } catch (err) {
       console.error(err);
       setError(String(err.message || err));
+      return false;
     }
   }
 
@@ -212,6 +218,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
           <button
             className="btn weekly-recipe-btn weekly-recipe-btn--new"
             onClick={() => {
+              setCreateRecipeForWeekday(null);
               setEditingRecipe(null);
               setShowRecipeModal(true);
             }}
@@ -317,17 +324,30 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
             setShowRecipeModal(false);
             setOpenListSelectionOnOpen(false);
             setEditingRecipe(null);
+            setCreateRecipeForWeekday(null);
           }}
-          onCreated={() => {
+          onCreated={async (recipe) => {
+            const targetWeekday = createRecipeForWeekday;
             setShowRecipeModal(false);
             setOpenListSelectionOnOpen(false);
             setEditingRecipe(null);
+            setCreateRecipeForWeekday(null);
+            if (targetWeekday && recipe?.id) {
+              const wasAssigned = await handleAssign(targetWeekday, recipe.id);
+              if (wasAssigned) {
+                setStatus("Rezept wurde erstellt und dem Tag zugewiesen.");
+              } else {
+                setStatus("Rezept wurde erstellt.");
+              }
+              return;
+            }
             window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
           }}
           onUpdated={() => {
             setShowRecipeModal(false);
             setOpenListSelectionOnOpen(false);
             setEditingRecipe(null);
+            setCreateRecipeForWeekday(null);
             setStatus("Rezept wurde aktualisiert.");
             window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
           }}
@@ -335,6 +355,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
             setShowRecipeModal(false);
             setOpenListSelectionOnOpen(false);
             setEditingRecipe(null);
+            setCreateRecipeForWeekday(null);
             setStatus("Rezept wurde gelöscht.");
             window.dispatchEvent(new CustomEvent("weekly-plan:changed"));
           }}
@@ -391,6 +412,19 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
 
               <div className="modal-footer" style={{ gap: 8 }}>
                 <button
+                  className="btn weekly-recipe-btn--new"
+                  onClick={() => {
+                    setShowAllRecipesModal(false);
+                    setAllRecipesSearch("");
+                    setOpenListSelectionOnOpen(false);
+                    setCreateRecipeForWeekday(null);
+                    setEditingRecipe(null);
+                    setShowRecipeModal(true);
+                  }}
+                >
+                  Neues Rezept hinzufügen
+                </button>
+                <button
                   className="btn cancel-btn"
                   onClick={() => {
                     setShowAllRecipesModal(false);
@@ -444,6 +478,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                             type="button"
                             className="btn"
                             onClick={() => {
+                              setCreateRecipeForWeekday(null);
                               setEditingRecipe(recipe);
                               setShowRecipeModal(true);
                             }}
@@ -457,6 +492,20 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                 </div>
               </div>
               <div className="modal-footer" style={{ gap: 8 }}>
+                <button
+                  className="btn weekly-recipe-btn--new"
+                  onClick={() => {
+                    setCreateRecipeForWeekday(pickerWeekday);
+                    setShowRecipePicker(false);
+                    setPickerWeekday(null);
+                    setPickerSearch("");
+                    setOpenListSelectionOnOpen(false);
+                    setEditingRecipe(null);
+                    setShowRecipeModal(true);
+                  }}
+                >
+                  Neues Rezept hinzufügen
+                </button>
                 <button
                   className="btn cancel-btn"
                   onClick={() => {
