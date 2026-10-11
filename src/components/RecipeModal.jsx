@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   addIngredientItemsToShoppingList,
@@ -23,6 +23,9 @@ const RecipeModal = ({
 } = {}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [isDescriptionFullscreen, setIsDescriptionFullscreen] = useState(false);
+  const descriptionTextareaRef = useRef(null);
+  const fullscreenDescriptionRef = useRef(null);
   const [ingredientSearch, setIngredientSearch] = useState("");
   const [showIngredientPickerModal, setShowIngredientPickerModal] =
     useState(false);
@@ -43,6 +46,7 @@ const RecipeModal = ({
   useEffect(() => {
     if (!visible) return;
 
+    setIsDescriptionFullscreen(false);
     if (isEditMode && recipeToEdit) {
       setTitle(recipeToEdit.title ?? "");
       setDescription(recipeToEdit.description ?? "");
@@ -73,14 +77,28 @@ const RecipeModal = ({
     if (!visible) return;
     document.body.classList.add("modal-open");
     const onKeyDown = (e) => {
-      if (e.key === "Escape") onClose?.();
+      if (e.key === "Escape") {
+        if (isDescriptionFullscreen) {
+          setIsDescriptionFullscreen(false);
+        } else {
+          onClose?.();
+        }
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
       document.body.classList.remove("modal-open");
     };
-  }, [visible, onClose]);
+  }, [visible, onClose, isDescriptionFullscreen]);
+
+  useEffect(() => {
+    if (isDescriptionFullscreen) {
+      fullscreenDescriptionRef.current?.focus();
+    } else {
+      descriptionTextareaRef.current?.focus();
+    }
+  }, [isDescriptionFullscreen]);
 
   useEffect(() => {
     if (!visible || !userId) return;
@@ -298,10 +316,13 @@ const RecipeModal = ({
 
                 <label className="modal-label">
                   <textarea
+                    ref={descriptionTextareaRef}
                     className="input-fields"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    onClick={() => setIsDescriptionFullscreen(true)}
                     placeholder="Anleitung"
+                    aria-label="Anleitung"
                   />
                 </label>
 
@@ -550,6 +571,40 @@ const RecipeModal = ({
           ) : null}
         </div>
       </div>
+
+      {isDescriptionFullscreen
+        ? createPortal(
+            <div
+              className="recipe-description-fullscreen"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Rezeptanleitung bearbeiten"
+              onClick={() => setIsDescriptionFullscreen(false)}
+            >
+              <div
+                className="recipe-description-fullscreen__content"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => setIsDescriptionFullscreen(false)}
+                >
+                  Zurück zum Rezept
+                </button>
+                <textarea
+                  ref={fullscreenDescriptionRef}
+                  className="recipe-description-fullscreen__textarea"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Anleitung"
+                  aria-label="Anleitung"
+                />
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
 
       {showIngredientCreator
         ? createPortal(
