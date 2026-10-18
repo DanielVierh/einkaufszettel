@@ -60,6 +60,36 @@ header {
   background: linear-gradient(135deg, var(--card-on-1), var(--card-on-2));
   box-shadow: 0 10px 30px var(--card-shadow);
 }
+.product-list {
+  color: var(--text);
+}
+.product-list .searchbar {
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+.product-list .searchbar::placeholder {
+  color: var(--muted-text);
+  opacity: 1;
+}
+.product-search-results {
+  border: 1px solid var(--line);
+  background: var(--fill-soft);
+  color: var(--text);
+  padding: 8px;
+}
+.product-list .item-price {
+  background: var(--surface-bg) !important;
+  color: var(--text);
+  box-shadow: 0 6px 14px var(--card-shadow);
+}
+.product-list .multiple-amount {
+  background: var(--accent-2);
+  color: var(--text);
+}
+.product-list--button-ready {
+  color: var(--text);
+}
 .modal-overlay {
   background: var(--overlay);
 }
@@ -144,71 +174,6 @@ body::before {
   --muted-text: #e6d8ff;
   --accent-1: #7a3fd0;
   --accent-2: #d04fc0;
-}
-
-/* 5 – Light */
-:root[data-theme="light"] {
-  color-scheme: light;
-  --bg: #f4f6f8;
-  --text: #1c2733;
-  --header-bg: #dfe7ee;
-  --panel-bg: #ffffff;
-  --surface-bg: #eef2f6;
-  --button-bg: #2f7fc1;
-  --button-hover-border: #1c5a8f;
-  --card-on-1: rgba(47, 127, 193, 0.95);
-  --card-on-2: rgba(90, 170, 220, 0.9);
-  --card-shadow: rgba(40, 80, 120, 0.25);
-  --modal-bg: #ffffff;
-  --input-bg: #f0f4f8;
-  --overlay: rgba(230, 236, 242, 0.8);
-  --fill-soft: rgba(20, 40, 60, 0.05);
-  --line: rgba(20, 40, 60, 0.2);
-  --glow-1: rgba(47, 127, 193, 0.08);
-  --glow-2: rgba(120, 200, 255, 0.06);
-  --glow-3: rgba(255, 255, 255, 0);
-  --muted-text: #46586b;
-  --list-btn-bg: #ffffff;
-  --accent-1: #2f7fc1;
-  --accent-2: #4fb0a0;
-}
-:root[data-theme="light"] .list-wrapper .product:not(.on-list):not(.item-open),
-:root[data-theme="light"] .weekly-day-card,
-:root[data-theme="light"] .weekly-day-card h4,
-:root[data-theme="light"] .recipe-selected-item,
-:root[data-theme="light"] .recipe-selected-title,
-:root[data-theme="light"] .modal-comment,
-:root[data-theme="light"] .modal-row > strong,
-:root[data-theme="light"] .modal-form.editing .modal-label,
-:root[data-theme="light"] .weekly-recipe-hint,
-:root[data-theme="light"] .recipe-selected-item small,
-:root[data-theme="light"] .recipe-ingredient-market {
-  color: var(--text);
-  border-color: var(--line);
-}
-:root[data-theme="light"] .list-wrapper .product.on-list,
-:root[data-theme="light"] .list-wrapper .product.item-open,
-:root[data-theme="light"] .item-price {
-  color: #fff;
-}
-:root[data-theme="light"] .weekly-recipe-suggestion,
-:root[data-theme="light"] .weekly-picker-item,
-:root[data-theme="light"] .weekly-picker-main,
-:root[data-theme="light"] .recipe-ingredient-list,
-:root[data-theme="light"] .modal-header,
-:root[data-theme="light"] .modal-row {
-  border-color: var(--line);
-  background-color: rgba(20, 40, 60, 0.04);
-}
-:root[data-theme="light"] .recipe-description-fullscreen__textarea,
-:root[data-theme="light"] .modal-form.editing .modal-label > textarea.input-fields {
-  background: var(--input-bg);
-  border-color: var(--line);
-}
-:root[data-theme="light"] .btn,
-:root[data-theme="light"] .submit-btn {
-  color: #fff;
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
 }
 
 /* 6 – Rose Pink */
@@ -311,6 +276,83 @@ body::before {
 :root[data-theme="black-white"] .item-price {
   color: #ffffff;
 }
+:root[data-theme="black-white"] .list-wrapper .product {
+  background: #ffffff;
+  border-color: #111111;
+  color: #111111;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+:root[data-theme="black-white"] .list-wrapper li {
+  color: #111111;
+}
+:root[data-theme="black-white"] .list-wrapper .product.on-list,
+:root[data-theme="black-white"] .list-wrapper .product.item-open {
+  background: #111111;
+  border-color: #111111;
+  color: #ffffff;
+}
+:root[data-theme="black-white"] .list-wrapper li.on-list,
+:root[data-theme="black-white"] .list-wrapper li.item-open {
+  color: #ffffff;
+}
+:root[data-theme="black-white"] .product-search-results,
+:root[data-theme="black-white"] .product-search-results li,
+:root[data-theme="black-white"] .product-search-results li span {
+  background: #ffffff;
+  color: #111111;
+}
+:root[data-theme="black-white"] .product-search-results li {
+  border-bottom: 1px solid #cccccc;
+}
+:root[data-theme="black-white"] .product-search-results li:last-child {
+  border-bottom: 0;
+}
+:root[data-theme="black-white"] .list-wrapper .product .item-price,
+:root[data-theme="black-white"] .list-wrapper .product .multiple-amount {
+  background: #111111 !important;
+  color: #ffffff;
+}
+:root[data-theme="black-white"] .btn,
+:root[data-theme="black-white"] .filter-btn.active,
+:root[data-theme="black-white"] .shopping-list--add-btn,
+:root[data-theme="black-white"] .product-list--button-ready,
+:root[data-theme="black-white"] .product-list--delete-btn,
+:root[data-theme="black-white"] .weekly-recipe-btn,
+:root[data-theme="black-white"] .weekly-recipe-btn--new,
+:root[data-theme="black-white"] .refresh-btn,
+:root[data-theme="black-white"] .btn-save {
+  background: #111111;
+  color: #ffffff;
+  box-shadow: none;
+}
+:root[data-theme="black-white"] .product-list .item-price,
+:root[data-theme="black-white"] .product-list .multiple-amount {
+  background: #111111 !important;
+  color: #ffffff;
+}
+:root[data-theme="black-white"] .btn:hover,
+:root[data-theme="black-white"] .filter-btn.active:hover,
+:root[data-theme="black-white"] .shopping-list--add-btn:hover,
+:root[data-theme="black-white"] .product-list--button-ready:hover,
+:root[data-theme="black-white"] .product-list--delete-btn:hover,
+:root[data-theme="black-white"] .weekly-recipe-btn:hover,
+:root[data-theme="black-white"] .weekly-recipe-btn--new:hover,
+:root[data-theme="black-white"] .refresh-btn:hover,
+:root[data-theme="black-white"] .btn-save:hover {
+  background: #000000;
+  border-color: #000000;
+}
+:root[data-theme="black-white"] .btn:focus-visible,
+:root[data-theme="black-white"] .filter-btn:focus-visible,
+:root[data-theme="black-white"] .shopping-list--add-btn:focus-visible,
+:root[data-theme="black-white"] .product-list--button-ready:focus-visible,
+:root[data-theme="black-white"] .product-list--delete-btn:focus-visible,
+:root[data-theme="black-white"] .weekly-recipe-btn:focus-visible,
+:root[data-theme="black-white"] .refresh-btn:focus-visible,
+:root[data-theme="black-white"] .btn-save:focus-visible {
+  outline: 3px solid #000000;
+  outline-offset: 3px;
+}
 
 :root[data-theme="arctic-mint"] .list-wrapper .product:not(.on-list):not(.item-open),
 :root[data-theme="arctic-mint"] .weekly-day-card,
@@ -335,6 +377,95 @@ body::before {
 :root[data-theme="black-white"] .recipe-ingredient-list {
   border-color: var(--line);
   background-color: var(--fill-soft);
+}
+:root[data-theme="arctic-mint"] .list-wrapper .product.on-list,
+:root[data-theme="arctic-mint"] .list-wrapper .product.item-open {
+  background: #176b75;
+  border-color: #0d4d55;
+  color: #ffffff;
+}
+:root[data-theme="arctic-mint"] .product-list {
+  background: #e8fbf7;
+  color: #12363b;
+}
+:root[data-theme="arctic-mint"] .product-list .list-wrapper .product,
+:root[data-theme="arctic-mint"] .product-list .list-wrapper li {
+  background: #ffffff;
+  border-color: #176b75;
+  color: #12363b;
+}
+:root[data-theme="arctic-mint"] .product-list .list-wrapper .product.on-list,
+:root[data-theme="arctic-mint"] .product-list .list-wrapper .product.item-open,
+:root[data-theme="arctic-mint"] .product-list .list-wrapper li.on-list,
+:root[data-theme="arctic-mint"] .product-list .list-wrapper li.item-open {
+  background: #176b75;
+  border-color: #0d4d55;
+  color: #ffffff;
+}
+:root[data-theme="arctic-mint"] .product-search-results,
+:root[data-theme="arctic-mint"] .product-search-results li,
+:root[data-theme="arctic-mint"] .product-search-results li span {
+  background: #ffffff;
+  color: #12363b;
+}
+:root[data-theme="arctic-mint"] .product-search-results li {
+  border-bottom: 1px solid #8abbb5;
+}
+:root[data-theme="arctic-mint"] .product-search-results li:last-child {
+  border-bottom: 0;
+}
+:root[data-theme="arctic-mint"] .btn,
+:root[data-theme="arctic-mint"] .filter-btn.active,
+:root[data-theme="arctic-mint"] .weekly-recipe-btn,
+:root[data-theme="arctic-mint"] .weekly-recipe-btn--new,
+:root[data-theme="arctic-mint"] .btn-save,
+:root[data-theme="arctic-mint"] .refresh-btn {
+  background: #176b75;
+  color: #ffffff;
+  box-shadow: none;
+}
+:root[data-theme="arctic-mint"] .btn:hover,
+:root[data-theme="arctic-mint"] .filter-btn.active:hover,
+:root[data-theme="arctic-mint"] .weekly-recipe-btn:hover,
+:root[data-theme="arctic-mint"] .weekly-recipe-btn--new:hover,
+:root[data-theme="arctic-mint"] .btn-save:hover,
+:root[data-theme="arctic-mint"] .refresh-btn:hover {
+  background: #0d4d55;
+  border-color: #0d4d55;
+}
+:root[data-theme="arctic-mint"] .shopping-list--add-btn {
+  background: #176b75 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+:root[data-theme="arctic-mint"] .cancel-btn,
+:root[data-theme="arctic-mint"] .product-list--delete-btn {
+  background: #8b1e3f;
+  color: #ffffff;
+}
+:root[data-theme="arctic-mint"] .product-list--button-ready {
+  background: #176b75;
+  color: #ffffff;
+}
+:root[data-theme="arctic-mint"] .status {
+  background: #176b75;
+  color: #ffffff;
+  box-shadow: none;
+}
+:root[data-theme="arctic-mint"] .shopping-sum {
+  color: #8b1e3f;
+}
+:root[data-theme="arctic-mint"] .modal-header,
+:root[data-theme="arctic-mint"] .modal-row {
+  border-color: var(--line);
+  background: var(--fill-soft);
+}
+:root[data-theme="arctic-mint"] .btn:focus-visible,
+:root[data-theme="arctic-mint"] .filter-btn:focus-visible,
+:root[data-theme="arctic-mint"] .weekly-recipe-btn:focus-visible,
+:root[data-theme="arctic-mint"] .refresh-btn:focus-visible {
+  outline: 3px solid #0d4d55;
+  outline-offset: 3px;
 }
 
 /* 10 – Midnight Teal */

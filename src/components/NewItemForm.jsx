@@ -206,7 +206,7 @@ const NewItemForm = ({
             <button className="btn">Neu Hinzufügen</button>
             <div style={{ marginTop: 8, marginBottom: 8 }}>
               {matches.length > 0 && (
-                <div style={{ border: "1px solid #ddd", padding: 8 }}>
+                <div className="product-search-results">
                   <div style={{ fontSize: 12, marginBottom: 6 }}>Treffer:</div>
                   <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
                     {matches.map((m) => (

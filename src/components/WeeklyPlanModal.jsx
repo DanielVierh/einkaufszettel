@@ -250,14 +250,12 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                     {selectedRecipe ? (
                       <button
                         type="button"
-                        className="btn"
+                        className="btn weekly-assigned-recipe-btn"
                         onClick={() => openRecipeModal(selectedRecipe)}
                         style={{
                           marginLeft: 6,
-                          color: "var(--text)",
                           fontSize: 14,
                           padding: 10,
-                          background: "var(--accent-1)",
                           borderRadius: 8,
                           cursor: "pointer",
                         }}

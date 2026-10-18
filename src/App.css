@@ -1007,6 +1007,10 @@ body.modal-open {
   background: linear-gradient(to bottom, var(--accent-2), var(--accent-1));
 }
 
+.weekly-assigned-recipe-btn {
+  background: var(--accent-1);
+}
+
 .weekly-picker-main span {
   font-size: 0.84rem;
   color: var(--muted-text);
