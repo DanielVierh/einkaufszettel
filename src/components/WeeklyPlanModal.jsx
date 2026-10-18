@@ -230,7 +230,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
         <div className="modal-body">
           {loading ? <p>Lade Wochenplan...</p> : null}
           {error ? <p style={{ color: "salmon" }}>{error}</p> : null}
-          {status ? <p style={{ color: "lightgreen" }}>{status}</p> : null}
+          {status ? <p style={{ color: "var(--accent-2)" }}>{status}</p> : null}
 
           <div className="weekly-grid">
             {orderedWeekDays.map((day) => {
@@ -254,10 +254,10 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
                         onClick={() => openRecipeModal(selectedRecipe)}
                         style={{
                           marginLeft: 6,
-                          color: "lightgreen",
+                          color: "var(--text)",
                           fontSize: 14,
                           padding: 10,
-                          background: "green",
+                          background: "var(--accent-1)",
                           borderRadius: 8,
                           cursor: "pointer",
                         }}
@@ -302,7 +302,7 @@ const WeeklyPlanModal = ({ visible, userId, userName, onClose } = {}) => {
           </div>
 
           {recipes.length === 0 ? (
-            <p style={{ color: "#bbb" }}>
+            <p style={{ color: "var(--muted-text)" }}>
               Es gibt noch keine Rezepte. Lege zuerst ein Rezept an.
             </p>
           ) : null}

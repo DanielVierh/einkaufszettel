@@ -10,10 +10,21 @@ import ItemList from "./components/ItemList";
 import NewItemForm from "./components/NewItemForm";
 import ShoppingList from "./components/ShoppingList";
 import WeeklyPlanModal from "./components/WeeklyPlanModal";
+import SettingsModal from "./components/SettingsModal";
+import "./themes.css";
+import { applySettings, loadSettings, saveSettings } from "./lib/settings";
 import { useState } from "react";
 
 function App() {
   const { user } = useUser();
+  const [showSettings, setShowSettings] = useState(false);
+  const [settings, setSettings] = useState(loadSettings);
+
+  function changeSettings(next) {
+    setSettings(next);
+    saveSettings(next);
+    applySettings(next);
+  }
   const [showItemList, setShowItemList] = useState(false);
   const [showWeeklyPlan, setShowWeeklyPlan] = useState(false);
 
@@ -38,8 +49,22 @@ function App() {
             <header>
               <h3>Hi {user.firstName || user.username || "User"}</h3>
               <h2>Einkaufszettel</h2>
+              <button
+                type="button"
+                className="settings-btn"
+                onClick={() => setShowSettings(true)}
+                aria-label="Einstellungen"
+              >
+                ⚙
+              </button>
               <UserButton />
             </header>
+            <SettingsModal
+              visible={showSettings}
+              onClose={() => setShowSettings(false)}
+              settings={settings}
+              onChange={changeSettings}
+            />
             <ShoppingList
               onToggleItemList={toggleItemList}
               onOpenWeeklyPlan={toggleWeeklyPlan}

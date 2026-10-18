@@ -354,7 +354,7 @@ const RecipeModal = ({
                   )}
                 </div>
 
-                <p style={{ margin: 0, color: "#bbb" }}>
+                <p style={{ margin: 0, color: "var(--muted-text)" }}>
                   Ausgewählt: {selectedIngredients.length}
                 </p>
                 {status ? (
@@ -417,7 +417,7 @@ const RecipeModal = ({
 
                 <div className="modal-body">
                   {listSelectionItems.length === 0 ? (
-                    <p style={{ margin: 0, color: "#bbb" }}>
+                    <p style={{ margin: 0, color: "var(--muted-text)" }}>
                       Dieses Rezept hat keine hinterlegten Zutaten.
                     </p>
                   ) : (
@@ -444,7 +444,7 @@ const RecipeModal = ({
                     </div>
                   )}
 
-                  <p style={{ marginTop: 10, marginBottom: 0, color: "#bbb" }}>
+                  <p style={{ marginTop: 10, marginBottom: 0, color: "var(--muted-text)" }}>
                     Ausgewählt: {selectedListItemIds.length}
                   </p>
                 </div>
@@ -498,7 +498,7 @@ const RecipeModal = ({
                   <div className="recipe-ingredient-list">
                     {filteredItems.length === 0 ? (
                       <div>
-                        <p style={{ margin: 0, color: "#bbb" }}>
+                        <p style={{ margin: 0, color: "var(--muted-text)" }}>
                           Keine passenden Zutaten gefunden.
                         </p>
                         {ingredientSearch.trim() ? (

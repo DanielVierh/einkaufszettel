@@ -47,10 +47,10 @@
   --style-open2: #137b86;
   --style-open3: rgb(4, 105, 155);
   --MainTheme: var(--style-open3);
-  --glass-bg: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-bg: var(--fill-soft);
+  --glass-border: var(--line);
   --glass-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
-  --glass-accent: rgba(255, 255, 255, 0.08);
+  --glass-accent: var(--line);
 }
 
 .list-wrapper {
@@ -92,8 +92,8 @@
   cursor: pointer;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.03),
-    rgba(255, 255, 255, 0.01)
+    var(--fill-soft),
+    var(--fill-soft)
   );
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
@@ -109,7 +109,7 @@
     rgba(6, 57, 104, 0.9),
     rgba(17, 94, 150, 0.9)
   );
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: var(--line);
   box-shadow: 0 10px 30px rgba(4, 30, 60, 0.6);
   /* ensure rounded corners and clipping remain for on-list state */
   border-radius: 14px;
@@ -120,7 +120,7 @@
   /* remove upward shift on hover — keep glow and subtle scale */
   transform: scale(1.02);
   box-shadow: 0 18px 40px rgba(4, 30, 60, 0.65);
-  border-color: rgba(255, 255, 255, 0.22);
+  border-color: var(--line);
 }
 
 .list-wrapper .product:active {
@@ -277,8 +277,8 @@ h2 {
 }
 
 .modal {
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  background: var(--fill-soft);
+  color: var(--text);
   padding: 18px;
   border-radius: 12px;
   width: 92%;
@@ -330,7 +330,7 @@ h2 {
   .modal-row > strong {
     font-size: 12px;
     letter-spacing: 0.02em;
-    color: rgba(230, 240, 248, 0.85);
+    color: var(--muted-text);
   }
 
   .modal-row .amount-controls {
@@ -347,7 +347,7 @@ h2 {
   align-items: center;
   flex: 0 0 auto;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--line);
 }
 .modal-header h3 {
   margin: 0;
@@ -361,7 +361,7 @@ h2 {
 .modal-close {
   background: transparent;
   border: none;
-  color: #fff;
+  color: var(--text);
   font-size: 22px;
   cursor: pointer;
 }
@@ -379,7 +379,7 @@ h2 {
   align-items: center;
   gap: 12px;
   padding: 12px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--fill-soft);
 }
 .modal-body .modal-row:last-child {
   border-bottom: none;
@@ -387,7 +387,7 @@ h2 {
 .modal-row > strong {
   text-align: left;
   font-weight: 650;
-  color: rgba(230, 240, 248, 0.92);
+  color: var(--muted-text);
 }
 .amount-controls {
   display: flex;
@@ -420,15 +420,15 @@ h2 {
   text-align: left;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.04),
-    rgba(255, 255, 255, 0.02)
+    var(--fill-soft),
+    var(--fill-soft)
   );
-  color: #e6f0f8;
+  color: var(--text);
   margin-left: 0;
   padding: 5px 10px;
   border-radius: 10px;
   width: auto;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--fill-soft);
 }
 
 .modal-form {
@@ -447,9 +447,9 @@ h2 {
   width: 100%;
   padding: 6px 8px;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--line);
   background: #0b1520;
-  color: #fff;
+  color: var(--text);
 }
 
 .btn-remove-from-list {
@@ -484,8 +484,8 @@ h2 {
   --accent-1: #0a7113;
   --accent-2: #0ca862;
   --accent-3: #6ef8b0;
-  --glass-strong: rgba(255, 255, 255, 0.08);
-  --glass-soft: rgba(255, 255, 255, 0.03);
+  --glass-strong: var(--line);
+  --glass-soft: var(--fill-soft);
 }
 
 /* floaty animation removed per user preference */
@@ -534,7 +534,7 @@ body::before {
   height: 200%;
   background: radial-gradient(
     circle at 30% 20%,
-    rgba(255, 255, 255, 0.06),
+    var(--fill-soft),
     rgba(255, 255, 255, 0) 25%
   );
   transform: rotate(-12deg);
@@ -575,7 +575,7 @@ body::before {
   box-shadow:
     0 26px 70px rgba(99, 79, 255, 0.18),
     0 14px 40px rgba(6, 57, 104, 0.35);
-  border-color: rgba(255, 255, 255, 0.22);
+  border-color: var(--line);
 }
 
 /* accent border glow for featured/on-list */
@@ -592,13 +592,13 @@ body::before {
   gap: 8px;
   padding: 8px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--line);
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(255, 255, 255, 0.01)
+    var(--fill-soft),
+    var(--fill-soft)
   );
-  color: #fff;
+  color: var(--text);
   cursor: pointer;
   transition:
     transform 180ms ease,
@@ -631,10 +631,10 @@ body::before {
   background: linear-gradient(
     90deg,
     rgba(0, 0, 0, 0.5),
-    rgba(255, 255, 255, 0.02)
+    var(--fill-soft)
   );
   color: yellow;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--fill-soft);
 }
 
 /* modal pop-in and inner shimmer */
@@ -658,7 +658,7 @@ body::before {
   pointer-events: none;
   background: linear-gradient(
     120deg,
-    rgba(255, 255, 255, 0.02),
+    var(--fill-soft),
     rgba(255, 255, 255, 0)
   );
   border-radius: 12px;
@@ -679,8 +679,8 @@ body::before {
   height: 120%;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.18),
-    rgba(255, 255, 255, 0.02)
+    var(--line),
+    var(--fill-soft)
   );
   transform: skewX(-10deg);
 }
@@ -693,7 +693,7 @@ body::before {
   background: linear-gradient(
     90deg,
     rgba(0, 0, 0, 0.35),
-    rgba(255, 255, 255, 0.02)
+    var(--fill-soft)
   );
   box-shadow: 0 6px 14px rgba(2, 6, 23, 0.45);
   transition: transform 200ms ease;
@@ -745,13 +745,13 @@ body.modal-open {
   width: auto;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--line);
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(255, 255, 255, 0.01)
+    var(--fill-soft),
+    var(--fill-soft)
   );
-  color: #fff;
+  color: var(--text);
   box-shadow: 0 6px 18px rgba(2, 6, 23, 0.45);
   transition:
     box-shadow 180ms ease,
@@ -780,11 +780,11 @@ body.modal-open {
 /* Make label text a little clearer in edit mode */
 .modal-form.editing .modal-label {
   font-size: 14px;
-  color: #e6eef8;
+  color: var(--text);
 }
 
 .btn-save {
-  background-color: #0a7113;
+  background-color: var(--accent-1);
 }
 
 .status {
@@ -855,10 +855,10 @@ body.modal-open {
   min-height: 0;
   resize: none;
   padding: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  background: var(--fill-soft);
+  color: var(--text);
   font: inherit;
   line-height: 1.5;
 }
@@ -880,22 +880,22 @@ body.modal-open {
 }
 
 .weekly-day-card {
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--line);
   border-radius: 12px;
   padding: 10px;
   text-align: left;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--fill-soft);
 }
 
 .weekly-day-card h4 {
   margin: 0 0 8px;
-  color: #f3f8fd;
+  color: var(--text);
 }
 
 .weekly-day-desc {
   margin: 8px 0;
   font-size: 0.9rem;
-  color: #d5e6f6;
+  color: var(--muted-text);
   min-height: 36px;
 }
 
@@ -916,22 +916,22 @@ body.modal-open {
 
 .weekly-recipe-suggestion {
   text-align: left;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  border: 1px solid var(--line);
+  background: var(--fill-soft);
+  color: var(--text);
   border-radius: 10px;
   padding: 6px 8px;
   cursor: pointer;
 }
 
 .weekly-recipe-suggestion:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--line);
 }
 
 .weekly-recipe-hint {
   margin: 6px 0 0;
   font-size: 0.82rem;
-  color: #b7d1e8;
+  color: var(--muted-text);
 }
 
 .weekly-picker-modal {
@@ -953,9 +953,9 @@ body.modal-open {
   flex-direction: column;
   text-align: left;
   gap: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  border: 1px solid var(--line);
+  background: var(--fill-soft);
+  color: var(--text);
   border-radius: 10px;
   padding: 9px 10px;
   cursor: pointer;
@@ -963,11 +963,11 @@ body.modal-open {
 
 .weekly-picker-item span {
   font-size: 0.84rem;
-  color: #d6e5f5;
+  color: var(--muted-text);
 }
 
 .weekly-picker-item:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--line);
 }
 
 .weekly-picker-row {
@@ -988,9 +988,9 @@ body.modal-open {
   flex-direction: column;
   text-align: left;
   gap: 4px;
-  border: 1px solid rgba(16, 118, 220, 0.925);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  border: 1px solid var(--accent-2);
+  background: var(--fill-soft);
+  color: var(--text);
   border-radius: 10px;
   padding: 9px 10px;
   cursor: pointer;
@@ -998,22 +998,22 @@ body.modal-open {
 }
 
 .weekly-recipe-btn {
-  background: #137b86;
+  background: var(--accent-2);
   margin-bottom: 15px !important;
   height: 40px;
 }
 
 .weekly-recipe-btn--new {
-  background: linear-gradient(to bottom, green, rgb(1, 63, 1));
+  background: linear-gradient(to bottom, var(--accent-2), var(--accent-1));
 }
 
 .weekly-picker-main span {
   font-size: 0.84rem;
-  color: #d6e5f5;
+  color: var(--muted-text);
 }
 
 .weekly-picker-main:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--line);
 }
 
 .weekly-picker-actions {
@@ -1026,7 +1026,7 @@ body.modal-open {
 }
 
 .recipe-ingredient-list {
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--line);
   border-radius: 10px;
   padding: 8px;
   max-height: 180px;
@@ -1037,22 +1037,22 @@ body.modal-open {
 }
 
 .recipe-selected-ingredients {
-  border: 1px solid rgba(110, 248, 176, 0.35);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 40%, transparent);
   border-radius: 10px;
   padding: 8px;
-  background: rgba(12, 168, 98, 0.08);
+  background: color-mix(in srgb, var(--accent-2) 10%, transparent);
 }
 
 .recipe-selected-title {
   margin: 0 0 8px;
   font-size: 0.85rem;
-  color: #bff5d8;
+  color: var(--muted-text);
   font-weight: 700;
 }
 
 .recipe-selected-empty {
   margin: 0;
-  color: #d6e5f5;
+  color: var(--muted-text);
   font-size: 0.85rem;
 }
 
@@ -1066,15 +1066,15 @@ body.modal-open {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid rgba(110, 248, 176, 0.25);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
   border-radius: 999px;
   padding: 4px 10px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #f1fff8;
+  background: var(--fill-soft);
+  color: var(--text);
 }
 
 .recipe-selected-item small {
-  color: #9cc2e3;
+  color: var(--muted-text);
 }
 
 .recipe-ingredient-row {
@@ -1086,11 +1086,11 @@ body.modal-open {
   width: 100%;
   padding: 6px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--fill-soft);
 }
 
 .recipe-ingredient-market {
-  color: #9cc2e3;
+  color: var(--muted-text);
   font-size: 0.8rem;
 }
 
@@ -1118,5 +1118,5 @@ body.modal-open {
 }
 
 .filter-btn.active {
-  background-color: #075431;
+  background-color: var(--accent-1);
 }

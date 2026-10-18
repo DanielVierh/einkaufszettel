@@ -244,7 +244,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
 
             <div className="modal-body">
               {recurringItems.length === 0 ? (
-                <p style={{ margin: 0, color: "#bbb" }}>
+                <p style={{ margin: 0, color: "var(--muted-text)" }}>
                   Es sind keine wiederkehrenden Items vorhanden.
                 </p>
               ) : (
@@ -267,7 +267,7 @@ const ItemList = ({ visible = false, onClose, userId, user_name } = {}) => {
                   })}
                 </div>
               )}
-              <p style={{ marginTop: 10, marginBottom: 0, color: "#bbb" }}>
+              <p style={{ marginTop: 10, marginBottom: 0, color: "var(--muted-text)" }}>
                 Ausgewählt: {selectedWeeklyItemIds.length}
               </p>
             </div>
