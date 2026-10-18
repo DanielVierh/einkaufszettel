@@ -125,27 +125,6 @@ body::before {
   --accent-2: #9bc53d;
 }
 
-/* 3 – Sunset Orange */
-:root[data-theme="sunset-orange"] {
-  --modal-bg: #3d1d0c;
-  --bg: #2a1408;
-  --header-bg: #8a3a10;
-  --panel-bg: #3a1c0c;
-  --surface-bg: #5a2a10;
-  --button-bg: #e0701f;
-  --button-hover-border: #ffd27a;
-  --card-on-1: rgba(190, 70, 20, 0.95);
-  --card-on-2: rgba(235, 140, 40, 0.9);
-  --card-shadow: rgba(80, 25, 5, 0.6);
-  --input-bg: #200e05;
-  --glow-1: rgba(255, 120, 40, 0.12);
-  --glow-2: rgba(255, 190, 80, 0.06);
-  --glow-3: rgba(255, 80, 80, 0.05);
-  --muted-text: #ffe2c4;
-  --accent-1: #d9531e;
-  --accent-2: #f5a623;
-}
-
 /* 4 – Royal Purple */
 :root[data-theme="royal-purple"] {
   --modal-bg: #271650;
@@ -272,6 +251,153 @@ body::before {
   --muted-text: #cfcfcf;
   --accent-1: #b89a00;
   --accent-2: #ffd400;
+}
+
+/* 8 – Arctic Mint (light) */
+:root[data-theme="arctic-mint"] {
+  color-scheme: light;
+  --modal-bg: #ffffff;
+  --bg: #e8fbf7;
+  --text: #12363b;
+  --header-bg: #c9eee7;
+  --panel-bg: #f8fffe;
+  --surface-bg: #d9f4ef;
+  --button-bg: #2d9f91;
+  --button-hover-border: #176b75;
+  --card-on-1: rgba(23, 107, 117, 0.95);
+  --card-on-2: rgba(58, 169, 149, 0.9);
+  --card-shadow: rgba(20, 100, 100, 0.25);
+  --input-bg: #f0fbf9;
+  --overlay: rgba(180, 220, 215, 0.8);
+  --line: rgba(18, 70, 70, 0.2);
+  --fill-soft: rgba(18, 70, 70, 0.05);
+  --glow-1: rgba(58, 200, 170, 0.1);
+  --glow-2: rgba(120, 230, 210, 0.06);
+  --glow-3: rgba(255, 255, 255, 0);
+  --muted-text: #477176;
+  --list-btn-bg: #ffffff;
+  --accent-1: #238b82;
+  --accent-2: #45c7ae;
+}
+
+/* 9 – Black & White (light) */
+:root[data-theme="black-white"] {
+  color-scheme: light;
+  --modal-bg: #ffffff;
+  --bg: #ffffff;
+  --text: #111111;
+  --header-bg: #eeeeee;
+  --panel-bg: #fafafa;
+  --surface-bg: #e6e6e6;
+  --button-bg: #222222;
+  --button-hover-border: #000000;
+  --card-on-1: rgba(25, 25, 25, 0.98);
+  --card-on-2: rgba(85, 85, 85, 0.95);
+  --card-shadow: rgba(0, 0, 0, 0.2);
+  --input-bg: #f7f7f7;
+  --overlay: rgba(255, 255, 255, 0.82);
+  --line: rgba(0, 0, 0, 0.22);
+  --fill-soft: rgba(0, 0, 0, 0.04);
+  --glow-1: rgba(0, 0, 0, 0.04);
+  --glow-2: rgba(0, 0, 0, 0.02);
+  --glow-3: transparent;
+  --muted-text: #555555;
+  --list-btn-bg: #ffffff;
+  --accent-1: #222222;
+  --accent-2: #666666;
+}
+:root[data-theme="black-white"] .list-wrapper .product.on-list,
+:root[data-theme="black-white"] .list-wrapper .product.item-open,
+:root[data-theme="black-white"] .item-price {
+  color: #ffffff;
+}
+
+:root[data-theme="arctic-mint"] .list-wrapper .product:not(.on-list):not(.item-open),
+:root[data-theme="arctic-mint"] .weekly-day-card,
+:root[data-theme="arctic-mint"] .weekly-day-card h4,
+:root[data-theme="arctic-mint"] .recipe-selected-item,
+:root[data-theme="arctic-mint"] .recipe-selected-title,
+:root[data-theme="black-white"] .list-wrapper .product:not(.on-list):not(.item-open),
+:root[data-theme="black-white"] .weekly-day-card,
+:root[data-theme="black-white"] .weekly-day-card h4,
+:root[data-theme="black-white"] .recipe-selected-item,
+:root[data-theme="black-white"] .recipe-selected-title {
+  color: var(--text);
+  border-color: var(--line);
+}
+:root[data-theme="arctic-mint"] .weekly-recipe-suggestion,
+:root[data-theme="arctic-mint"] .weekly-picker-item,
+:root[data-theme="arctic-mint"] .weekly-picker-main,
+:root[data-theme="arctic-mint"] .recipe-ingredient-list,
+:root[data-theme="black-white"] .weekly-recipe-suggestion,
+:root[data-theme="black-white"] .weekly-picker-item,
+:root[data-theme="black-white"] .weekly-picker-main,
+:root[data-theme="black-white"] .recipe-ingredient-list {
+  border-color: var(--line);
+  background-color: var(--fill-soft);
+}
+
+/* 10 – Midnight Teal */
+:root[data-theme="midnight-teal"] {
+  --modal-bg: #09262e;
+  --bg: #061c24;
+  --header-bg: #0b5966;
+  --panel-bg: #082933;
+  --surface-bg: #0e414a;
+  --button-bg: #168b91;
+  --button-hover-border: #39d0c5;
+  --card-on-1: rgba(8, 102, 112, 0.95);
+  --card-on-2: rgba(22, 158, 148, 0.9);
+  --card-shadow: rgba(0, 20, 28, 0.7);
+  --input-bg: #04151b;
+  --glow-1: rgba(0, 220, 200, 0.1);
+  --glow-2: rgba(20, 150, 180, 0.06);
+  --glow-3: rgba(80, 255, 220, 0.03);
+  --muted-text: #b5e4e0;
+  --accent-1: #0b8d96;
+  --accent-2: #39d0c5;
+}
+
+/* 11 – Deep Space */
+:root[data-theme="deep-space"] {
+  --modal-bg: #11132e;
+  --bg: #080b1c;
+  --header-bg: #25245c;
+  --panel-bg: #10132b;
+  --surface-bg: #1b1e46;
+  --button-bg: #4d4ad0;
+  --button-hover-border: #aaa7ff;
+  --card-on-1: rgba(44, 42, 130, 0.95);
+  --card-on-2: rgba(101, 92, 210, 0.9);
+  --card-shadow: rgba(5, 5, 40, 0.75);
+  --input-bg: #060817;
+  --glow-1: rgba(100, 100, 255, 0.12);
+  --glow-2: rgba(200, 80, 255, 0.06);
+  --glow-3: rgba(50, 180, 255, 0.04);
+  --muted-text: #c6c8f0;
+  --accent-1: #5551d8;
+  --accent-2: #7874ff;
+}
+
+/* 12 – Neon Cyber */
+:root[data-theme="neon-cyber"] {
+  --modal-bg: #120522;
+  --bg: #090016;
+  --header-bg: #360a4f;
+  --panel-bg: #160625;
+  --surface-bg: #260a3b;
+  --button-bg: #c51b75;
+  --button-hover-border: #00f0ff;
+  --card-on-1: rgba(130, 12, 100, 0.95);
+  --card-on-2: rgba(30, 150, 180, 0.9);
+  --card-shadow: rgba(70, 0, 80, 0.75);
+  --input-bg: #07000e;
+  --glow-1: rgba(236, 22, 127, 0.14);
+  --glow-2: rgba(0, 240, 255, 0.08);
+  --glow-3: rgba(130, 40, 255, 0.06);
+  --muted-text: #e7c8f5;
+  --accent-1: #ec167f;
+  --accent-2: #00cbd8;
 }
 
 /* Settings */
