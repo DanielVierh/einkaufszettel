@@ -21,6 +21,8 @@
   --ready-bg: #0e354c;
   --list-btn-bg: rgb(33, 31, 31);
   --fill-soft: rgba(255, 255, 255, 0.04);
+  --filter-active-bg: #075431;
+  --filter-active-text: #ffffff;
 
   color: var(--text);
   background-color: var(--bg);
@@ -124,6 +126,19 @@ header {
 .btn {
   color: var(--text);
 }
+.filter-btn.active {
+  background: var(--filter-active-bg) !important;
+  border: 2px solid var(--filter-active-text);
+  color: var(--filter-active-text) !important;
+  box-shadow: 0 0 0 2px var(--filter-active-bg);
+}
+.filter-btn.active:hover {
+  filter: brightness(1.12);
+}
+.filter-btn.active:focus-visible {
+  outline: 3px solid var(--filter-active-text);
+  outline-offset: 3px;
+}
 body::before {
   background: linear-gradient(
     120deg,
@@ -153,6 +168,7 @@ body::before {
   --ready-bg: #1b4d2e;
   --accent-1: #6a8f1d;
   --accent-2: #9bc53d;
+  --filter-active-bg: #365614;
 }
 
 /* 4 – Royal Purple */
@@ -174,6 +190,7 @@ body::before {
   --muted-text: #e6d8ff;
   --accent-1: #7a3fd0;
   --accent-2: #d04fc0;
+  --filter-active-bg: #51258a;
 }
 
 /* 6 – Rose Pink */
@@ -195,6 +212,7 @@ body::before {
   --muted-text: #ffd9e6;
   --accent-1: #c9306e;
   --accent-2: #f07aa5;
+  --filter-active-bg: #861743;
 }
 
 /* 7 – Mono Dark */
@@ -216,6 +234,7 @@ body::before {
   --muted-text: #cfcfcf;
   --accent-1: #b89a00;
   --accent-2: #ffd400;
+  --filter-active-bg: #3a3a3a;
 }
 
 /* 8 – Arctic Mint (light) */
@@ -243,6 +262,7 @@ body::before {
   --list-btn-bg: #ffffff;
   --accent-1: #238b82;
   --accent-2: #45c7ae;
+  --filter-active-bg: #176b75;
 }
 
 /* 9 – Black & White (light) */
@@ -270,6 +290,7 @@ body::before {
   --list-btn-bg: #ffffff;
   --accent-1: #222222;
   --accent-2: #666666;
+  --filter-active-bg: #111111;
 }
 :root[data-theme="black-white"] .list-wrapper .product.on-list,
 :root[data-theme="black-white"] .list-wrapper .product.item-open,
@@ -467,6 +488,28 @@ body::before {
   outline: 3px solid #0d4d55;
   outline-offset: 3px;
 }
+:root[data-theme="arctic-mint"] .filter-btn:not(.active) {
+  background: #d9f4ef !important;
+  border: 1px solid #176b75;
+  color: #12363b !important;
+  box-shadow: none;
+}
+:root[data-theme="arctic-mint"] .filter-btn.active {
+  background: #176b75 !important;
+  border: 2px solid #0d4d55;
+  color: #ffffff !important;
+}
+:root[data-theme="black-white"] .filter-btn:not(.active) {
+  background: #ffffff !important;
+  border: 1px solid #111111;
+  color: #111111 !important;
+  box-shadow: none;
+}
+:root[data-theme="black-white"] .filter-btn.active {
+  background: #111111 !important;
+  border: 2px solid #111111;
+  color: #ffffff !important;
+}
 
 /* 10 – Midnight Teal */
 :root[data-theme="midnight-teal"] {
@@ -487,6 +530,7 @@ body::before {
   --muted-text: #b5e4e0;
   --accent-1: #0b8d96;
   --accent-2: #39d0c5;
+  --filter-active-bg: #07545c;
 }
 
 /* 11 – Deep Space */
@@ -508,6 +552,7 @@ body::before {
   --muted-text: #c6c8f0;
   --accent-1: #5551d8;
   --accent-2: #7874ff;
+  --filter-active-bg: #333095;
 }
 
 /* 12 – Neon Cyber */
@@ -529,6 +574,7 @@ body::before {
   --muted-text: #e7c8f5;
   --accent-1: #ec167f;
   --accent-2: #00cbd8;
+  --filter-active-bg: #8f0954;
 }
 
 /* Settings */
